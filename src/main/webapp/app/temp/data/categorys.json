@@ -1,0 +1,154 @@
+{
+  "rows": [
+    {
+      "id": "0001",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 1
+    },
+    {
+      "id": "0002",
+      "name": "新闻",
+      "path": "/新闻法讯/新闻/",
+      "eName": "/news/normal_news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 1
+    },
+    {
+      "id": "0003",
+      "name": "法会通启",
+      "path": "/新闻法讯/法会通启/",
+      "eName": "/news/notice/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0004",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0005",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0006",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0007",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0008",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0009",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0010",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0011",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0012",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0013",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0014",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    },
+    {
+      "id": "0015",
+      "name": "新闻法讯",
+      "path": "/新闻法讯/",
+      "eName": "/news/",
+      "category_template": "text_list",
+      "article_template": "article_right",
+      "createDate": "2017-04-21 18:12:07",
+      "status": 0
+    }
+  ]
+}

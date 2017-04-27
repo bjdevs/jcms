@@ -1,0 +1,50 @@
+/* set default-icon-libs */
+.x-fa:before {
+    font-family: FontAwesome !important;
+}
+
+/* if theme neptune */
+body.x-border-layout-ct, div.x-border-layout-ct {
+    background: none;
+}
+
+.admin-login-logo {
+    text-align: center;
+}
+
+.admin-header-logo {
+    top: 0px !important;
+    left: 0px !important;
+}
+
+/* color */
+.admin-color-red {
+    color: red;
+}
+
+.admin-color-purple {
+    color: purple;
+}
+
+.admin-color-gray {
+    color: gray;
+}
+
+/* color */
+
+.admin-label-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.admin-label-button:hover {
+    background: none;
+    cursor: pointer;
+    /*border: none;*/
+}
+
+
+
+
+
