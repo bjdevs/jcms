@@ -56,9 +56,9 @@ module.exports = function(grunt) {
 
 
     });
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');//采用UglifyJS压缩js
+    grunt.loadNpmTasks('grunt-contrib-concat');//js合并
+    grunt.loadNpmTasks('grunt-contrib-cssmin');//css压缩合并
     grunt.loadNpmTasks('grunt-extjs-dependencies');
 
     grunt.registerTask('default', ['concat', 'extjs_dependencies', 'cssmin', 'uglify']);
