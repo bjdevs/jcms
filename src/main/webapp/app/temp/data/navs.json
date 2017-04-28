@@ -1,0 +1,246 @@
+{
+  "children": [
+    {
+      "text": "内容管理",
+      "iconCls": "x-fa fa-newspaper-o",
+      "expanded": true,
+      "children": [
+        {
+          "text": "首页",
+          "children": [
+            {
+              "viewType": "content-index-nav-main",
+              "text": "主导航",
+              "split": true,
+              "leaf": true
+            },
+            {
+              "viewType": "content-index-nav-sub",
+              "text": "次导航",
+              "split": true,
+              "leaf": true
+            },
+            {
+              "viewType": "report-outsource",
+              "text": "活动通知",
+              "leaf": true
+            },
+            {
+              "viewType": "report-outsource",
+              "text": "广告管理",
+              "leaf": true
+            },
+            {
+              "viewType": "report-outsource",
+              "text": "紫云法务",
+              "children": [
+                {
+                  "viewType": "report-outsource",
+                  "text": "短期出家",
+                  "children": [
+                    {
+                      "viewType": "report-outsource",
+                      "text": "短期出家修改",
+                      "leaf": true
+                    }
+                  ]
+                },
+                {
+                  "viewType": "report-outsource",
+                  "text": "入寺须知",
+                  "leaf": true
+                },
+                {
+                  "viewType": "report-outsource",
+                  "text": "礼佛须右",
+                  "leaf": true
+                }
+              ]
+            },
+            {
+              "viewType": "report-outsource",
+              "text": "广种福田",
+              "leaf": true
+            },
+            {
+              "viewType": "report-outsource",
+              "text": "联系我们",
+              "leaf": true
+            }
+          ]
+        },
+        {
+          "viewType": "content-news",
+          "text": "新闻法讯",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-life",
+          "text": "生活禅",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-ziyunfoguo",
+          "text": "紫云佛国",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-",
+          "text": "神医养生",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-knowledge",
+          "text": "佛教常识",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-cangjingge",
+          "text": "藏经阁",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-law",
+          "text": "紫云法务",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-shuimochanyun",
+          "text": "水墨禅韵",
+          "split": true,
+          "leaf": true
+        },
+        {
+          "viewType": "content-recycle",
+          "iconCls": "x-fa fa-trash",
+          "text": "回收站",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "连载管理",
+      "iconCls": "x-fa fa-desktop",
+      "visible": false,
+      "children": [
+        {
+          "viewType": "log222",
+          "text": "连载列表",
+          "children": [
+            {
+              "viewType": "debug",
+              "text": "新增连载",
+              "leaf": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "发布管理",
+      "iconCls": "x-fa fa-desktop",
+      "visible": false,
+      "children": [
+        {
+          "viewType": "basicData",
+          "text": "发布记录",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "栏目维护",
+      "iconCls": "x-fa fa-bars",
+      "children": [
+        {
+          "viewType": "category",
+          "text": "目录维护",
+          "leaf": true
+        },
+        {
+          "viewType": "template",
+          "text": "模板维护",
+          "leaf": true
+        },
+        {
+          "viewType": "keyword",
+          "text": "标签维护",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "媒体管理",
+      "iconCls": "x-fa fa-cog",
+      "visible": false,
+      "children": [
+        {
+          "viewType": "basicData",
+          "text": "图片",
+          "leaf": true
+        },
+        {
+          "viewType": "site",
+          "text": "音频",
+          "leaf": true,
+        },
+        {
+          "viewType": "setting",
+          "text": "文档",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "帐户资料",
+      "iconCls": "x-fa fa-user",
+      "children": [
+        {
+          "viewType": "account-setting",
+          "text": "资料设置",
+          "leaf": true
+        },
+        {
+          "viewType": "account-editpwd",
+          "text": "密码修改",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "text": "系统安全",
+      "iconCls": "x-fa fa-lock",
+      "children": [
+        {
+          "viewType": "log",
+          "text": "日志管理",
+          "leaf": true
+        },
+        {
+          "viewType": "site",
+          "text": "帐户管理",
+          "leaf": true,
+          "visible": false
+        },
+        {
+          "viewType": "auth-role",
+          "text": "角色管理",
+          "leaf": true
+        },
+        {
+          "viewType": "setting",
+          "text": "权限管理",
+          "leaf": true,
+          "visible": false
+        }
+      ]
+    }
+  ]
+}

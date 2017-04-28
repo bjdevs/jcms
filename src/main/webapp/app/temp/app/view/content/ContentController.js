@@ -79,7 +79,7 @@ Ext.define('Admin.view.content.ContentController', {
         var action = target.getAttribute('action'),
 
             category = view.id.split('-'),
-            category = category[category.length];
+            category = category[category.length - 1];
 
 
         switch (action) {
@@ -138,7 +138,7 @@ Ext.define('Admin.view.content.ContentController', {
             view = ctrl.getView(),
 
             category = view.id.split('-'),
-            category = category[category.length],
+            category = category[category.length - 1],
 
             winReference = 'content-mform-' + category,
 
@@ -172,7 +172,7 @@ Ext.define('Admin.view.content.ContentController', {
             view = ctrl.getView(),
 
             category = view.id.split('-'),
-            category = category[category.length],
+            category = category[category.length - 1],
 
             winReference = 'content-headline-text-win-' + category;
 
@@ -204,7 +204,7 @@ Ext.define('Admin.view.content.ContentController', {
             view = ctrl.getView(),
 
             category = view.id.split('-'),
-            category = category[category.length],
+            category = category[category.length - 1],
 
             winReference = 'content-headline-picture-win-' + category;
 

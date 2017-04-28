@@ -72,7 +72,7 @@ Ext.define('Admin.view.content.headline.text.TextController', {
             ownerCtrl = ownerView.getController(), // content
 
             category = ownerView.id.split('-'),
-            category = category[category.length],
+            category = category[category.length-1],
 
             winReference = 'content-headline-picture-win-' + category;
 

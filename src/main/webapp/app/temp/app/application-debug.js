@@ -1,5 +1,5 @@
 Ext.Loader.setConfig({
-    // enabled: true, // 是否启动动态依赖加载,默认开启
+    enabled: true, // 是否启动动态依赖加载,默认开启
     disableCaching: true // 启用脚本文件缓存
 });
 
@@ -11,8 +11,7 @@ Ext.application({
 
     requires: [
         'Ext.app.*',
-        'Ext.chart.*'//,
-        //'Admin.*'
+        'Ext.chart.*'
     ],
 
     controllers: [
@@ -26,12 +25,15 @@ Ext.application({
         'common.panel.BaseSearchPanel',
         'common.charts.BaseChart',
 
+        'login.Login',
+
         'main.Main',
 
         // 工作台
         'workbench.Workbench',
 
         // 内容管理
+        'content.index.nav.Nav',
         //'content.news.News',
         'content.Content',
         'content.recycle.Recycle',
@@ -48,6 +50,7 @@ Ext.application({
 
         // 系统安全
         'auth.role.Role',
+        'log.Log',
 
         // 欢迎页
         'main.HomePage'
