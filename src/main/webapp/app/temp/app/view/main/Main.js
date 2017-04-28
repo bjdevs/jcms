@@ -51,7 +51,7 @@ Ext.define('Admin.view.main.Main', {
                         xtype: 'tbtext',
                         userCls: 'x-fa fa-user',
                         bind: {
-                            text: '{adminUser}，欢迎您 ！'
+                            text: ' {adminUser}，欢迎您！'
                         }
                     },
                     {

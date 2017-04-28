@@ -9,193 +9,157 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
     controller: 'content-headline-picture',
 
     maximized: true,// 默认最大化窗口
-    minWidth: 800,
+    maximizable: false, // 不支持放大 or 缩小
+    width: 1000,
+    height: 800,
+    layout: 'border',
 
     initComponent: function () {
         var me = this;
 
         Ext.apply(me, {
-            items: {
+            items: [{
                 xtype: 'panel',
-                layout: {
-                    type: 'vbox',
-                    pack: 'start',
-                    align: 'stretch'
-                },
-
+                region: 'center',
+                layout: 'form',
+                minHeight: 400,
+                border: false,
+                scrollable: 'y',
                 items: [
                     {
-                        flex: 2,
-                        region: 'center',
-                        items: {
+                        border: false,
+                        xtype: 'form',
+                        height: '100%',
+                        defaults: {
+                            xtype: 'fieldcontainer',
+                            defaults: {
+                                labelWidth: 80,
+                                labelAlign: 'right',
+                                width: '50%'
+                            }
+                        },
+                        bodyPadding: 10,
+                        items: [
+                            {
 
-                            xtype: 'form',
-                            scrollable: true,
-                            style: {
-                                marginBottom: 10
-                            },
-                            items: {
-                                xtype: 'fieldcontainer',
-                                //height: 400,
-                                //scrollable: true,
-
-                                layout: 'anchor',
-
-                                defaults: {
-                                    xtype: 'fieldcontainer',
-                                    layout: {
-                                        type: 'hbox',
-                                        pack: 'start',
-                                        align: 'stretch'
-                                    },
-
-                                    margin: '5 0 5 10',
-                                    defaults: {
-                                        anchor: '100%',
-                                        labelWidth: 80,
-                                        labelAlign: 'right',
-                                        msgTarget: 'side',
-                                        beforeLabelTextTpl: '<span class="admin-color-red">* </span>',
-                                        width: 600
-                                    },
-
-                                    defaultType: 'textfield'
+                                layout: {
+                                    type: 'hbox',
+                                    align: 'stretchmax'
                                 },
                                 items: [
                                     {
-                                        items: [
-                                            {
-                                                xtype: 'displayfield',
-                                                reference: 'title',
-                                                publishes: 'value',
-                                                fieldLabel: '文章标题',
-                                                name: 'title'
-                                            },
-                                            {
-                                                xtype: 'displayfield',
-                                                fieldLabel: '文章ID',
-                                                name: 'id',
-                                                width: 100
-                                            }
-                                        ]
+                                        xtype: 'displayfield',
+                                        fieldLabel: '文章标题',
+                                        reference: 'title',
+                                        publishes: 'value',
+                                        name: 'title'
                                     },
                                     {
-                                        items: [
-                                            {
-                                                fieldLabel: '头条标题',
-                                                name: 'topTitle',
-                                                bind: {
-                                                    value: '{title.value}'
-                                                },
-                                                allowBlank: false
-                                            }
-                                        ]
-                                    },
-                                    {
-
-                                        layout: {
-                                            type: 'vbox'/*,
-                                             pack: 'start',
-                                             align: 'stretch'*/
-                                        },
-
-                                        items: [
-                                            {
-                                                xtype: 'filefield',
-                                                fieldLabel: '标题图片',
-                                                name: 'photo',
-                                                buttonText: '',
-                                                buttonConfig: {
-                                                    iconCls: 'x-fa fa-file-image-o'
-                                                }
-                                            },
-                                            {
-                                                xtype: 'image',
-                                                itemId: 'form-image',
-                                                beforeLabelTextTpl: '',
-                                                src: 'resources/images/placeholder.jpg',
-                                                width: 300,
-                                                height: 100,
-                                                style: {
-                                                    left: '80px !important'
-                                                }
-
-
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        items: [
-                                            {
-                                                fieldLabel: '栏目名称',
-                                                name: 'category',
-                                                allowBlank: false
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        items: {
-                                            xtype: 'itemselector',
-                                            beforeLabelTextTpl: '',
-                                            fieldLabel: '手工增加',
-                                            name: 'itemselector',
-                                            maxHeight: 200,
-                                            scrollable: 'y',
-                                            imagePath: '../ux/images/',
-                                            buttons: [
-                                                'add', 'remove'
-                                            ],
-                                            buttonsText: [
-                                                '增加', '删除'
-                                            ],
-                                            store: {
-                                                proxy: {
-                                                    type: 'ajax',
-                                                    url: 'data/categorys.json',
-                                                    reader: {
-                                                        type: 'json',
-                                                        rootProperty: 'rows'
-                                                    }
-                                                },
-                                                autoLoad: true
-                                            },
-                                            displayField: 'name',
-                                            valueField: 'id',
-                                            allowBlank: false,
-                                            msgTarget: 'side'
-                                        }
+                                        xtype: 'displayfield',
+                                        fieldLabel: '文章ID',
+                                        name: 'id',
+                                        width: '30%'
                                     }
-
                                 ]
                             },
-                            tbar: [
-                                {
-                                    text: '重置',
-                                    iconCls: 'x-fa fa-undo',
-                                    action: 'reset',
-                                    handler: 'onResetBtnClicked'
+                            {
+                                items: [
+                                    {
+                                        xtype: 'textfield',
+                                        fieldLabel: '头条标题',
+                                        name: 'topTitle',
+                                        allowBlank: false,
+                                        bind: {
+                                            value: '{title.value}'
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                items: [
+                                    {
+                                        xtype: 'filefield',
+                                        fieldLabel: '标题图片',
+                                        buttonText: '',
+                                        buttonConfig: {
+                                            iconCls: 'x-fa fa-file-image-o'
+                                        }
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        height: 150,
+                                        items: {
+                                            xtype: 'image',
+                                            src: 'resources/images/placeholder.jpg',
+                                            height: 150,
+                                            width: 300
+                                        },
+                                        style: {
+                                            left: '80px'
+                                        }
+
+                                    }
+                                ]
+                            },
+                            {
+                                items: [
+                                    {
+                                        xtype: 'textfield',
+                                        fieldLabel: '栏目名称',
+                                        name: 'category',
+                                        allowBlank: false,
+                                        width: '50%'
+                                    }
+                                ]
+                            },
+
+                            {
+                                layout: 'fit',
+                                width: 595,
+                                style: {
+                                    left: '85px'
                                 },
-                                {
-                                    text: '提交',
-                                    iconCls: 'x-fa fa-floppy-o',
-                                    tooltip: '快捷键：Ctrl+Enter',
-                                    disabled: true,
-                                    formBind: true,  // 表单验证通过后才能点击
-                                    action: 'submit',
-                                    handler: 'onSubmitBtnClicked'
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        region: 'south',
-                        height: 280,
-                        items: new Admin.view.keyword.KeywordMainGrid()
+                                items: [
+                                    {
+                                        xtype: 'itemselector',
+                                        name: 'category',
+                                        height: 160,
+                                        scrollable: 'y',
+                                        imagePath: '../ux/images/',
+                                        buttons: [
+                                            'add', 'remove'
+                                        ],
+                                        buttonsText: [
+                                            '增加', '删除'
+                                        ],
+                                        store: {
+                                            proxy: {
+                                                type: 'ajax',
+                                                url: 'data/categorys.json',
+                                                reader: {
+                                                    type: 'json',
+                                                    rootProperty: 'rows'
+                                                }
+                                            },
+                                            autoLoad: true
+                                        },
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        msgTarget: 'side'
+                                    }
+                                ]
+                            }
+
+                        ]
                     }
                 ]
-            }
-
-
+            },
+                {
+                    region: 'south',
+                    height: 250,
+                    items: new Admin.view.workbench.WorkbenchMainGrid()
+                }
+            ]
         });
 
         me.callParent();

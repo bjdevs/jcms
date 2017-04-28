@@ -10,6 +10,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
     controller: 'content-headline-text',
 
     maximized: true,// 默认最大化窗口
+    maximizable: false, // 不支持放大 or 缩小
     width: 1000,
     height: 800,
     layout: 'border',
@@ -21,14 +22,18 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
             items: [{
                 xtype: 'panel',
                 region: 'center',
-                layout: 'fit',
+                layout: 'form',
                 minHeight: 400,
-                scrollable: true,
+                border: false,
+                scrollable: 'y',
                 items: [
                     {
+                        border: false,
+
                         xtype: 'form',
                         height: '100%',
                         defaults: {
+                            xtype: 'fieldcontainer',
                             defaults: {
                                 labelWidth: 80,
                                 labelAlign: 'right',
@@ -38,8 +43,28 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                         bodyPadding: 10,
                         items: [
                             {
-                                xtype: 'fieldcontainer',
-                                fieldLabel: '',
+
+                                layout: {
+                                    type: 'hbox',
+                                    align: 'stretchmax'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'displayfield',
+                                        fieldLabel: '文章标题',
+                                        reference: 'title',
+                                        publishes: 'value',
+                                        name: 'title'
+                                    },
+                                    {
+                                        xtype: 'displayfield',
+                                        fieldLabel: '文章ID',
+                                        name: 'id',
+                                        width: '30%'
+                                    }
+                                ]
+                            },
+                            {
                                 layout: {
                                     type: 'hbox',
                                     align: 'stretchmax'
@@ -47,73 +72,52 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                 items: [
                                     {
                                         xtype: 'textfield',
-                                        fieldLabel: '头条标题'
-                                    },
-                                    {
-                                        xtype: 'displayfield',
-                                        width: '30%',
-                                        fieldLabel: '文章ID',
-                                        value: '1001'
-                                    }
-                                ]
-                            },
-                            {
-                                xtype: 'fieldcontainer',
-                                fieldLabel: '',
-                                items: [
-                                    {
-                                        xtype: 'displayfield',
-                                        fieldLabel: '文章标题',
-                                        value: 'Display Field'
-                                    }
-                                ]
-                            },
-                            {
-                                xtype: 'fieldcontainer',
-                                items: [
-                                    {
-                                        xtype: 'filefield',
-                                        fieldLabel: '标题图片'
-                                    },
-                                    {
-                                        xtype: 'container',
-                                        height: 150,
-                                        width: '50%',
-                                        fieldLabel: '',
-                                        items: {
-                                            xtype: 'image',
-                                            src: 'resources/images/placeholder.jpg',
-                                            height: 150,
-                                            width: 300
-                                        },
-                                        style: {
-                                            left: '80px'
+                                        fieldLabel: '头条标题',
+                                        name: 'topTitle',
+                                        allowBlank: false,
+                                        bind: {
+                                            value: '{title.value}'
                                         }
-
+                                    },
+                                    {
+                                        xtype: 'checkboxgroup',
+                                        fieldLabel: '套红',
+                                        items: [
+                                            {
+                                                //boxLabel: '套红',
+                                                name: 'redStatus',
+                                                inputValue: '1'/*,
+                                             boxLabelAlign: 'before'*/
+                                            }
+                                        ],
+                                        width: 100
                                     }
                                 ]
                             },
                             {
-                                xtype: 'fieldcontainer',
-                                fieldLabel: '',
                                 items: [
                                     {
                                         xtype: 'textfield',
-                                        width: '50%',
-                                        fieldLabel: '栏目名称'
+                                        fieldLabel: '栏目名称',
+                                        name: 'category',
+                                        allowBlank: false,
+                                        width: '50%'
                                     }
                                 ]
                             },
+
                             {
-                                xtype: 'fieldcontainer',
                                 layout: 'fit',
-                                width: '60%',
-                                fieldLabel: '',
+                                width: 595,
+                                style: {
+                                    left: '85px'
+                                },
                                 items: [
                                     {
                                         xtype: 'itemselector',
-                                        width: '60%',
-                                        height: 137,
+                                        name: 'category',
+                                        height: 220,
+                                        scrollable: 'y',
                                         imagePath: '../ux/images/',
                                         buttons: [
                                             'add', 'remove'
@@ -134,19 +138,35 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                         },
                                         displayField: 'name',
                                         valueField: 'id',
-                                        allowBlank: false,
                                         msgTarget: 'side'
                                     }
                                 ]
                             }
 
+                        ],
+                        tbar: [
+                            {
+                                text: '重置',
+                                iconCls: 'x-fa fa-undo',
+                                action: 'reset',
+                                handler: 'onResetBtnClicked'
+                            },
+                            {
+                                text: '提交',
+                                iconCls: 'x-fa fa-floppy-o',
+                                tooltip: '快捷键：Ctrl+Enter',
+                                disabled: true,
+                                formBind: true,  // 表单验证通过后才能点击
+                                action: 'submit',
+                                handler: 'onSubmitBtnClicked'
+                            }
                         ]
                     }
                 ]
             },
                 {
                     region: 'south',
-                    height: 150,
+                    height: 350,
                     items: new Admin.view.workbench.WorkbenchMainGrid()
                 }
             ]

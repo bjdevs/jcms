@@ -28,19 +28,21 @@ Ext.define('Admin.controller.AppController', {
             viewport: 'viewport',
             login: 'login',
             navigationTree: 'navigation-tree',
-            contentPanel: 'contentPanel',
+            contentPanel: 'contentPanel'
 
-            outsourceGrid: '#outsource',
-            adInfoGrid: 'outsource > adInfo-mgrid'
         },
         routes: {
-            ':node': 'onRouteChange'
+            ':node': {
+                before: 'onBeforeHandleRoute',
+                action: 'onRouteChange'
+            }
         }
     },
 
     lastView: null,
 
     loginViewType: 'login',
+
 
     setCurrentView: function (hashTag) {
         hashTag = (hashTag || '');
@@ -58,12 +60,12 @@ Ext.define('Admin.controller.AppController', {
             newView;
 
 
-
         if (node.get('split')) {  // 多模块复用同一个页面,通过此属性进行拆分
-            view = view.split('-')[0];
+            var tmps = view.split('-');
+            view = tmps.slice(0, tmps.length - 1).join('-');
         }
 
-        /* if(view == 'page404') {
+        /* if(view == 'page404') { // 这里是指没有相关模块,未在navigation.js中添加节点
          location.href = '/jsp/400.jsp';
          }*/
 
@@ -87,24 +89,36 @@ Ext.define('Admin.controller.AppController', {
 
                 } else {
 
-                    newView = Ext.create({
-                        id: 'main-panel-' + hashTag,
-                        xtype: description ? 'panel' : view,
-                        html: description ? description : '',
-                        title: title,
-                        iconCls: iconCls,
-                        routeId: hashTag,  // for existingItem search later
-                        hideMode: 'offsets'
-                    });
+                    try {
+                        newView = Ext.create({
+                            id: 'main-panel-' + hashTag,
+                            xtype: description ? 'panel' : view,
+                            html: description ? description : '',
+                            title: title,
+                            iconCls: iconCls,
+                            routeId: hashTag,  // for existingItem search later
+                            hideMode: 'offsets'
+                        });
+                    } catch (e) {
+                        Ext.ux.Msg.error(e.message, e.name);
+                        return;
+                    }
                 }
 
             } else {
 
-                newView = Ext.create({
-                    xtype: view,
-                    routeId: hashTag,  // for existingItem search later
-                    hideMode: 'offsets'
-                });
+                try {
+                    newView = Ext.create({
+                        xtype: view,
+                        routeId: hashTag,  // for existingItem search later
+                        hideMode: 'offsets'
+                    });
+                } catch (e) {
+                    Ext.ux.Msg.error(e.message, e.name);
+                    return;
+
+
+                }
             }
 
 
@@ -152,11 +166,42 @@ Ext.define('Admin.controller.AppController', {
 
         me.lastView = newView;
     },
+    onBeforeHandleRoute: function (id, action) {
+        var me = this,
+            navigationList = me.getNavigationTree(),
+            store = navigationList.getStore(),
+            node = store.findNode('viewType', id);
+
+        if (node) {
+
+            action.resume();
+
+        } else if (store.getCount() === 0) {
+            //在store load事件中判断节点，避免store数据未加载情况
+
+            store.on('load', function () {
+
+                node = store.findNode('viewType', id);
+
+                if (node) {
+                    action.resume();
+
+                } else {
+
+                    Ext.ux.Msg.error('找不到viewType为【' + id + '】 的组件', '路由跳转失败');
+                    action.stop();
+                }
+            });
+        } else {
+
+            Ext.ux.Msg.error('找不到viewType为【' + id + '】 的组件', '路由跳转失败');
+            action.stop();
+        }
+    },
     onRouteChange: function (id) {
         this.setCurrentView(id);
     },
     onNavigationTreeSelectionChange: function (tree, node, item, index, e, eOpts) {
-        console.log('setup2.');
         var to = node && (node.get('routeId') || node.get('viewType'));
 
         if (to) {
