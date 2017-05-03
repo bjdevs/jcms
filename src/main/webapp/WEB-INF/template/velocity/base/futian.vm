@@ -1,0 +1,45 @@
+document.write(
+## 广种福田
+'<div class="layer1 gzft">'+
+    '<h2><span><em>$!futian[0]</em>#*<a href="$futian[1]">更多></a>*#</span></h2>'+
+
+    '<p>$!futian[1]</p>'+
+
+    '<div class="bank">'+
+        '<table>'+
+            '<thead>'+
+            '<tr>'+
+                '<td class="first">用途</td>'+
+                '<td>开户行</td>'+
+                '<td>户名</td>'+
+                '<td>账号</td>'+
+            '</tr>'+
+            '</thead>'+
+            '<tbody>'+
+            '<tr>'+
+                '<td class="first">$!futian[2]</td>'+
+                '<td>$!futian[3]</td>'+
+                '<td>$!futian[4]</td>'+
+                '<td>$!futian[5]</td>'+
+            '</tr>'+
+            '</tbody>'+
+        '</table>'+
+    '</div>'+
+'</div>'+
+'<div class="layer1 contact" id="contact">'+
+    '<h2><span><em>$!contact.get(0)[0]</em>'+
+        #if($contact.get(0)[1] != "")
+            '<a href="$!contact.get(0)[1]" target="_blank">详细></a>'+
+        #end
+    '</span></h2>'+
+    '<ul>'+
+#set($contactMaxNum = $contact.size() - 3)
+#foreach($index in $contact)
+    #if($velocityCount > 1 && $velocityCount <= 4)
+        '<li><span>$!index[0]：</span>$!index[1]</li>'+
+    #end
+#end
+    '</ul>'+
+    '<div class="map" id="map_container" style="width: 210px; height: 110px;"></div>'+
+'</div>'
+)

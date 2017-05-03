@@ -1,0 +1,7 @@
+document.write(
+'<ol>'+
+#foreach($item in $nav)
+    '$item'+
+#end
+'</ol>'
+);
