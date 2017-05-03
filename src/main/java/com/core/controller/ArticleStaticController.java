@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RightCheck(depict = "静态页面控制器")
 @Controller
 @RequestMapping("/article/create")
-public class ArticleController extends BaseController {
+public class ArticleStaticController extends BaseController {
 
     @Autowired
     private HomePageService homePageService;
