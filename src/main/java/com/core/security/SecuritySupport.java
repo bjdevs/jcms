@@ -61,7 +61,7 @@ public class SecuritySupport {
                 Map<String, Object> param = new HashMap<String, Object>();
                 param.put("account", account);
                 param.put("password", EncryptUtil.md5(password));
-                param.put("status", Constant.OPEN);
+                param.put("status", Constant.GENERAL_ID_ONE);
                 User user = findAccount(User.class, param);
                 if (user != null && user.getId() > 0) {
                     createSession(response, user.getAccount(), user.getId());
@@ -140,7 +140,7 @@ public class SecuritySupport {
             session.setSessionKey(sessionKey);
             session.setAccount(account);
 
-            session.setStatus(Constant.OPEN);
+            session.setStatus(Constant.GENERAL_ID_ONE);
             session.setUserId(id);
 
             securityRepository.create(session);
@@ -212,7 +212,7 @@ public class SecuritySupport {
     public Session findSession(String key) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("sessionKey", key);
-        param.put("status", Constant.OPEN);
+        param.put("status", Constant.GENERAL_ID_ONE);
 
         List<Session> list = securityRepository.list(Session.class, " WHERE sessionKey = :sessionKey AND status = :status ", param);
         if (list != null && list.size() != 0) {
@@ -274,7 +274,7 @@ public class SecuritySupport {
             param.put("password", password);
         }
         param.put("account", account);
-        param.put("status", Constant.OPEN);
+        param.put("status", Constant.GENERAL_ID_ONE);
 
         User userInfo = findAccount(User.class, param);
         if (userInfo != null && userInfo.getId() != 0) {
