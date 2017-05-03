@@ -32,14 +32,20 @@ public class HomePageService extends BaseService {
     @Autowired
     private HeadLineService headLineService;
 
-    private Log log = new Log();
-
     private JsonObject jsonObject = new JsonObject();
 
     /**
      * 静态化 首页
      */
     public void staticIndex() {
+
+        /**
+         * 结合后台--待完善目标
+         * 1、模版路径根据template表中数据获取
+         * 2、各模块数据获取
+         * 3、获取登录的admin信息
+         * 4、其他细节
+         */
 
         String staticResPrefix = config.getStaticResourceURLPrefix();
         String listDomain = config.getListDomain();
@@ -85,6 +91,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("waterzen", waterzen);
 
         create("/index.html", "base/index.vm", toolManagerContext);
+        createLog("首页模块静态化");
     }
 
     /**
@@ -101,6 +108,7 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("nav", navs);
 
             create("/base/nav.html", "base/nav.vm", toolManagerContext);
+            createLog("主导航静态化");
         }
 
         if ("deputy".equals(type) || "all".equals(type)) {
@@ -109,18 +117,17 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("nav", navs);
 
             create("/base/nav_deputy.html", "base/nav_1.vm", toolManagerContext);
+            createLog("副导航静态化");
         }
+
     }
 
     /**
      * 静态化 导航重置
      */
     public void staticNavReset(String type) {
+        String content = "";
         String[] navs;
-        log.setUserId(1);
-        log.setName("admin");
-        log.setAction("重置导航");
-        log.setIp(IpUtil.getIp(request));
         StringBuffer sb = new StringBuffer();
         ToolContext toolManagerContext = toolManager.createContext();
         Article article = null;
@@ -145,7 +152,7 @@ public class HomePageService extends BaseService {
                 SubArticle subArticle = find(SubArticle.class, 1);
                 subArticle.setContent(row2);
                 update(subArticle);
-                log.setContent("重置主导航");
+                content = "重置主导航";
             } else {
                 article.setContent(sb.toString());
             }
@@ -161,14 +168,11 @@ public class HomePageService extends BaseService {
 
             article = find(Article.class, 2);
             article.setContent(sb.toString());
-            log.setContent("重置副导航");
+            content = "重置副导航";
         }
 
-        log.setCreateDate(new Date());
-        create(log);
-
         update(article);
-
+        createLog(content);
     }
 
     /**
@@ -183,6 +187,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("contact", resultContact);
 
         create("/base/futian.html", "base/futian.vm", toolManagerContext);
+        createLog("广种福田、联系我们");
     }
 
     /**
@@ -225,6 +230,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("content", res);
 
         create("/base/fawu.html", "base/fawu.vm", toolManagerContext);
+        createLog("紫云法务");
     }
 
     /**
@@ -237,6 +243,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("ad", resultAdList);
 
         create("/base/banner.html", "base/banner.vm", toolManagerContext);
+        createLog("广告位");
     }
 
     /**
@@ -258,6 +265,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("notice", list);
 
         create("/base/notice.html", "base/notice.vm", toolManagerContext);
+        createLog("活动通知");
     }
 
 
@@ -348,7 +356,7 @@ public class HomePageService extends BaseService {
                     news[0] = article.getUrl();
                     news[1] = headLine.getName();
                     news[2] = article.getDepict();
-                    news[3] = null != article.getUpdateDate() ? new SimpleDateFormat("MM-dd").format(article.getUpdateDate()) : new SimpleDateFormat("MM-dd").format(article.getCreateDate());
+                    news[3] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     news[4] = null != media ? media.getUrl() : null;
                 }
                 map.put("first", news);
@@ -360,7 +368,7 @@ public class HomePageService extends BaseService {
                     article = find(Article.class, headLine.getaId());
                     news[0] = article.getUrl();
                     news[1] = headLine.getName();
-                    news[2] = null != article.getUpdateDate() ? new SimpleDateFormat("MM-dd").format(article.getUpdateDate()) : new SimpleDateFormat("MM-dd").format(article.getCreateDate());
+                    news[2] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     other.add(i, news);
                 }
                 map.put("other", other);
@@ -640,11 +648,38 @@ public class HomePageService extends BaseService {
 
     /**
      * 获取分类中文名称
+     *
      * @param id
      * @return
      */
-    public String getCategoryEName(int id) {
+    private String getCategoryEName(int id) {
         return find(Category.class, id).geteName();
+    }
+
+    /**
+     * 文章时间格式
+     *
+     * @param date
+     * @return
+     */
+    private String getArticleDate(Date date) {
+        return new SimpleDateFormat("MM-dd").format(date);
+    }
+
+    /**
+     * 记录日志
+     *
+     * @param content
+     */
+    private void createLog(String content) {
+        Log log = new Log();
+        log.setUserId(1);
+        log.setName("admin");
+        log.setAction("首页静态化");
+        log.setIp(IpUtil.getIp(request));
+        log.setContent(content);
+        log.setCreateDate(new Date());
+        create(log);
     }
 
 }
