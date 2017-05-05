@@ -6,7 +6,7 @@ Ext.define('Admin.view.auth.role.RoleController', {
 
     url: 'Super Awesome',
 
-    init: function () {
+    init: function() {
         console.log(this)
     },
 
@@ -27,28 +27,29 @@ Ext.define('Admin.view.auth.role.RoleController', {
         }
     },
 
-    onSelectionChange: function (model, selected, eOpts) {
+    onSelectionChange: function(model, selected, eOpts) {
         var ctrl = this,
             view = ctrl.getView(), // role
             viewModel = ctrl.getViewModel() || {};
 
-        var module = ctrl['module'],
-            roleGrid = view.down(module + ctrl.getSearchGridSuffix()),
+        var roleGrid = view.down('auth-role-mgrid'),
             count = !selected ? 0 : selected.length;
 
-        if (count == 0) Ext.log('No selection');
+        if(count == 0) Ext.log('No selection');
 
         roleGrid.down('button[action=edit]').setDisabled(count !== 1);
     },
 
-    onAddBtnClicked: function (button) {
+    onAddBtnClicked: function(button) {
         var ctrl = this,
             view = ctrl.getView();
 
         var win = ctrl.lookupReference('auth-role-mform');
 
-        if (!win) {
+        if(!win) {
             win = Ext.create({
+                reference: 'auth-role-mform',
+
                 xtype: 'auth-role-mform'
             });
 
@@ -58,14 +59,16 @@ Ext.define('Admin.view.auth.role.RoleController', {
         win.setTitle('新增');
         win.show();
     },
-    onEditBtnClicked: function (button) {
+    onEditBtnClicked: function(button) {
         var ctrl = this,
             view = ctrl.getView();
 
         var win = ctrl.lookupReference('auth-role-mform');
 
-        if (!win) {
+        if(!win) {
             win = Ext.create({
+                reference: 'auth-role-mform',
+
                 xtype: 'auth-role-mform'
             });
 
@@ -83,17 +86,21 @@ Ext.define('Admin.view.auth.role.RoleController', {
         win.down('form').getForm().loadRecord(record);
     },
 
-    onSubmitBtnClicked: function (button) {
+    onSubmitBtnClicked: function(button) {
         var ctrl = this,
             view = ctrl.getView();
 
 
-        var form = view.down('form').getForm();
+        var form = view.down('form').getForm(),
+
+            id = form.findField('id').getValue(),
+            submitUrl = id ? 'update.do' : 'create.do';
+
 
         ctrl.formSubmit(form, {
-            url: 'data/ajax.json' // todo edit
-        }, function (form, action) {
-            Ext.ux.Msg.info('保存成功', function () {
+            url: _ADMIN.root + '/auth-role/' + submitUrl
+        }, function(form, action) {
+            Ext.ux.Msg.info('保存成功', function() {
 
                 view.hide();
 

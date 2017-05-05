@@ -224,10 +224,9 @@
           "leaf": true
         },
         {
-          "viewType": "site",
-          "text": "帐户管理",
-          "leaf": true,
-          "visible": false
+          "viewType": "auth-function",
+          "text": "功能管理",
+          "leaf": true
         },
         {
           "viewType": "auth-role",
@@ -235,11 +234,11 @@
           "leaf": true
         },
         {
-          "viewType": "setting",
-          "text": "权限管理",
-          "leaf": true,
-          "visible": false
+          "viewType": "auth-acl",
+          "text": "用户管理",
+          "leaf": true
         }
+       
       ]
     }
   ]
