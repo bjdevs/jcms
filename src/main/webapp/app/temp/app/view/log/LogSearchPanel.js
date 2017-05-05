@@ -2,7 +2,7 @@ Ext.define('Admin.view.log.LogSearchPanel', {
     extend: 'Admin.view.common.panel.BaseSearchPanel',
     xtype: 'log-sp',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         var defaults = me.subDefaults;
@@ -17,20 +17,18 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             fieldLabel: '模块',
                             itemId: 'search-module',
                             store: {
+                                type: 'logStore',
+                                isPage: false,
+                                isSearch: true,
                                 proxy: {
-                                    type: 'ajax',
-                                    url: _ADMIN.root + '/log/select.do',
                                     extraParams: {
-                                        groupField: 'module'
-                                    },
-                                    reader: {
-                                        type: 'json',
-                                        rootProperty: 'rows'
+                                        method: 'group-list',
+                                        group: 'module'
                                     }
                                 }
                             },
-                            displayField: 'text',
-                            valueField: 'text',
+                            displayField: 'module',
+                            valueField: 'module',
                             queryMode: 'remote',
                             triggerAction: 'all',
                             typeAhead: true,
@@ -42,25 +40,24 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             fieldLabel: '动作',
                             itemId: 'search-action',
                             store: {
+                                type: 'logStore',
+                                isPage: false,
+                                isSearch: true,
                                 proxy: {
-                                    type: 'ajax',
-                                    url: _ADMIN.root + '/log/select.do',
                                     extraParams: {
-                                        groupField: 'action'
-                                    },
-                                    reader: {
-                                        type: 'json',
-                                        rootProperty: 'rows'
+                                        method: 'group-list',
+                                        group: 'action'
                                     }
                                 }
                             },
-                            displayField: 'text',
-                            valueField: 'text',
+                            displayField: 'action',
+                            valueField: 'action',
                             queryMode: 'remote',
                             triggerAction: 'all',
                             typeAhead: true,
                             forceSelection: true
                         },
+
                         {
                             xtype: 'textfield',
                             fieldLabel: '模糊查询',
@@ -87,5 +84,6 @@ Ext.define('Admin.view.log.LogSearchPanel', {
 
         me.callParent();
     }
+
 
 });

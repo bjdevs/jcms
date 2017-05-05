@@ -1,13 +1,12 @@
 Ext.define('Admin.view.log.Log', {
     extend: 'Ext.panel.Panel',
-    xtype: 'log', // 此处的主视图 xtype = 模块名称
+    xtype: 'log',
 
     requires: [
         'Admin.view.log.LogController',
-        'Admin.view.log.LogSearchPanel',
+        //'Admin.view.log.LogSearchPanel',
         'Admin.view.log.LogMainGrid'
     ],
-
 
     controller: 'log',
 
@@ -17,18 +16,16 @@ Ext.define('Admin.view.log.Log', {
     initComponent: function () {
         var me = this;
 
-
         Ext.apply(me, {
             items: [
-                {
+               /* {
                     region: 'north',
                     xtype: 'log-sp'
-                },
+                },*/
                 {
                     region: 'center',
                     xtype: 'log-mgrid'
                 }
-
             ]
         });
 
@@ -36,5 +33,4 @@ Ext.define('Admin.view.log.Log', {
 
 
     }
-
 });

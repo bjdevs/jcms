@@ -2,15 +2,15 @@ Ext.define('Admin.view.log.LogMainGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
     xtype: 'log-mgrid',
 
+
     initComponent: function() {
         var me = this;
-
 
         Ext.apply(me, {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/log/list.do',
+                    url: 'data/logs.json',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -19,12 +19,11 @@ Ext.define('Admin.view.log.LogMainGrid', {
                 autoLoad: true
             }),
             columns: [
-                { text: 'ID', dataIndex: 'operateLogId', width: 80 },
-                { text: '动作', dataIndex: 'action' },
-                { text: '模块', dataIndex: 'module' },
-                { text: 'IP', dataIndex: 'ip', width: 180 },
-                { text: '详情', dataIndex: 'logDetail', renderer: me.renderer, flex: 1 },
-                { text: '操作人', dataIndex: 'operate_name' },
+                { text: '模块', dataIndex: 'name', width: 120 },
+                { text: '动作', dataIndex: 'action', width: 100 },
+                { text: '详情', dataIndex: 'content', renderer: me.renderer, flex: 1 },
+                { text: '操作者', dataIndex: 'user_name', width: 100 },
+                { text: 'IP', dataIndex: 'ip', width: 150 },
                 { text: '操作时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'Y-m-d H:i:s', width: 150 }
             ],
             tbar: [
@@ -47,18 +46,17 @@ Ext.define('Admin.view.log.LogMainGrid', {
             dataIndex = column.dataIndex;
 
         switch(dataIndex) {
-            case 'logDetail':
-                if(value && typeof value === 'object') {
-                    var returnStr = JSON.stringify(value);
+            case 'content':
+                var returnStr = (value && typeof value === 'object') ? JSON.stringify(value) : value;
+                // metaData.tdAttr = 'data-qtip="' + returnStr + '"';
 
+                // 使用Ext.JSON会导致中文乱码
+                // return (value && typeof value === 'object') ? Ext.JSON.encode(value) : value;
 
-                    // return '<a href="http://jsoneditoronline.org/?json=' + encodeURIComponent(returnStr) + '" target="_blank" title="查看完整JSON">' + returnStr + '</a>';
-                    return '<button class="x-fa fa-magic admin-label-button admin-color-brown" action="show-json" title="想看我变魔术吗？赶快点击我吧！"></button>' + returnStr;
-                }
-
-                return value;
+                return returnStr;
             default:
                 return value;
         }
+
     }
 });
