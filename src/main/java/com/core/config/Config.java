@@ -6,10 +6,13 @@ public class Config {
     private String database;
 
     private String dbName;
+    private String projectName;
 
     private String domain;
     private String listDomain;
     private String listParam;
+
+    // 静态资源链接前缀
     private String staticResourceURLPrefix;
 
     private long dbIdBuffSize;
@@ -18,6 +21,9 @@ public class Config {
 
     private String templateDir;
     private String previewDir;
+
+    // 文章地址
+    private String articleDir;
 
     public String getDbName() {
         return dbName;
@@ -97,5 +103,21 @@ public class Config {
 
     public void setPreviewDir(String previewDir) {
         this.previewDir = previewDir;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getArticleDir() {
+        return articleDir;
+    }
+
+    public void setArticleDir(String articleDir) {
+        this.articleDir = articleDir;
     }
 }

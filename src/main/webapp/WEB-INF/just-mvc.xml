@@ -62,7 +62,14 @@
           p:dbIdBuffSize="${db.id.buffSize}"
           p:articleIdAddend="${db.article.id.addend}"
           p:templateDir="${template.upload.dir}"
-          p:previewDir="${velocity.output.preview}">
+          p:previewDir="${velocity.output.preview}"
+          p:staticResourceURLPrefix="${config.hmlzs.static.resource.prefix}"
+          p:articleDir="${config.hmlzs.static.article}"
+          p:listDomain="${config.hmlzs.domain.list}"
+          p:listParam="${config.hmlzs.domain.list.param}"
+          p:domain="${config.hmlzs.domain}"
+          p:projectName="${config.hmlzs.project.name}"
+    >
     </bean>
 
     <!-- NamedParameterJdbcTemplate-->

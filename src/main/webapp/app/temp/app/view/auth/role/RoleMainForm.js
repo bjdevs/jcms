@@ -6,7 +6,7 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
 
     maximizable: false,
 
-    initComponent: function () {
+    initComponent: function() {
         var me = this;
 
         var form = Ext.create({
@@ -40,11 +40,13 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                     name: 'rank',
                     fieldLabel: '级别',
                     allowBlank: false,
-                    minValue: 0
+                    allowDecimals: false,
+                    minValue: 0,
+                    value: 0
                 },
                 {
                     xtype: 'textarea',
-                    name: 'depict',
+                    name: 'description',
                     beforeLabelTextTpl: '',
                     fieldLabel: '描述',
                     maxLength: 255
@@ -53,13 +55,14 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                     xtype: 'fieldcontainer',
                     fieldLabel: '功能',
                     layout: 'fit',
-                    maxHeight: 500,
-                    scrollable: 'y',
+                    // maxHeight: 500,
                     items: {
                         xtype: 'itemselector',
                         name: 'function_ids',
                         itemId: 'function_ids',
                         width: '100%',
+                        height: 300,
+                        scrollable: 'y',
                         imagePath: '../ux/images/',
                         buttons: [
                             'add', 'remove'
@@ -70,7 +73,7 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                         store: {
                             proxy: {
                                 type: 'ajax',
-                                url: 'data/functions.json',
+                                url: _ADMIN.root + '/auth-function/list.do',
                                 reader: {
                                     type: 'json',
                                     rootProperty: 'rows'

@@ -1,0 +1,299 @@
+#parse("/base/head.vm")
+<div class="navbar">
+    <div class="wrapper" id="navbar">
+        <script type="text/javascript" src=${resURLPrefix}/base/nav.html></script>
+    </div>
+</div>
+
+<div class="content">
+
+    <div class="notice">
+        <span class="icon left"></span>
+
+        <p>
+            <strong>活动通知</strong>
+            <script type="text/javascript" src=${resURLPrefix}/base/notice.html></script>
+        </p>
+        <span class="icon right"></span>
+    </div>
+
+    <div class="focus">
+        #if($focus.list.size() > 0)
+            <ul>
+                #foreach($item in $focus.list)
+                    <li><a href="$!item[1]" target="_blank"><img src="$!item[2]" alt=""/><span>$!item[0]</span></a></li>
+                #end
+            </ul>
+            <ol>
+                #foreach($item in $focus.list)
+                    #if($velocityCount == 1)
+                        <li class="activeSlide"><a href="$!item[1]" target="_blank"><img src="$!item[3]" alt=""/><span>$!item[0]</span></a>
+                        </li>
+                    #else
+                        <li><a href="$!item[1]" target="_blank"><img src="$!item[3]" alt=""/><span>$!item[0]</span></a>
+                        </li>
+                    #end
+                #end
+            </ol>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <!-- 新闻法讯 -->
+    <div class="layer1 xwfx">
+        <h2><span><em>$!news.name</em></span></h2>
+        #if($news.first)
+            <dl>
+                <dt><a href="$!news.first[0]" target="_blank">$!news.first[1]</a></dt>
+                <dd>
+                    $!news.first[2]
+                    <a href="$!news.first[0]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
+                #foreach($item in $news.other)
+                    #if($items[2])
+                        <li class="highlight"><a href="!$item[0]" target="_blank">!$item[1]</a></li>
+                    #else
+                        <li><a href="$!item[0]" target="_blank">$!item[1]</a></li>
+                    #end
+                #end
+            </ul>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <!-- 生活禅 -->
+    <div class="layer1 layer1-1 shc">
+        <h2><span><em>$!life.name</em>
+            #if($life.more)
+                <a href="$!life.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+
+        #if($life.first)
+            <div class="pic">
+                <img src="$!life.first[4]" style="width: 240px;height: 160px;" alt=""/>
+            </div>
+            <dl>
+                <dt><span><a href="$!life.first[0]" target="_blank">$!life.first[1]</a></span><em>$!life.first[3]</em>
+                </dt>
+                <dd>
+                    $!life.first[2]
+                    <a href="$!life.first[0]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
+                #foreach($item in $life.other)
+                    <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$item[2]</em></li>
+                #end
+            </ul>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <!-- 紫云佛国 -->
+    <div class="layer1 layer1-1 zyfg">
+        <h2><span><em>$!ziyun.name</em>
+            #if($ziyun.more)
+                <a href="$!ziyun.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+
+        #if($ziyun.first)
+            <div class="pic">
+                <img src="$!ziyun.first[4]" style="width: 240px;height: 160px;" alt=""/>
+            </div>
+            <dl>
+                <dt><span><a href="$!ziyun.first[0]" target="_blank">$!ziyun.first[1]</a></span><em>$!ziyun.first[3]</em>
+                </dt>
+                <dd>
+                    $!ziyun.first[2]<a href="$!ziyun.first[0]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
+                #foreach($item in $ziyun.other)
+                    <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$!item[2]</em></li>
+                #end
+            </ul>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <div class="banner" id="banner">
+        <script type="text/javascript" src="${resURLPrefix}/base/banner.html"></script>
+    </div>
+
+    <!-- 禅医养生 -->
+    <div class="layer1 layer1-1 layer1-1-1 hgwj">
+        <h2><span><em>$!medical.name</em>
+            #if($medical.more)
+                <a href="$medical.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+        #if($medical.first)
+            <div class="pic">
+                #if($medical.first.size() > 4)
+                    <img src="$!medical.first[4]" style="width: 144px;height: 96px;" alt=""/>
+                #end
+                #if($medical.first.size() > 5)
+                    <img src="$!medical.first[5]" style="width: 144px;height: 96px;" alt=""/>
+                #end
+            </div>
+            <dl>
+                <dt><span><a href="$!medical.first[0]"
+                             target="_blank">$!medical.first[1]</a></span><em>$!medical.first[3]</em></dt>
+                <dd>
+                    $!medical.first[2]<a href="$!medical.first[0]">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
+                #foreach($item in $medical.other)
+                    <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$!item[2]</em></li>
+                #end
+            </ul>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <!-- 佛教常识 -->
+    <div class="layer1 layer1-1 layer1-1-1 fjcs">
+        <h2><span><em>$!knowledge.name</em>
+            #if($knowledge.more)
+                <a href="$!knowledge.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+        #if($knowledge.first)
+            <div class="pic">
+                #if($knowledge.first.size() > 4)
+                    <img src="$!knowledge.first[4]" style="width: 144px;height: 96px;" alt=""/>
+                #end
+                #if($knowledge.first.size() > 5)
+                    <img src="$!knowledge.first[5]" style="width: 144px;height: 96px;" alt=""/>
+                #end
+            </div>
+            <dl>
+                <dt><span><a href="$!knowledge.first[0]"
+                             target="_blank">$!knowledge.first[1]</a></span><em>$!knowledge.first[3]</em>
+                </dt>
+                <dd>
+                    $!knowledge.first[2]<a href="$!knowledge.first[2]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
+                #foreach($item in $knowledge.other)
+                    <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$!item[2]</em></li>
+                #end
+            </ul>
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </div>
+
+    <!-- 藏经阁 -->
+    <div class="layer1 fyxl">
+        <h2><span><em>$!depository.name</em>
+            #if($depository.more)
+                <a href="$!depository.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+    #*
+    #if($depository.currentUrl)
+        <div class="player">
+            <audio src="$depository.currentUrl" preload="auto"/>
+        </div>
+        <div class="name">$depository.currentTitle</div>
+    #end*#
+    #*<ul id="playlist">
+        #if($depository.currentUrl || ($depository.list && $depository.list.size() > 0))
+            <li class="playing" data-src="$depository.currentUrl">$depository.currentTitle</li>
+            #foreach($item in $depository.list)
+                <li data-src="$item[1]">$item[0]</li>
+            #end
+        #else
+            <span style="color:red">(暂无)</span>
+        #end
+    </ul>*#
+        <ul>
+            #foreach($item in $depository.list)
+                <li><a href="$!item[0]" target="_blank">$!item[1]</a></li>
+            #end
+        </ul>
+    </div>
+
+    <script type="text/javascript" src=${resURLPrefix}/base/fawu.html></script>
+    <script type="text/javascript" src=${resURLPrefix}/base/futian.html></script>
+
+    <!-- 水墨禅韵 -->
+    <div class="layer1 gallery">
+        <h2><span><em>$!waterzen.name</em>
+            #if($waterzen.more)
+                <a href="$!waterzen.more" target="_blank">更多></a>
+            #end
+        </span></h2>
+        <ul>
+            #if($waterzen.list && $waterzen.list.size() > 0)
+                #foreach($item in $waterzen.list)
+                    <li>
+                        <a href="$!item[1]" target="_blank"><img src="$!item[2]" alt=""/></a>
+
+                        <p><a href="$!item[1]" target="_blank">$!item[0]</a></p>
+                    </li>
+                #end
+            #else
+                <li><span style="color:red">(暂无)</span></li>
+            #end
+
+        </ul>
+    </div>
+</div>
+</div>
+<!-- /content -->
+#parse("/base/foot.vm")
+</div>
+#parse("/base/script.vm")
+
+<script type="text/javascript">
+
+    // 紫云法务
+    $(".zyfw ul li").each(function (index) {
+        $(this).mouseenter(function () {
+            $("ul li:eq(" + index + "), ol li:eq(" + index + ")", ".zyfw").addClass("current").siblings().removeClass("current");
+        });
+    });
+
+    // focus
+    $(".focus ul").cycle({
+        pager: ".focus ol",
+        pagerAnchorBuilder: function (idx, slide) {
+            return ".focus ol li:eq(" + idx + ") a";
+        },
+        pagerEvent: "hover",
+        pause: true,
+        timeout: 1000 * 3
+    });
+
+    // audio
+    audiojs.events.ready(function () {
+        var audio = audiojs.createAll()[0];
+        $("#playlist li").click(function (e) {
+            $(this).addClass("playing").siblings().removeClass("playing");
+            $(".fyxl .name").text($(this).text());
+            audio.load($(this).attr("data-src"));
+            audio.play();
+        });
+    });
+    console.log('%c黄梅老祖寺期待您的光临', 'background-image:-webkit-gradient( linear, left top, right top, ' +
+            'color-stop(0, #f22),color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff),' +
+            'color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2),color-stop(1, #f22) );' +
+            'color:transparent;-webkit-background-clip: text;font-size:5em;');
+    console.log("%c", "padding:50px 300px;line-height:120px;" +
+            "background:url('http://note.youdao.com/yws/public/resource/666584082b02a9c346980f6d1c7e68e0/xmlnote/5A5314A1694E4ED28E9E5383E9FC2A6B/17113') no-repeat;");
+</script>
+</body>
+</html>
