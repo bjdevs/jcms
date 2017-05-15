@@ -17,10 +17,25 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-
     <!-- annotation config -->
     <mvc:annotation-driven/>
     <context:component-scan base-package="com"/>
+
+    <!-- mvc的注解驱动 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 解决中文返回乱码问题 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- properties -->
     <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
@@ -150,6 +165,18 @@
 
     <bean class="com.core.security.SupportFactory">
         <lookup-method name="getSecuritySupport" bean="securitySupport"></lookup-method>
+    </bean>
+
+    <bean class="com.qiniu.storage.UploadManager">
+        <constructor-arg ref="config"/>
+    </bean>
+    <bean id="config" class="com.qiniu.storage.Configuration"/>
+
+    <bean class="com.core.util.QiniuAuthUtil"
+          c:_0="${qiniu.accessKey}"
+          c:_1="${qiniu.secretKey}"
+          c:_2="${qiniu.bucket}"
+          c:_3="${qiniu.file.access.domain}">
     </bean>
 
 </beans>

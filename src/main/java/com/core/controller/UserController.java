@@ -29,12 +29,6 @@ public class UserController extends BaseController {
         return userService.updateInfo(user).toString();
     }
 
-    @RequestMapping(value = "/userAddShow", method = RequestMethod.GET)
-    public String userAddShowAH() throws Exception {
-        request.setAttribute("addStatus",1);
-        return getView("userInfo");
-    }
-
     @ResponseBody
     @RequestMapping(value = "/userChangePassWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userChangePassWordAH(User user) throws Exception {
