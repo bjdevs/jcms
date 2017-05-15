@@ -1,0 +1,8 @@
+document.write(
+'<ul>'+
+#foreach($item  in $nav)
+    '$item'+
+#end
+'</ul>'+
+'<script type="text/javascript" src=${resURLPrefix}/base/nav_deputy.html></script>'
+);

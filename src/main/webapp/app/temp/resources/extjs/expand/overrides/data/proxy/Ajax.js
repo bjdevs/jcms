@@ -2,7 +2,8 @@ Ext.define('classic.expand.overrides.data.proxy.Ajax', {
     override: 'Ext.data.proxy.Ajax',
 
     config: {
-        simpleFilterMode: true// 组合filters普通参数
+        simpleFilterMode: true,// 组合filters普通参数
+        pagination: true // 默认分页
     },
 
     getParams: function(operation) {
@@ -18,6 +19,7 @@ Ext.define('classic.expand.overrides.data.proxy.Ajax', {
             page = operation.getPage(),
             start = operation.getStart(),
             limit = operation.getLimit(),
+            pagination = me.getPagination(),
             simpleFilterMode = me.getSimpleFilterMode(),
             simpleSortMode = me.getSimpleSortMode(),
             simpleGroupMode = me.getSimpleGroupMode(),
@@ -31,16 +33,20 @@ Ext.define('classic.expand.overrides.data.proxy.Ajax', {
             directionParam = me.getDirectionParam(),
             hasGroups, index;
 
-        if(pageParam && page) {
-            params[pageParam] = page;
-        }
+        if(pagination) {
 
-        if(startParam && (start || start === 0)) {
-            params[startParam] = start;
-        }
+            if(pageParam && page) {
+                params[pageParam] = page;
+            }
 
-        if(limitParam && limit) {
-            params[limitParam] = limit;
+            if(startParam && (start || start === 0)) {
+                params[startParam] = start;
+            }
+
+            if(limitParam && limit) {
+                params[limitParam] = limit;
+            }
+
         }
 
         hasGroups = groupParam && grouper;

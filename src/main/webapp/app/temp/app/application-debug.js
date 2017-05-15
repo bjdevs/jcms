@@ -52,7 +52,10 @@ Ext.application({
         'account.AccountEditPwd',
 
         // 系统安全
+        'auth.function.Function',
         'auth.role.Role',
+        'auth.acl.Acl',
+
         'log.Log',
 
         // 欢迎页
