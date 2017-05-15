@@ -17,7 +17,7 @@ Ext.define('Admin.store.Navigation', {
     },
     proxy: {
         type: 'ajax',
-        url: 'data/navs.json',
+        url: '/app/temp/data/navs.json',
         reader: {
             type: 'json',
             rootProperty: 'children'

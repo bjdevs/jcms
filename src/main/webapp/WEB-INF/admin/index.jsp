@@ -40,6 +40,7 @@
     <!-- kindeditor -->
     <script charset="utf-8" src="/resources/kindeditor/kindeditor-all-min.js"></script>
     <script charset="utf-8" src="/resources/kindeditor/lang/zh_CN.js"></script>
+    <jsp:include page="_script.jspf"></jsp:include>
 
 </head>
 <body>

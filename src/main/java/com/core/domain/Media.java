@@ -1,22 +1,22 @@
 package com.core.domain;
 
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 
 /**
- * Created by yk on 2017/4/28.
+ * Created by sun on 2017/5/2.
  */
 public class Media {
 
     private long id;
-    private int uId;
+    private short uId;
     private String title;
-    private String depict;
-
-    // 0 9
-    private int type;
+    private byte type;
     private String url;
-    private int cId;
-    private int status;
+    private short cId;
+    private byte status;
     private Date createDate;
 
     public long getId() {
@@ -27,11 +27,11 @@ public class Media {
         this.id = id;
     }
 
-    public int getuId() {
+    public short getuId() {
         return uId;
     }
 
-    public void setuId(int uId) {
+    public void setuId(short uId) {
         this.uId = uId;
     }
 
@@ -43,20 +43,73 @@ public class Media {
         this.title = title;
     }
 
-    public String getDepict() {
-        return depict;
-    }
-
-    public void setDepict(String depict) {
-        this.depict = depict;
-    }
-
-    public int getType() {
+    public byte getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(byte type) {
         this.type = type;
+    }
+
+    /**
+     * 首页大焦点图          630x420
+     * 首页焦点图右1         102x68
+     * 首页栏目图片1         240x160
+     * 首页栏目图片2         144x96
+     * 水墨禅韵头条          279x186
+     * 首页通栏左侧1         912x100
+     * 首页通栏右侧1         240x100
+     */
+
+    @JsonIgnore
+    public String getPic_630x420() {
+        return getUrl("630x420");
+    }
+
+    @JsonIgnore
+    public String getPic_102x68() {
+        return getUrl("102x68");
+    }
+
+    @JsonIgnore
+    public String getPic_240x160() {
+        return getUrl("240x160");
+    }
+
+    @JsonIgnore
+    public String getPic_144x96() {
+        return getUrl("144x96");
+    }
+
+    @JsonIgnore
+    public String getPic_279x186() {
+        return getUrl("279x186");
+    }
+
+    @JsonIgnore
+    public String getPic_912x100() {
+        return getUrl("912x100");
+    }
+
+    @JsonIgnore
+    public String getPic_240x100() {
+        return getUrl("240x100");
+    }
+
+    // 获取音频 / 文档类型使用此方法
+    @JsonIgnore
+    public String getRealUrl() {
+        return getUrl("");
+    }
+
+    /**
+     *
+     * @param rule 允许为空
+     * @return
+     */
+    @JsonIgnore
+    public String getUrl(String rule) {
+        return  url + (StringUtils.isBlank(rule) ? "" : "-" + rule);
     }
 
     public String getUrl() {
@@ -67,19 +120,19 @@ public class Media {
         this.url = url;
     }
 
-    public int getcId() {
+    public short getcId() {
         return cId;
     }
 
-    public void setcId(int cId) {
+    public void setcId(short cId) {
         this.cId = cId;
     }
 
-    public int getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -89,20 +142,5 @@ public class Media {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Media{" +
-                "id=" + id +
-                ", uId=" + uId +
-                ", title='" + title + '\'' +
-                ", depict='" + depict + '\'' +
-                ", type=" + type +
-                ", url='" + url + '\'' +
-                ", cId=" + cId +
-                ", status=" + status +
-                ", createDate=" + createDate +
-                '}';
     }
 }

@@ -179,21 +179,10 @@
     {
       "text": "媒体管理",
       "iconCls": "x-fa fa-cog",
-      "visible": false,
       "children": [
         {
-          "viewType": "basicData",
-          "text": "图片",
-          "leaf": true
-        },
-        {
-          "viewType": "site",
-          "text": "音频",
-          "leaf": true
-        },
-        {
-          "viewType": "setting",
-          "text": "文档",
+          "viewType": "media",
+          "text": "媒体库",
           "leaf": true
         }
       ]

@@ -44,6 +44,9 @@ Ext.application({
         'template.Template',
         'keyword.Keyword',
 
+        // 媒体管理
+        'media.Media',
+
         // 帐户资料
         'account.AccountEditSetting',
         'account.AccountEditPwd',
