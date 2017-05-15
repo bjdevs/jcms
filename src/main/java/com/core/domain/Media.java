@@ -1,12 +1,8 @@
 package com.core.domain;
 
-import com.core.util.QiniuAuthUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.beans.Transient;
 import java.util.Date;
 
 /**
