@@ -11,12 +11,10 @@ Ext.define('Admin.view.media.MediaController', {
     },
 
     control: {
-
         'media-mgrid': {
             selectionchange: 'onSelectionChange',
             itemclick: 'onItemClick'
         },
-
         'media-mgrid button[action=add]': {
             click: 'onAddBtnClicked'
         },
@@ -37,8 +35,13 @@ Ext.define('Admin.view.media.MediaController', {
         },
         'media-mgrid button[action=edit]': {
             click: 'onEditBtnClicked'
+        },
+        'media-sp button[action=search]': {
+            click: 'onSearchPanelQuery'
+        },
+        'media-sp button[action=reset]': {
+            click: 'onSearchPanelReset'
         }
-
     },
 
     onSelectionChange: function (model, selected, eOpts) {
@@ -78,7 +81,6 @@ Ext.define('Admin.view.media.MediaController', {
 
                 //alert('【' + id + '】' + target.getAttribute('title'));
 
-
                 var win = ctrl.lookupReference('media-mform');
 
                 if (!win) {
@@ -89,12 +91,8 @@ Ext.define('Admin.view.media.MediaController', {
 
                     view.add(win);
                 }
-
                 win.setTitle('新增子栏目');
-
                 win.show();
-
-
 
                 var form = win.down('form').getForm();
                 form.findField('parentId').setValue(id);
@@ -102,23 +100,15 @@ Ext.define('Admin.view.media.MediaController', {
 
                 break;
             case 'headlineText':
-
                 alert('【' + id + '】' + target.getAttribute('title'));
-
                 break;
             case 'picture':
-
                 alert('【' + id + '】' + target.getAttribute('title'));
-
                 break;
             case 'article':
-
                 alert('【' + id + '】' + target.getAttribute('title'));
-
                 break;
         }
-
-
     },
 
     onAddBtnClicked: function (button) {
@@ -138,6 +128,13 @@ Ext.define('Admin.view.media.MediaController', {
 
         win.setTitle('新增');
 
+        var formPanel = win,
+            displayFields = formPanel.query('[itemId^="d-"]');
+
+        Ext.each(displayFields, function (item, index, allItems) {
+            item.enable();
+            item.setHidden(false);
+        });
         win.show();
     },
 
@@ -149,43 +146,6 @@ Ext.define('Admin.view.media.MediaController', {
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
             url: './mediaUpdate'
         });
-    },
-
-    onUpdateSubmitBtnClicked: function (button) {
-        var ctrl = this,
-            view = ctrl.getView();
-
-        var form = view.down('form').getForm();
-        /*if (form.isValid()) {
-            form.submit({
-                url: "./mediaUpdate",
-                method: "POST",
-                submitEmptyText: false,
-                waitMsg: '上传中，稍等片刻...',
-                success: function (_form, action) {
-                    var result = action.result.result;
-                    switch (result) {
-                        case 'success' :
-                            Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
-                                view.hide();
-                                var grid = view.up().down('media-mgrid'),
-                                    store = grid.getStore();
-
-                                store.getProxy().setExtraParam('page', 1);
-                                store.reload();
-                            }).setIcon(Ext.Msg.INFO);
-                            break;
-                        case 'failed' :
-                            Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
-                        default :
-                            break;
-                    }
-                },
-                failure: function (_form, action) {
-                    Ext.Msg.alert("错误", "服务器端异常，请联系管理员").setIcon(Ext.Msg.ERROR);
-                }
-            });
-        }*/
     },
 
     onDeleteBtnClicked: function (button) {
@@ -218,21 +178,38 @@ Ext.define('Admin.view.media.MediaController', {
     },
     onEditBtnClicked: function (button) {
         var ctrl = this,
+            view = ctrl.getView(),
             grid = button.up("grid");
 
-        this.setCurrentView({
-            xtype: 'mediaUpdate-mform',
-            window: true,
-            targetCfg: {
-                title: '编辑',
-                listeners: {
-                    show: function (win) {
-                        var record = grid.getSelection()[0];
-                        win.down('form').getForm().loadRecord(record);
-                    }
-                }
-            }
+        var win = ctrl.lookupReference('media-mform');
+
+        if (!win) {
+            win = Ext.create({
+                reference: 'media-mform',
+                xtype: 'media-mform'
+            });
+
+            view.add(win);
+        }
+
+        win.setTitle('新增');
+
+        win.show();
+        var record = grid.getSelection()[0];
+        win.down('form').getForm().loadRecord(record);
+
+        var formPanel = view.down('form'),
+            displayFields = formPanel.query('[itemId^="d-"]'),
+            resetButton = view.down('button[action="reset"]'),
+            submitButton = view.down('button[action="submit"]');
+
+        Ext.each(displayFields, function (item, index, allItems) {
+            item.disable();
+            item.setHidden(true);
         });
+
+        resetButton.setHidden(false);
+        submitButton.setHidden(false);
     },
 
     onSubmitBtnClicked: function (button) {

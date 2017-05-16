@@ -28,12 +28,14 @@ Ext.define('Admin.view.media.MediaForm', {
                     name: 'title',
                     fieldLabel: '标题',
                     allowBlank: false
+
                 },
                 {
-                    itemId: 'media-type',
+                    itemId: 'd-media-type',
                     name: 'type',
                     fieldLabel: '类型',
                     xtype: 'radiogroup',
+                    hidden: false,
                     items: [
                         {inputValue: MEDIA_TYPE_PICTURE, boxLabel: '图片', checked: true},
                         {inputValue: MEDIA_TYPE_AUDIO, boxLabel: '音频'},
@@ -41,9 +43,10 @@ Ext.define('Admin.view.media.MediaForm', {
                     ]
                 },
                 {
-                    itemId: 'file-rule',
+                    itemId: 'd-file-rule',
                     name: 'rule',
                     fieldLabel: '规则',
+                    hidden: false,
                     xtype: 'radiogroup',
                     items: [
                         {inputValue: 0, boxLabel: '系统生成', checked: true,labelAlign : 'left'},
@@ -51,8 +54,10 @@ Ext.define('Admin.view.media.MediaForm', {
                     ]
                 },
                 {
+                    itemId: 'd-file-type',
                     xtype: 'fieldcontainer',
                     fieldLabel: '文件',
+                    hidden: false,
                     layout: {
                         type: 'vbox',
                         align: 'stretch'
@@ -68,7 +73,7 @@ Ext.define('Admin.view.media.MediaForm', {
                             var mediaType,
                                 regex,
                                 fileRule;
-                            mediaType = me.down('#media-type').getValue()['type'].toString();
+                            mediaType = me.down('#d-media-type').getValue()['type'].toString();
                             if (mediaType == MEDIA_TYPE_PICTURE) {
                                 regex = /^.+\.(jpg|jpeg|gif|png|bmp)$/;
                                 if (!regex.test(val)) {
@@ -87,7 +92,7 @@ Ext.define('Admin.view.media.MediaForm', {
                                     return '不支持的文档类型，请上传txt|pdf|doc|docx|xls|xlsx格式的文档文件';
                                 }
                             }
-                            fileRule = me.down('#file-rule').getValue()['rule'].toString();
+                            fileRule = me.down('#d-file-rule').getValue()['rule'].toString();
                             if (fileRule == 1) {
                                 regex = /(C:\\fakepath\\)+[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/;
                                 if (!regex.test(val)) {
@@ -102,6 +107,10 @@ Ext.define('Admin.view.media.MediaForm', {
                     name: 'uId',
                     hidden: true,
                     value: _am.currentUser.id
+                },
+                {
+                    name: 'id',
+                    hidden: true
                 }
             ],
             buttons: [

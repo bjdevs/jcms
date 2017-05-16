@@ -39,16 +39,38 @@ public class MediaService extends BaseService {
 
     /**
      * 根据媒体类型 获取数据
-     * @param type
+     * @param
      * @return
      */
-    public ObjectNode getList(byte type, int pageSize, int pageNum) {
+    public ObjectNode getList(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("type", type);
+        String title = request.getParameter("title");
+        String startDate = request.getParameter("startdate");
+        String endDate = request.getParameter("enddate");
+        int type = Integer.parseInt(
+                !StringUtils.isBlank(request.getParameter("type")) ? request.getParameter("type") : "0");
+        int pageSize = Integer.parseInt(
+                !StringUtils.isBlank(request.getParameter("pageSize")) ? request.getParameter("pageSize") : Constant.PAGE_SIZE+"");
+        int pageNum = Integer.valueOf(
+                !StringUtils.isBlank(request.getParameter("page")) ? request.getParameter("page") : 1+"");
         String sql = "";
-        //sql = " WHERE type = :type";
+        sql = " WHERE 1 = 1";
+        Map<String, Object> params = new HashMap<String, Object>();
+        if (!StringUtils.isBlank(title)) {
+            params.put("title", title);
+            sql += " AND title = :title";
+        }
+        if (type > 0) {
+            params.put("type", type);
+            sql += " AND type = :type";
+        }
+        if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)
+                && startDate.length() > 5 && endDate.length() > 5) {
+            params.put("createDate", startDate);
+            params.put("endDate", endDate.replace("00:00:00","23:59:59"));
+            sql += " AND createDate > :createDate AND createDate < :endDate";
+        }
 
         Page<Media> page = this.getPage(Media.class, sql, params, pageSize, pageNum);
         List<Media> list = page.getResultList();
@@ -80,51 +102,33 @@ public class MediaService extends BaseService {
         objectNode.put("message", "");
         objectNode.put("success", true);
         try {
-            String id = request.getParameter("id");
-            String title = request.getParameter("title");
             String data = request.getParameter("data");
             Media media = null;
             Media mediaOld = null;
-            if (!StringUtils.isBlank(data)) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(data);
-                for (JsonNode jsonNode : root) {
-                    media = new Media();
-                    // 考虑转成它
-                    //mapper.readValue()
-                    media.setId(jsonNode.get("id").asLong());
-                    media.setTitle(jsonNode.get("title").asText());
-                    //media.setUrl(jsonNode.get("url").asText());
-                    media.setType((byte) jsonNode.get("type").asInt());
-                    //media.setcId((short) jsonNode.get("cId").asInt());
-                    media.setStatus((byte) jsonNode.get("status").asInt());
-                    //media.setuId((short) (jsonNode.get("uId").asInt()));
-                    if (media.getId() > 0) {
-                        mediaOld = find(Media.class, media.getId());
-                        if (mediaOld != null && mediaOld.getId() > 0) {
-                            //mediaOld.setUrl(media.getUrl());
-                            mediaOld.setTitle(media.getTitle());
-                            //mediaOld.setuId(media.getuId());
-                            //mediaOld.setcId(media.getcId());
-                            mediaOld.setType(media.getType());
-                            mediaOld.setStatus(media.getStatus());
-                            baseRepository.update(mediaOld);
-                            objectNode.put("result", "success");
-                        }
-                    }
-                }
-            } else {
-                if (!StringUtils.isBlank(id) && !StringUtils.isBlank(title)) {
-                    media = new Media();
-                    media.setId(Integer.parseInt(id));
-                    media.setTitle(title);
-                    if (media.getId() > 0) {
-                        mediaOld = find(Media.class, media.getId());
-                        if (mediaOld != null && mediaOld.getId() > 0) {
-                            mediaOld.setTitle(media.getTitle());
-                            baseRepository.update(mediaOld);
-                            objectNode.put("result", "success");
-                        }
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(data);
+            for (JsonNode jsonNode : root) {
+                media = new Media();
+                // 考虑转成它
+                //mapper.readValue()
+                media.setId(jsonNode.get("id").asLong());
+                media.setTitle(jsonNode.get("title").asText());
+                //media.setUrl(jsonNode.get("url").asText());
+                media.setType((byte) jsonNode.get("type").asInt());
+                //media.setcId((short) jsonNode.get("cId").asInt());
+                media.setStatus((byte) jsonNode.get("status").asInt());
+                //media.setuId((short) (jsonNode.get("uId").asInt()));
+                if (media.getId() > 0) {
+                    mediaOld = find(Media.class, media.getId());
+                    if (mediaOld != null && mediaOld.getId() > 0) {
+                        //mediaOld.setUrl(media.getUrl());
+                        mediaOld.setTitle(media.getTitle());
+                        //mediaOld.setuId(media.getuId());
+                        //mediaOld.setcId(media.getcId());
+                        mediaOld.setType(media.getType());
+                        mediaOld.setStatus(media.getStatus());
+                        baseRepository.update(mediaOld);
+                        objectNode.put("result", "success");
                     }
                 }
             }
@@ -163,7 +167,7 @@ public class MediaService extends BaseService {
                         baseRepository.update(media);
                     }
                     if (type == 2) { // 删除
-                        qiniuAuthUtil.deleteFile(media.getRealUrl());
+                        qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
                         baseRepository.delete(Media.class, media.getId());
                     }
                     objectNode.put("result", "success");
@@ -182,98 +186,121 @@ public class MediaService extends BaseService {
         String result = "failed";
         String message = "";
         objectNode.put("success", true);
-        User userInfo = (User) request.getAttribute("user");
-        // 媒体类型 图片 / 音频 / 文档
-        byte mediaType = Byte.valueOf(msr.getParameter("type"));
-        // 命名规则 系统默认 / 原始名称
-        byte ruleType = Byte.valueOf(msr.getParameter("rule"));
 
-        try {
-            MultipartFile msrFile = msr.getFile(fileNames.next());
-            long msrFileSize = msrFile.getSize();
-            String fileName = msrFile.getOriginalFilename().toLowerCase();
-            String[] fileNameArray = fileName.split("\\.");
-            String title = msr.getParameter("title");
-            boolean isImage = true;
-            String path = "";
-            // 检查上传文件类型
-            switch (mediaType) {
-                case Constant.MEDIA_TYPE_PICTURE:
-                    path = "pic/";
-                    if (!fileName.matches(Constant.IMG_FILTER)) {
-                        message = Constant.IMG_FILTER_MSG;
+        String id = msr.getParameter("id");
+        String title = msr.getParameter("title");
+
+        if (!StringUtils.isBlank(id) && !StringUtils.isBlank(title)) {
+            Media media = new Media();
+            media.setId(Integer.parseInt(id));
+            media.setTitle(title);
+            if (media.getId() > 0) {
+                Media mediaOld = find(Media.class, media.getId());
+                if (mediaOld != null && mediaOld.getId() > 0) {
+                    mediaOld.setTitle(media.getTitle());
+                    try {
+                        baseRepository.update(mediaOld);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    result = "success";
+                }
+            }
+        } else {
+            // 新增
+            User userInfo = (User) request.getAttribute("user");
+            // 媒体类型 图片 / 音频 / 文档
+            byte mediaType = Byte.valueOf(msr.getParameter("type"));
+            // 命名规则 系统默认 / 原始名称
+            byte ruleType = Byte.valueOf(msr.getParameter("rule"));
+
+            try {
+                MultipartFile msrFile = msr.getFile(fileNames.next());
+                long msrFileSize = msrFile.getSize();
+                String fileName = msrFile.getOriginalFilename().toLowerCase();
+                String[] fileNameArray = fileName.split("\\.");
+                //String title = msr.getParameter("title");
+                boolean isImage = true;
+                String path = "";
+                // 检查上传文件类型
+                switch (mediaType) {
+                    case Constant.MEDIA_TYPE_PICTURE:
+                        path = "pic/";
+                        if (!fileName.matches(Constant.IMG_FILTER)) {
+                            message = Constant.IMG_FILTER_MSG;
+                            isImage = false;
+                        }
+                        if (msrFileSize > Constant.UPLOAD_PICTURE_MAX_SIZE) {
+                            message = "上传图片超过最大上限 10MB，请重新上传";
+                            isImage = false;
+                        }
+                        break;
+                    case Constant.MEDIA_TYPE_AUDIO:
+                        path = "audio/";
+                        if (!fileName.matches(Constant.AUDIO_FILTER)) {
+                            message = Constant.AUDIO_FILTER_MSG;
+                            isImage = false;
+                        }
+                        if (msrFileSize > Constant.UPLOAD_AUDIO_MAX_SIZE) {
+                            message = "上传音频超过最大上限 30MB，请重新上传";
+                            isImage = false;
+                        }
+                        break;
+                    case Constant.MEDIA_TYPE_DOCUMENT:
+                        path = "doc/";
+                        if (!fileName.matches(Constant.DOCUMENT_FILTER)) {
+                            message = Constant.DOCUMENT_FILTER_MSG;
+                            isImage = false;
+                        }
+                        if (msrFileSize > Constant.UPLOAD_DOCUMENT_MAX_SIZE) {
+                            message = "上传文档超过最大上限 20MB，请重新上传";
+                            isImage = false;
+                        }
+                        break;
+                    default:
+                        message = Constant.NO_SUPPORT_TYPE;
+                        isImage = false;
+                }
+                // 检查上传文件名是否合法
+                if (ruleType == 1) {
+                    if (!fileName.matches(Constant.FILERULE_FILTER)) {
+                        message = Constant.FILERULE_FILTER_MSG;
                         isImage = false;
                     }
-                    if (msrFileSize > Constant.UPLOAD_PICTURE_MAX_SIZE) {
-                        message = "上传图片超过最大上限 10MB，请重新上传";
-                        isImage = false;
-                    }
-                    break;
-                case Constant.MEDIA_TYPE_AUDIO:
-                    path = "audio/";
-                    if (!fileName.matches(Constant.AUDIO_FILTER)) {
-                        message = Constant.AUDIO_FILTER_MSG;
-                        isImage = false;
-                    }
-                    if (msrFileSize > Constant.UPLOAD_AUDIO_MAX_SIZE) {
-                        message = "上传音频超过最大上限 30MB，请重新上传";
-                        isImage = false;
-                    }
-                    break;
-                case Constant.MEDIA_TYPE_DOCUMENT:
-                    path = "doc/";
-                    if (!fileName.matches(Constant.DOCUMENT_FILTER)) {
-                        message = Constant.DOCUMENT_FILTER_MSG;
-                        isImage = false;
-                    }
-                    if (msrFileSize > Constant.UPLOAD_DOCUMENT_MAX_SIZE) {
-                        message = "上传文档超过最大上限 20MB，请重新上传";
-                        isImage = false;
-                    }
-                    break;
-                default:
-                    message = Constant.NO_SUPPORT_TYPE;
+                }
+                if (fileNameArray.length != 2) {
+                    message = "上传文件丢失扩展名";
                     isImage = false;
-            }
-            // 检查上传文件名是否合法
-            if (ruleType == 1) {
-                if (!fileName.matches(Constant.FILERULE_FILTER)) {
-                    message = Constant.FILERULE_FILTER_MSG;
-                    isImage = false;
                 }
-            }
-            if (fileNameArray.length != 2) {
-                message = "上传文件丢失扩展名";
-                isImage = false;
-            }
-            if (isImage) {
-                // 七牛
-                String realFileName = ProjectUtil.getFileName(fileName);
-                // 上传到七牛云
-                if (ruleType == 1) { // 使用原名
-                    realFileName = fileName;
+                if (isImage) {
+                    // 七牛
+                    String realFileName = ProjectUtil.getFileName(fileName);
+                    // 上传到七牛云
+                    if (ruleType == 1) { // 使用原名
+                        realFileName = fileName;
+                    }
+                    // 上传图片路径 pic
+                    // 上传音频 audio
+                    // 上传文档 doc
+                    upload(mediaType, msrFile.getBytes(), path + realFileName, ruleType);
+                    Media media = new Media();
+                    media.setTitle(title);
+                    realFileName = qiniuAuthUtil.getAccessDomain() + path + realFileName;
+                    if (ruleType == 1) { // 使用原名
+                        // 增加时间戳
+                        realFileName = realFileName + "?v=" + System.currentTimeMillis();
+                    }
+                    media.setUrl(realFileName);
+                    media.setType(mediaType);
+                    media.setCreateDate(new Date());
+                    media.setStatus(Constant.GENERAL_ID_ONE);
+                    media.setuId((byte) userInfo.getId());
+                    baseRepository.create(media);
+                    result = "success";
                 }
-                // 上传图片路径 pic
-                // 上传音频 audio
-                // 上传文档 doc
-                upload(mediaType, msrFile.getBytes(),path + realFileName, ruleType);
-                Media media = new Media();
-                media.setTitle(title);
-                realFileName = qiniuAuthUtil.getAccessDomain() + path + realFileName;
-                if (ruleType == 1) { // 使用原名
-                    // 增加时间戳
-                    realFileName = realFileName + "?v=" + System.currentTimeMillis();
-                }
-                media.setUrl(realFileName);
-                media.setType(mediaType);
-                media.setCreateDate(new Date());
-                media.setStatus(Constant.GENERAL_ID_ONE);
-                media.setuId((byte)userInfo.getId());
-                baseRepository.create(media);
-                result = "success";
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         objectNode.put("result", result);
         objectNode.put("message", message);

@@ -13,7 +13,7 @@ public class Constant {
 
     public static final int PAGE_SIZE = 25;
 
-    
+
     /**
      * 适用
      * 文章 0-初稿 / 1-已签 /  5-返工  / 9-已发 /  10+-已删
@@ -67,8 +67,8 @@ public class Constant {
     public static final int CATEGORY_ID_CONTACT = 11;
     // 活动通知
     public static final int CATEGORY_ID_NOTICE = 12;
-	
-	/**
+
+    /**
      * 适用
      * 登录、分类、模板、头条套红、媒体类型
      */
