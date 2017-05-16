@@ -17,7 +17,6 @@ Ext.define('Admin.view.media.MediaGrid', {
                         totalProperty: 'totalData'
                     },
                     extraParams: {
-                        type: 0,
                         pageSize: pageSize
                     }
                 },

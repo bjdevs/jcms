@@ -28,8 +28,8 @@ public class MediaController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/mediaList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void mediaTypeShow(HttpServletResponse response, byte type, int pageSize, int page) throws Exception {
-        response.getWriter().print(mediaService.getList(type, pageSize, page));
+    public void mediaTypeShow(HttpServletRequest request,HttpServletResponse response) throws Exception {
+        response.getWriter().print(mediaService.getList(request));
     }
 
     @ResponseBody

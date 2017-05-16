@@ -33,6 +33,8 @@ Ext.define('Admin.controller.ViewController', {
 
             if(value && typeof value === 'string') {
                 value = value.indexOf('全部') > -1 ? '' : value;
+            } else if (item.xtype == 'datefield') {
+                value = Ext.Date.format(value, 'Y-m-d H:i:s');
             }
 
             filters.push({

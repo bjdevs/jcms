@@ -109,7 +109,12 @@ public class Media {
      */
     @JsonIgnore
     public String getUrl(String rule) {
-        return  url + (StringUtils.isBlank(rule) ? "" : "-" + rule);
+        if (url.split("\\?").length != 2) {
+            return  url + (!StringUtils.isBlank(rule) ? "-" + rule : "");
+        } else {
+            String[] urls = url.split("\\?");
+            return urls[0] + (!StringUtils.isBlank(rule) ? "-" + rule : "") + "?" + urls[1];
+        }
     }
 
     public String getUrl() {

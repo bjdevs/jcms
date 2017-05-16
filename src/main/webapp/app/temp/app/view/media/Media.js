@@ -4,12 +4,12 @@ Ext.define('Admin.view.media.Media', {
 
     requires: [
         'Admin.view.media.MediaController',
+        'Admin.view.media.MediaSearchPanel',
         'Admin.view.media.MediaGrid'
     ],
 
     uses: [
-        'Admin.view.media.MediaForm',
-        'Admin.view.media.MediaUpdateForm'
+        'Admin.view.media.MediaForm'
     ],
 
     controller: 'media',
@@ -22,6 +22,10 @@ Ext.define('Admin.view.media.Media', {
 
         Ext.apply(me, {
             items: [
+                {
+                    region: 'north',
+                    xtype: 'media-sp'
+                },
                 {
                     region: 'center',
                     xtype: 'media-mgrid'
