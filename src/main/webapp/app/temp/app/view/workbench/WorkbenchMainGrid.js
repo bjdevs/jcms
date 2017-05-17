@@ -10,7 +10,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/workbenchs.json',
+                    url: '/app/temp/data/workbenchs.json',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -84,7 +84,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                         beforerender: function (panel, eOpts) {
 
                             Ext.Ajax.request({
-                                url: 'data/fileinfo.json'
+                                url: '/app/temp/data/fileinfo.json'
                             }).then(function (response, opts) {
                                     var obj = Ext.decode(response.responseText);
                                     panel.setHtml(obj);

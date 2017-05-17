@@ -128,4 +128,21 @@ public class BaseService {
         log.setCreateDate(new Date());
         baseRepository.create(log);
     }
+
+    public long create(Object object) {
+        try {
+            return baseRepository.create(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void update(Object object) {
+        try {
+            baseRepository.update(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

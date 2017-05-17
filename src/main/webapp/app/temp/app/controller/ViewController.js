@@ -33,6 +33,8 @@ Ext.define('Admin.controller.ViewController', {
 
             if(value && typeof value === 'string') {
                 value = value.indexOf('全部') > -1 ? '' : value;
+            } else if (item.xtype == 'datefield') {
+                value = Ext.Date.format(value, 'Y-m-d H:i:s');
             }
 
             filters.push({
@@ -165,9 +167,9 @@ Ext.define('Admin.controller.ViewController', {
             }
         });
 
-        if(data.length == 0) return;
+		    if(data.length == 0) return;
 
-
+		
         var cfg = Ext.apply({
             url: '',
             params: {
@@ -232,7 +234,72 @@ Ext.define('Admin.controller.ViewController', {
     /* temp function */
     onBtnClicked: function(button) {
         Ext.log(button.text);
+    },
+
+    /**
+     *
+     * @param view
+     * @param params
+     *
+     * {
+     *  xtype:'',
+     *  window:true, // 表示传过来的组件本身就是window
+     *  openWindow:true, // 表示要嵌在window中
+     *  windowCfg:{},
+     *  targetCfg:{}
+     * }
+     *
+     */
+    setCurrentView: function(options) {
+        options = Ext.apply({
+            xtype: 'panel',
+            window: false,
+            openWindow: false,
+            inWindow: false,
+            windowCfg: {},
+            targetCfg: {}
+        }, options);
+
+        var xtype = options.xtype,
+            window = options.window,
+            inWindow = options.inWindow,
+            openWindow = options.openWindow,
+            windowCfg = options.windowCfg,
+            targetCfg = options.targetCfg;
+
+        if(inWindow) {
+            var cfg = Ext.apply({
+                xtype: 'basewindow',
+                items: [
+                    Ext.apply({
+                        xtype: xtype
+                    }, targetCfg)
+                ]
+            }, windowCfg);
+
+            Ext.create(cfg);
+
+        } else if(openWindow) {
+
+            var cfg = Ext.apply({
+                xtype: 'basewindow',
+                autoShow: true
+            }, windowCfg);
+
+            Ext.create(cfg);
+
+        } else if(window) {
+            var cfg = Ext.apply({
+                xtype: xtype,
+                autoShow: true
+
+            }, targetCfg);
+
+
+            Ext.create(cfg);
+        } else {
+            Ext.log('setCurrentView 调用参数错误');
+        }
+
     }
-
-
 });

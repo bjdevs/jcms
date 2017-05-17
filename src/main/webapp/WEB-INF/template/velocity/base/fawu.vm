@@ -1,0 +1,36 @@
+document.write(
+## 紫云法务
+'<div class="layer1 zyfw">'+
+    '<h2><span><em>$!law.name</em>'+
+#if($law.more)
+        '<a href="$law.more" target="_blank">更多></a>'+
+#end
+        '</span></h2>'+
+'<div class="tabbar">'+
+#if($content && $content.size() != 0)
+    '<ul>'+
+#foreach($item in $content)
+#if($velocityCount == 1)
+        '<li class="current">$item[0]</li>'+
+#else
+        '<li>$item[0]</li>'+
+#end
+#end
+    '</ul>'+
+#end
+'</div>'+
+    '<ol>'+
+#if($content && $content.size() != 0)
+#foreach($item in $content)
+#if($velocityCount == 1)
+        '<li class="current">$item[2]<a href="$item[1]">[详细]</a></li>'+
+#else
+        '<li>$item[2]<a href="$item[1]">[详细]</a></li>'+
+#end
+#end
+#else
+'<span style="color:red">(暂无)</span>'+
+#end
+    '</ol>'+
+'</div>'
+)
