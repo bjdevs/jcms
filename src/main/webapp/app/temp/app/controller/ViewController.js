@@ -167,7 +167,7 @@ Ext.define('Admin.controller.ViewController', {
             }
         });
 
-		if(data.length == 0) return;
+		    if(data.length == 0) return;
 
 		
         var cfg = Ext.apply({
