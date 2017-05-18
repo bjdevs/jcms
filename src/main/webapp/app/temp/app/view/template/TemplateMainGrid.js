@@ -18,14 +18,11 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
         var me = this,
             viewModel = me.getViewModel();
 
-        console.log(viewModel.getStore('templateType'))
-
-
         Ext.apply(me, {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/templates.json',
+                    url: '/cn/article/templateList',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -48,11 +45,11 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                 },
                 {
                     text: '文件 <span class="admin-color-red">+</span>',
-                    dataIndex: 'filename',
-                    editor: {
+                    dataIndex: 'fileName',
+                    /*editor: {
                         xtype: 'textfield',
                         allowBlank: false
-                    },
+                    },*/
                     width: 250
                 },
                 {
@@ -76,14 +73,31 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     renderer: me.renderer,
                     width: 250
                 },
-                {text: '导入者', dataIndex: 'creator'},
+                {text: '栏目', dataIndex: 'cId'},
+                {
+                    text: '状态',
+                    dataIndex: 'status',
+                    editor: {
+                        xtype: 'combo',
+                        store: [
+                            [1, '启用'],
+                            [-2, '内置']
+                        ],
+                        editable: false, // 不允许编辑
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        allowBlank: false
+                    },
+                    renderer: me.renderer
+                },
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '状态', dataIndex: 'status', renderer: me.renderer}
+                {text: '修改时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
                 {
                     xtype: 'button',
                     text: '新增',
+                    disabled: true, // 先禁用
                     iconCls: 'x-fa fa-plus-circle',
                     action: 'add'
                 },
@@ -91,14 +105,14 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     xtype: 'button',
                     text: '保存',
                     iconCls: 'x-fa fa-floppy-o',
-                    disabled: true,
+                    disabled: true, // 先禁用
                     action: 'save'
                 },
                 {
                     xtype: 'button',
                     text: '删除',
                     iconCls: 'x-fa fa-trash-o',
-                    disabled: true,
+                    disabled: true, // 先禁用
                     action: 'delete'
                 },
 
@@ -128,7 +142,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
         switch (dataIndex) {
             case 'status':
                 switch (value) {
-                    case 0:
+                    case -2:
                         metaData.tdStyle = 'color:#0066FF';
                         return '内置';
                     case 1:

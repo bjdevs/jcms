@@ -5,7 +5,8 @@ Ext.define('Admin.view.keyword.Keyword', {
     requires: [
         'Admin.view.keyword.KeywordController',
         'Admin.view.keyword.HotKeywordGrid',
-        'Admin.view.keyword.KeywordMainGrid'
+        'Admin.view.keyword.KeywordMainGrid',
+        'Admin.view.keyword.KeyWordForm'
     ],
 
     uses: [],
@@ -22,12 +23,12 @@ Ext.define('Admin.view.keyword.Keyword', {
             items: [
                 {
                     region: 'center',
-                    height: '50%',
+                    height: '40%',
                     xtype: 'hotkeyword-grid'
                 },
                 {
                     region: 'south',
-                    height: '50%',
+                    height: '60%',
                     xtype: 'keyword-mgrid'
                 }
             ]

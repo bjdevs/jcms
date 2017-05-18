@@ -9,7 +9,7 @@ import java.util.Date;
 public class SubArticle {
     private long id;
     private int seq;
-    private int aId;
+    private long aId;
     private String content;
     private Date createDate;
 
@@ -29,11 +29,11 @@ public class SubArticle {
         this.seq = seq;
     }
 
-    public int getaId() {
+    public long getaId() {
         return aId;
     }
 
-    public void setaId(int aId) {
+    public void setaId(long aId) {
         this.aId = aId;
     }
 

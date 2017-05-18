@@ -3,14 +3,18 @@ Ext.define('Admin.view.content.recycle.RecycleMainGrid', {
     xtype: 'content-recycle-mgrid',
 
     initComponent: function () {
-        var me = this;
-
+        var me = this,
+            category = location.hash.split('-'),
+            category = category[category.length - 1];
 
         Ext.apply(me, {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/news.json',
+                    url: '/cn/article/articleList',
+                    extraParams:{
+                        category: category
+                    },
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -72,19 +76,19 @@ Ext.define('Admin.view.content.recycle.RecycleMainGrid', {
         switch (dataIndex) {
             case 'status':
                 switch (value) {
-                    case 0:
+                    case 10:
                         metaData.tdStyle = 'color:#0066FF';
                         return '初稿';
-                    case 1:
+                    case 11:
                         metaData.tdStyle = 'color:blank';
                         return '已签';
-                    case 5:
+                    case 15:
                         metaData.tdStyle = 'color:#FF6633';
                         return '返工';
-                    case 9:
-                        metaData.tdStyle = 'color:blank';
+                    case 19:
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
-                    case 10:
+                    case 20:
                         metaData.tdStyle = 'color:red';
                         return '已删';
                 }

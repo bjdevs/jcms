@@ -35,10 +35,10 @@ Ext.define('Admin.view.content.index.nav.NavController', {
 
     onBeforeRender: function (panel, eOpts) {
         this.onRefresh(panel);
-
     },
     onRefreshBtnClicked: function () {
-        this.onRefresh(this.getView());
+        var view = this.getView();
+        this.onRefresh(view);
     },
 
     onRefresh: function (panel) {
@@ -47,13 +47,12 @@ Ext.define('Admin.view.content.index.nav.NavController', {
 
             navType = view.id.split('-'),
             navType = navType[navType.length - 1];
-
         Ext.Ajax.request({
-            url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
+            url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
+            // url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
         }).then(function (response, opts) {
                 var obj = Ext.decode(response.responseText);
                 panel.setHtml(obj);
-
 
                 var status = obj['status'],
                     statusText = '', statusColor = '';
@@ -117,8 +116,10 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         // render
         var record = view.down('#nav').data,
             form = win.down('form').getForm();
+        var content = record['content'].replace(/,/g, "\n");
+
         form.findField('id').setValue(record['id']);
-        form.findField('content').setValue(record['content']);
+        form.findField('content').setValue(content);
     },
 
     onBtnClicked: function (button) {
@@ -140,14 +141,13 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         var form = view.down('form').getForm();
 
         ctrl.formSubmit(form, {
-            url: 'data/ajax.json' // todo edit
+            url: '/cn/article/updateArticleForId' // todo edit
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 
                 view.hide();
 
-               ctrl.onRefresh(ownerView);
-
+                ctrl.onRefresh(ownerView);
             });
         });
     }

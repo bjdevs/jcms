@@ -5,6 +5,10 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
     iconCls: 'x-fa fa-free-code-camp',
     title: '热门标签',
 
+    selModel: {
+        selType: ''
+    },
+
     initComponent: function () {
         var me = this;
 
@@ -13,7 +17,10 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/keywords.json',
+                    url: '/cn/article/keyWordList',
+                    extraParams: {
+                        type: 'hot'
+                    },
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -22,13 +29,13 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
                 autoLoad: true
             }),
             columns: [
-                // todo edit {dataIndex}
-
+                // {xtype: 'rownumberer'},
                 {text: 'ID', dataIndex: 'id', width: 100},
-                {text: '名称', dataIndex: 'name', width: 150},
-                {text: '描述', dataIndex: 'desc', flex: 1},
-                {text: '英文', dataIndex: 'ename', width: 250},
-                {text: '计数', dataIndex: 'counter'}
+                {text: '名称', dataIndex: 'name', width: 250},
+                {text: '描述', dataIndex: 'depict', flex: 1},
+                {text: '计数', dataIndex: 'count'},
+                {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
 
             ],
             tbar: [
@@ -38,7 +45,13 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
                 }
-            ]
+            ],
+            bbar: {
+                xtype: 'pagingtoolbar',
+                displayInfo: true,
+                // disabled: true
+                hidden: true
+            }
         });
 
         me.callParent();

@@ -34,14 +34,19 @@ Ext.define('Admin.view.content.ContentMainGrid', {
 
 
     initComponent: function () {
-        var me = this;
-
+        var me = this,
+            category = location.hash.split('-'),
+            category = category[category.length - 1];
 
         Ext.apply(me, {
             store: Ext.create('Ext.data.Store', {
+                remoteFilter: true,
                 proxy: {
                     type: 'ajax',
-                    url: 'data/news.json',
+                    url: '/cn/article/articleList',
+                    extraParams:{
+                        category: category
+                    },
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -58,10 +63,10 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '作者', dataIndex: 'author'},
                 {text: '创建人', dataIndex: 'creator'},
-                {text: '头条', dataIndex: 'headlineArticle', renderer: me.renderer},
-                {text: '图片', dataIndex: 'headlinePic', renderer: me.renderer},
+                {text: '头条', dataIndex: 'hAId', renderer: me.renderer},
+                {text: '图片', dataIndex: 'hPId', renderer: me.renderer},
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '更新时间', dataIndex: 'lastChange', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
 
             ],
             tbar: [
@@ -157,26 +162,36 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                         metaData.tdStyle = 'color:#FF6633';
                         return '返工';
                     case 9:
-                        metaData.tdStyle = 'color:blank';
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
-                    case 10:
+                    default:
                         metaData.tdStyle = 'color:red';
-                        return '已删';
+                        return value;
                 }
-            case 'headlineArticle':
-                switch (value) {
+            case 'hAId':
+                if(value == 0){
+                    return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
+                } else {
+                    return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
+                }
+                /*switch (value) {
                     case 1:
                         return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
                     case 0:
                         return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
+                }*/
+            case 'hPId':
+                if(value == 0){
+                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
+                } else {
+                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
                 }
-            case 'headlinePic':
-                switch (value) {
+                /*switch (value) {
                     case 2:
                         return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
                     case 0:
                         return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
-                }
+                }*/
             default:
                 return value;
         }
