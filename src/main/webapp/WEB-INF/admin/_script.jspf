@@ -1,15 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.core.util.Constant" %>
+
+<%
+    pageContext.setAttribute("PAGE_SIZE", Constant.PAGE_SIZE);
+    pageContext.setAttribute("MEDIA_TYPE_PICTURE", Constant.MEDIA_TYPE_PICTURE);
+    pageContext.setAttribute("MEDIA_TYPE_AUDIO", Constant.MEDIA_TYPE_AUDIO);
+    pageContext.setAttribute("MEDIA_TYPE_DOCUMENT", Constant.MEDIA_TYPE_DOCUMENT);
+
+%>
 
 <script>
-    var alertTitle = '提示', pageSize = 25, waitMsg = "操作中，请等待...";
-
-    function errorAlert(alertTitle,msg,fn,icon){
-        Ext.Msg.alert({
-            title: alertTitle,
-            msg: msg,
-            buttons: Ext.Msg.OK,
-            fn: fn,
-            icon: icon || Ext.Msg.ERROR
-        });
-    }
+    var pageSize = ${PAGE_SIZE},
+        MEDIA_TYPE_PICTURE = ${MEDIA_TYPE_PICTURE},
+        MEDIA_TYPE_AUDIO = ${MEDIA_TYPE_AUDIO},
+        MEDIA_TYPE_DOCUMENT = ${MEDIA_TYPE_DOCUMENT};
 </script>

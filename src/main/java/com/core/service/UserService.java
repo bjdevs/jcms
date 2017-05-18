@@ -19,8 +19,6 @@ import java.util.Map;
  */
 @Service
 public class UserService extends BaseService {
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     /**
      * 查

@@ -181,21 +181,10 @@
     {
       "text": "媒体管理",
       "iconCls": "x-fa fa-cog",
-      "visible": false,
       "children": [
         {
-          "viewType": "basicData",
-          "text": "图片",
-          "leaf": true
-        },
-        {
-          "viewType": "site",
-          "text": "音频",
-          "leaf": true
-        },
-        {
-          "viewType": "setting",
-          "text": "文档",
+          "viewType": "media",
+          "text": "媒体库",
           "leaf": true
         }
       ]
@@ -226,10 +215,9 @@
           "leaf": true
         },
         {
-          "viewType": "site",
-          "text": "帐户管理",
-          "leaf": true,
-          "visible": false
+          "viewType": "auth-function",
+          "text": "功能管理",
+          "leaf": true
         },
         {
           "viewType": "auth-role",
@@ -237,11 +225,11 @@
           "leaf": true
         },
         {
-          "viewType": "setting",
-          "text": "权限管理",
-          "leaf": true,
-          "visible": false
+          "viewType": "auth-acl",
+          "text": "用户管理",
+          "leaf": true
         }
+       
       ]
     }
   ]

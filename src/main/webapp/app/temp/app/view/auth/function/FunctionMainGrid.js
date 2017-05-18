@@ -1,6 +1,6 @@
-Ext.define('Admin.view.auth.role.RoleMainGrid', {
+Ext.define('Admin.view.auth.function.FunctionMainGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'auth-role-mgrid',
+    xtype: 'auth-function-mgrid',
 
     viewModel: {
         data: {
@@ -14,10 +14,11 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
 
 
         Ext.apply(me, {
+
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/auth-role/list.do',
+                    url: _ADMIN.root + '/auth-function/list.do',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -32,10 +33,15 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '名称', dataIndex: 'name' },
-                { text: '级别', dataIndex: 'rank' },
-                { text: '描述', dataIndex: 'description', renderer: me.renderer, width: 200 },
-                { text: '功能', dataIndex: 'function_names', renderer: me.renderer, flex: 1 }
+                {
+                    text: '名称 <span class="admin-color-red">+</span>',
+                    dataIndex: 'name',
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    },
+                    flex: 1
+                }
             ],
             tbar: [
                 {
@@ -46,10 +52,10 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '修改',
-                    iconCls: 'x-fa fa-pencil-square-o',
+                    text: '保存',
+                    iconCls: 'x-fa fa-floppy-o',
                     disabled: true,
-                    action: 'edit'
+                    action: 'save'
                 },
                 '-',
                 {
@@ -66,27 +72,13 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
                         bind: '共 {rowCount} 条'
                     }
                 ]
-            }
+            },
+            plugins: [{
+                ptype: 'cellediting',
+                clicksToEdit: 2
+            }]
         });
 
         me.callParent();
-    },
-    renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
-        var me = this,
-
-            headerCt = me.getHeaderContainer(),
-            column = headerCt.getHeaderAtIndex(colIndex),
-            dataIndex = column.dataIndex;
-
-        switch(dataIndex) {
-            case 'description':
-                metaData.tdAttr = 'data-qtip="' + value + '"';
-                return value;
-            case 'function_names':
-                metaData.tdAttr = 'data-qtip="' + value + '"';
-                return value.join(",");
-            default:
-                return value;
-        }
     }
 });

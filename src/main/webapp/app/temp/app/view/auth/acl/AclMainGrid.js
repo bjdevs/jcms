@@ -1,6 +1,6 @@
-Ext.define('Admin.view.auth.role.RoleMainGrid', {
+Ext.define('Admin.view.auth.acl.AclMainGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'auth-role-mgrid',
+    xtype: 'auth-acl-mgrid',
 
     viewModel: {
         data: {
@@ -17,7 +17,7 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/auth-role/list.do',
+                    url: _ADMIN.root + '/auth-acl/list.do',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -32,10 +32,10 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '名称', dataIndex: 'name' },
-                { text: '级别', dataIndex: 'rank' },
-                { text: '描述', dataIndex: 'description', renderer: me.renderer, width: 200 },
-                { text: '功能', dataIndex: 'function_names', renderer: me.renderer, flex: 1 }
+                { text: '用户名', dataIndex: 'account' },
+                { text: '姓名', dataIndex: 'name' },
+                { text: '部门', dataIndex: 'department', renderer: me.renderer, width: 200 },
+                { text: '角色', dataIndex: 'role_names', renderer: me.renderer, flex: 1 }
             ],
             tbar: [
                 {

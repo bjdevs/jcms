@@ -1,15 +1,18 @@
-Ext.define('Admin.view.log.Log', {
+Ext.define('Admin.view.media.Media', {
     extend: 'Ext.panel.Panel',
-    xtype: 'log', // 此处的主视图 xtype = 模块名称
+    xtype: 'media', // 此处的主视图 xtype = 模块名称
 
     requires: [
-        'Admin.view.log.LogController',
-        'Admin.view.log.LogSearchPanel',
-        'Admin.view.log.LogMainGrid'
+        'Admin.view.media.MediaController',
+        'Admin.view.media.MediaSearchPanel',
+        'Admin.view.media.MediaGrid'
     ],
 
+    uses: [
+        'Admin.view.media.MediaForm'
+    ],
 
-    controller: 'log',
+    controller: 'media',
 
     layout: 'border',
     margin: 5,
@@ -17,18 +20,16 @@ Ext.define('Admin.view.log.Log', {
     initComponent: function () {
         var me = this;
 
-
         Ext.apply(me, {
             items: [
                 {
                     region: 'north',
-                    xtype: 'log-sp'
+                    xtype: 'media-sp'
                 },
                 {
                     region: 'center',
-                    xtype: 'log-mgrid'
+                    xtype: 'media-mgrid'
                 }
-
             ]
         });
 

@@ -48,12 +48,18 @@ Ext.application({
         'template.Template',
         'keyword.Keyword',
 
+        // 媒体管理
+        'media.Media',
+
         // 帐户资料
         'account.AccountEditSetting',
         'account.AccountEditPwd',
 
         // 系统安全
+        'auth.function.Function',
         'auth.role.Role',
+        'auth.acl.Acl',
+
         'log.Log',
 
         // 欢迎页
