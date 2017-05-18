@@ -24,7 +24,7 @@ Ext.define('Admin.view.content.index.nav.Nav', {
                         {
                             formatContent: function (content) {
 
-                                var css = content.split('</li>');
+                                var css = content.split(',');
                                 for (var i = 0; i < css.length; i++) {
                                     css[i] = '<div style="float: left;padding:5px 10px;">' + css[i] + '</div>';
                                 }
@@ -34,18 +34,18 @@ Ext.define('Admin.view.content.index.nav.Nav', {
                         }
                     ),
                     tbar: [
-                        {
+                        /*{
                             xtype: 'button',
                             text: '审核',
                             iconCls: 'x-fa fa-check-circle-o',
                             action: 'audit'
-                        },
-                        {
+                        },*/
+                        /*{
                             xtype: 'button',
                             text: '返工',
                             iconCls: 'x-fa fa-undo',
                             action: 'rework'
-                        },
+                        },*/
                         {
                             xtype: 'button',
                             text: '修改',

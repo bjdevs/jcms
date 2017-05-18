@@ -17,9 +17,10 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/texts.json',
+                    url: '/cn/article/headLine',
                     extraParams: {
-                        category: viewModel.get('category') || ''
+                        category: viewModel.get('category') || '',
+                        type: 'text'
                     },
                     reader: {
                         type: 'json',
@@ -34,7 +35,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 {text: 'ID', dataIndex: 'id', width: 80},
                 {
                     text: '次序 <span class="admin-color-red">+</span>',
-                    dataIndex: 'rank',
+                    dataIndex: 'cateOrderBy',
                     editor: {
                         xtype: 'numberfield',
                         allowBlank: false,
@@ -44,12 +45,12 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     width: 80
                 },
                 {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80},
-                {text: '标题', dataIndex: 'title', renderer: me.renderer, flex: 1},
+                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1},
                 {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '套红 <span class="admin-color-red">+</span>', dataIndex: 'redStatus', xtype: 'checkcolumn'},
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '更新时间', dataIndex: 'lastChange', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
 
             ],
             tbar: [
@@ -77,7 +78,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 '->',
                 {
                     xtype: 'button',
-                    text: '栏目图片列表',
+                    text: '栏目文章列表',
                     userCls: 'admin-label-button',
                     action: 'content-headline-picture'
                 }

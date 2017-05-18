@@ -67,7 +67,7 @@ Ext.define('Admin.view.keyword.KeywordController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/keyWordSave?' + button.action
         });
     },
 
@@ -77,8 +77,43 @@ Ext.define('Admin.view.keyword.KeywordController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/keyWordSave?' + button.action
         });
     },
+
+    /*标签提交*/
+    onSubmitBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+        var form = view.down('form').getForm();
+
+        if (form.isValid()) {
+            form.submit({
+                url: '/cn/article/createKeyWord',
+                method: 'POST',
+                waitMsg: '正在提交中，请等待片刻...',
+                submitEmptyText: false,
+                success: function (_from, action) {
+                    var success = action.result.success;
+                    if (success) {
+                        view.hide();
+                        Ext.MessageBox.show({
+                            title: '操作提示',
+                            closable: 'true',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO,
+                            message: '标签创建成功',
+                            fn: function () {
+                                var store = view.up().down('keyword-mgrid').getStore();
+                                store.getProxy().setExtraParam('page', 1);
+                                store.reload();
+                            }
+                        });
+                    }
+                }
+
+            });
+        }
+    }
 
 });

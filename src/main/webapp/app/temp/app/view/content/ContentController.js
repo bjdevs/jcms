@@ -81,7 +81,6 @@ Ext.define('Admin.view.content.ContentController', {
             category = view.id.split('-'),
             category = category[category.length - 1];
 
-
         switch (action) {
             case 'set-text-headline':
 
@@ -147,7 +146,8 @@ Ext.define('Admin.view.content.ContentController', {
         if (!win) {
             win = Ext.create({
                 xtype: 'content-mform',
-                reference: winReference
+                reference: winReference,
+                id: category
             });
 
             view.add(win);
@@ -163,7 +163,7 @@ Ext.define('Admin.view.content.ContentController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/articleButton?' + button.action
         });
     },
 
@@ -229,6 +229,146 @@ Ext.define('Admin.view.content.ContentController', {
         }
 
         win.show();
+    },
+    /*提交按钮*/
+    onSubmitBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+        var form = view.down('form').getForm();
+
+        if (form.isValid()) {
+            form.submit({
+                url: '/cn/article/createArticle',
+                method: 'POST',
+                params: {
+                    content: editor.isEmpty() ? "" : editor.html(),
+                    category: view.id,
+                    userId: _am.currentUser.name,
+                    authorStr: _am.currentUser.name
+                },
+                waitMsg: '正在提交中，请等待片刻...',
+                submitEmptyText: false,
+                success: function (_from, action) {
+                    var result = action.result.result;
+                    var success = action.result.success;
+                    if (success) {
+                        Ext.MessageBox.show({
+                            title: '操作提示',
+                            closable: 'true',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO,
+                            align: 'center',
+                            message: '文章创建成功',
+                            fn: function (buttonId) {
+                                view.hide();
+                                editor.html("");
+                                var store = view.up().down('grid').getStore();
+                                store.getProxy().setExtraParam('page', 1);
+                                store.reload();
+                            }
+                        });
+                    } else {
+                        Ext.MessageBox.show({
+                            title: '文章创建失败,请刷新重试',
+                            closable: 'true',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR,
+                            align: 'center',
+                            message: result,
+                            fn: function (buttonId) {
+                                editor.html("");
+                            }
+                        });
+                    }
+                }
+
+            });
+        }
+    },
+    /*取消移动*/
+    moveBtnCancel: function (button) {
+        var checkedArray = this.getView().down('treepanel').getChecked();
+        if (checkedArray.length > 0) {
+            Ext.each(checkedArray, function (node) {
+                node.set("checked", false);
+            })
+        }
+        this.getView().down('treepanel').up('move-window').hide();
+    },
+
+    /* 处理复选框单选 */
+    onBeforeCheckChange: function (record, checkedState, e) {
+        var checkedArray = this.getView().down('treepanel').getChecked();
+        if (!checkedState) {
+            if (checkedArray.length > 0) {
+                Ext.each(checkedArray, function (node) {
+                    node.set("checked", false);
+                })
+            }
+        }
+    },
+    /* 确认移动*/
+    submitBtnOK: function () {
+        var grid = this.getView().up().down('grid');
+        var view = this.getView();
+
+        var idArray = grid.getSelection();
+        var ids = new Array();
+        for (var i = 0; i < idArray.length; i++) {
+            ids[i] = idArray[i].id;
+        }
+
+        var checkedArray = view.down('treepanel').getChecked();
+        if (checkedArray.length > 0) {
+            Ext.each(checkedArray, function (node) {
+                var categoryId = node.data.viewType;
+                categoryId = categoryId.split("-");
+                categoryId = categoryId[categoryId.length - 1];
+                Ext.Ajax.request({
+                    url: '/cn/article/articleChangeCategory',
+                    method: 'POST',
+                    params: {
+                        category: categoryId,
+                        ids: ids
+                    },
+                    waitMsg: '正在移动中，请等待片刻...',
+                    submitEmptyText: false,
+                    success: function (response, opts) {
+                        var result = JSON.parse(response.responseText);
+                        console.log(result);
+                        console.log(response);
+                        if (result) {
+                            Ext.MessageBox.show({
+                                title: '操作提示',
+                                closable: 'true',
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.INFO,
+                                align: 'center',
+                                message: '文章移动完成',
+                                fn: function (buttonId) {
+                                    view.hide();
+                                }
+                            });
+                        } else {
+                            Ext.MessageBox.show({
+                                title: '操作提示',
+                                closable: 'true',
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.ERROR,
+                                align: 'center',
+                                message: '文章移动失败，请刷新重试',
+                                fn: function (buttonId) {
+                                    view.hide();
+                                }
+                            });
+                        }
+                        var store = grid.getStore();
+                        store.getProxy().setExtraParam('page', 1);
+                        store.reload();
+                    }
+                });
+            })
+        }
     }
 
 });

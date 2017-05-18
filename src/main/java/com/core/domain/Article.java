@@ -17,6 +17,7 @@ public class Article {
     private String content;
     private int kId;
     private int sId;
+    private int tId;
     private int hAId;
     private int hPId;
     private int cId;
@@ -106,6 +107,14 @@ public class Article {
         this.sId = sId;
     }
 
+    public int gettId() {
+        return tId;
+    }
+
+    public void settId(int tId) {
+        this.tId = tId;
+    }
+
     public int gethAId() {
         return hAId;
     }
@@ -183,6 +192,7 @@ public class Article {
                 ", content='" + content + '\'' +
                 ", kId=" + kId +
                 ", sId=" + sId +
+                ", tId=" + tId +
                 ", hAId=" + hAId +
                 ", hPId=" + hPId +
                 ", cId=" + cId +

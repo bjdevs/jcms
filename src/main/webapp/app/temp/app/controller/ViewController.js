@@ -1,6 +1,10 @@
 Ext.define('Admin.controller.ViewController', {
     extend: 'Ext.app.ViewController',
 
+    requires: [
+        'Admin.view.common.window.MovePanel'
+    ],
+
     config: {
         // url: '', // 子控制器赋值
         searchPrefix: 'search-',
@@ -66,8 +70,6 @@ Ext.define('Admin.controller.ViewController', {
         Ext.each(searchComs, function(item, index, allItems) {
             item.setValue('');
         });
-
-
         store.clearFilter();
     },
 
@@ -138,12 +140,30 @@ Ext.define('Admin.controller.ViewController', {
             failure: Ext.ux.Msg.ajaxFailure
         }, ajaxCfg);
 
-        Ext.MessageBox.confirm('提示', '共选中【' + ids.length + '】项，确定要【' + text + '】吗？', function(result) {
-            if(result === 'no') return;
+        if (action == "move") {
+            var me = this,
+                view = me.getView();
+            var win = me.lookupReference("moveWindow");
 
-            Ext.Ajax.request(cfg);
-        });
+            if (!win) {
+                win = Ext.create({
+                    xtype: 'moveCategoty-tree',
+                    reference: "moveWindow",
+                    ids: ids
+                });
 
+                view.add(win);
+            }
+
+            win.show();
+
+        } else {
+            Ext.MessageBox.confirm('提示', '共选中【' + ids.length + '】项，确定要【' + text + '】吗？', function (result) {
+                if (result === 'no') return;
+
+                Ext.Ajax.request(cfg);
+            });
+        }
     },
 
     /**
@@ -195,9 +215,8 @@ Ext.define('Admin.controller.ViewController', {
             failure: Ext.ux.Msg.ajaxFailure
         }, ajaxCfg);
 
-        Ext.MessageBox.confirm('提示', '共选中【' + data.length + '】项，确定要【' + text + '】吗？', function(result) {
-            if(result === 'no') return;
-
+        Ext.MessageBox.confirm('提示', '共选中【' + data.length + '】项，确定要【' + text + '】吗？', function (result) {
+            if (result === 'no') return;
             Ext.Ajax.request(cfg);
         });
 
@@ -235,6 +254,32 @@ Ext.define('Admin.controller.ViewController', {
     onBtnClicked: function(button) {
         Ext.log(button.text);
     },
+
+    /**
+     * 发布
+     * @param button
+     */
+    onClickedRelease: function (button) {
+        console.log("发布");
+    },
+
+    /**
+     * 全局发布
+     * @param button
+     */
+    onClickBtnPublish: function (button) {
+        Ext.Ajax.request({
+            url : '/cn/article/publishAll',
+            method: 'POST',
+            waitMsg: '正在发布，请稍候...',
+            success: function (response) {
+                console.log(response);
+            }
+
+
+        });
+
+    }
 
     /**
      *

@@ -41,7 +41,7 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/categorys.json',
+                    url: '/cn/article/categoryList',
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -55,27 +55,28 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
                 {text: '栏目ID', dataIndex: 'id', width: 80},
                 {
                     text: '栏目名称 <span class="admin-color-red">+</span>',
-                    dataIndex: 'name',
-                    width: 250,
+                    dataIndex: 'eName',
+                    width: 150,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
                     }
                 },
-                {text: '栏目路径', dataIndex: 'path', width: 250},
+                {text: '栏目路径', dataIndex: 'path', width: 150},
                 {
                     text: '存放路径 <span class="admin-color-red">+</span>',
-                    dataIndex: 'eName',
-                    width: 250,
-                    editor: {
+                    dataIndex: 'name',
+                    width: 150,
+                    /*editor: {
                         xtype: 'textfield',
                         allowBlank: false
-                    }
+                    }*/
                 },
-                {text: '栏目模板', dataIndex: 'category_template', width: 100},
-                {text: '文章模板', dataIndex: 'article_template', width: 100},
+                {text: '栏目模板', dataIndex: 'category_template', width: 150},
+                {text: '文章模板', dataIndex: 'article_template', width: 150},
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '操作', dataIndex: 'id', renderer: me.renderer, width: 200}
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
+                {text: '操作', dataIndex: 'id', renderer: me.renderer, flex: 1 /*width: 230*/}
                 /*  {
                  xtype: 'actioncolumn',
                  items: [

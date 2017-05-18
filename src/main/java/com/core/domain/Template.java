@@ -3,16 +3,15 @@ package com.core.domain;
 import java.util.Date;
 
 /**
- * Created by yk on 2017/4/24.
+ * Created by yk on 2017/5/12.
  */
-public class Category {
+public class Template {
 
     private long id;
     private String name;
-    private String eName;
-    private int parentId;
-    private int tId;
-    private int tAId;
+    private String fileName;
+    private int cId;
+    private int type;
     private int status;
     private Date createDate;
     private Date updateDate;
@@ -33,28 +32,28 @@ public class Category {
         this.name = name;
     }
 
-    public String geteName() {
-        return eName;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void seteName(String eName) {
-        this.eName = eName;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public int getParentId() {
-        return parentId;
+    public int getcId() {
+        return cId;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
+    public void setcId(int cId) {
+        this.cId = cId;
     }
 
-    public int gettId() {
-        return tId;
+    public int getType() {
+        return type;
     }
 
-    public void settId(int tId) {
-        this.tId = tId;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getStatus() {
@@ -81,23 +80,14 @@ public class Category {
         this.updateDate = updateDate;
     }
 
-    public int gettAId() {
-        return tAId;
-    }
-
-    public void settAId(int tAId) {
-        this.tAId = tAId;
-    }
-
     @Override
     public String toString() {
-        return "Category{" +
+        return "Template{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", eName='" + eName + '\'' +
-                ", parentId=" + parentId +
-                ", tId=" + tId +
-                ", tAId=" + tAId +
+                ", fileName='" + fileName + '\'' +
+                ", cId=" + cId +
+                ", type='" + type + '\'' +
                 ", status=" + status +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
