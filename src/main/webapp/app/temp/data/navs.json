@@ -4,6 +4,7 @@
       "text": "内容管理",
       "iconCls": "x-fa fa-newspaper-o",
       "expanded": true,
+      "checked": false,
       "children": [
         {
           "text": "首页",
@@ -21,8 +22,9 @@
               "leaf": true
             },
             {
-              "viewType": "report-outsource",
+              "viewType": "content-notice",
               "text": "活动通知",
+              "split": true,
               "leaf": true
             },
             {
@@ -58,12 +60,12 @@
               ]
             },
             {
-              "viewType": "report-outsource",
+              "viewType": "content-index-embed-futian",
               "text": "广种福田",
               "leaf": true
             },
             {
-              "viewType": "report-outsource",
+              "viewType": "content-index-embed-contact",
               "text": "联系我们",
               "leaf": true
             }
@@ -88,8 +90,8 @@
           "leaf": true
         },
         {
-          "viewType": "content-",
-          "text": "神医养生",
+          "viewType": "content-medical",
+          "text": "禅医养生",
           "split": true,
           "leaf": true
         },
@@ -100,7 +102,7 @@
           "leaf": true
         },
         {
-          "viewType": "content-cangjingge",
+          "viewType": "content-depository",
           "text": "藏经阁",
           "split": true,
           "leaf": true
@@ -112,7 +114,7 @@
           "leaf": true
         },
         {
-          "viewType": "content-shuimochanyun",
+          "viewType": "content-waterzen",
           "text": "水墨禅韵",
           "split": true,
           "leaf": true
@@ -146,11 +148,11 @@
     {
       "text": "发布管理",
       "iconCls": "x-fa fa-desktop",
-      "visible": false,
       "children": [
         {
-          "viewType": "basicData",
+          "viewType": "publish",
           "text": "发布记录",
+          "iconCls": "x-fa fa-paper-plane-o",
           "leaf": true
         }
       ]

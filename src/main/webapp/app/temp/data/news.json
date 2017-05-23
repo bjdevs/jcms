@@ -3,14 +3,14 @@
     {
       "id": 1,
       "title": "黄梅老祖寺精进候行周通启",
-        "category": "新闻法讯",
+      "category": "新闻法讯",
       "author": "老祖寺",
       "creator": "孙健炜",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 2,
@@ -19,10 +19,10 @@
       "author": "老祖寺",
       "creator": "黎思",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 1,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 3,
@@ -31,10 +31,10 @@
       "author": "老祖寺",
       "creator": "杨凯",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 5,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 4,
@@ -43,10 +43,10 @@
       "author": "老祖寺",
       "creator": "陈自新",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 9,
-      "headlineArticle": 0,
-      "headlinePic": 2
+      "hAId": 0,
+      "hPId": 2
     },
     {
       "id": 5,
@@ -55,10 +55,10 @@
       "author": "佚名",
       "creator": "黎思",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 10,
-      "headlineArticle": 0,
-      "headlinePic": 2
+      "hAId": 0,
+      "hPId": 2
     },
     {
       "id": 6,
@@ -67,10 +67,10 @@
       "author": "老祖寺",
       "creator": "老师傅",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 0,
-      "headlinePic": 2
+      "hAId": 0,
+      "hPId": 2
     },
     {
       "id": 7,
@@ -79,10 +79,10 @@
       "author": "老祖寺",
       "creator": "孙健炜",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 0,
-      "headlinePic": 2
+      "hAId": 0,
+      "hPId": 2
     },
     {
       "id": 8,
@@ -91,10 +91,10 @@
       "author": "老祖寺",
       "creator": "司马明",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 9,
@@ -103,10 +103,10 @@
       "author": "老祖寺",
       "creator": "孙健炜",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 10,
@@ -115,10 +115,10 @@
       "author": "老祖寺",
       "creator": "刘北",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 11,
@@ -127,10 +127,10 @@
       "author": "老祖寺",
       "creator": "创建人",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 12,
@@ -139,10 +139,10 @@
       "author": "老祖寺",
       "creator": "创建人",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 13,
@@ -151,10 +151,10 @@
       "author": "老祖寺",
       "creator": "创建人",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 14,
@@ -163,10 +163,10 @@
       "author": "老祖寺",
       "creator": "创建人",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 1,
-      "headlinePic": 0
+      "hAId": 1,
+      "hPId": 0
     },
     {
       "id": 15,
@@ -175,10 +175,10 @@
       "author": "老祖寺",
       "creator": "创建人",
       "createDate": "2017-04-21 18:12:07",
-      "lastChange": "2017-04-22 18:12:07",
+      "updateDate": "2017-04-22 18:12:07",
       "status": 0,
-      "headlineArticle": 0,
-      "headlinePic": 2
+      "hAId": 0,
+      "hPId": 2
     }
   ]
 }

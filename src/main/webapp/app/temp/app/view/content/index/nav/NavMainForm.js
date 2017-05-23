@@ -42,7 +42,7 @@ Ext.define('Admin.view.content.index.nav.NavMainForm', {
                     text: '重置',
                     iconCls: 'x-fa fa-undo',
                     action: 'reset',
-                    handler: 'onResetBtnClicked'
+                    handler: 'onResetBtnClickedNav'
                 },
                 {
                     text: '提交',

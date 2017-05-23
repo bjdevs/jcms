@@ -66,7 +66,7 @@ Ext.define('Admin.view.workbench.WorkbenchController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/articleButton?' + button.action
         });
     }
 

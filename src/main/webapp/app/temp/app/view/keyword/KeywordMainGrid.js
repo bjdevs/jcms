@@ -13,7 +13,10 @@ Ext.define('Admin.view.keyword.KeywordMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/keywords.json',
+                    url: '/cn/article/keyWordList',
+                    extraParams: {
+                        type: 'list'
+                    },
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -32,27 +35,20 @@ Ext.define('Admin.view.keyword.KeywordMainGrid', {
                         xtype: 'textfield',
                         allowBlank: false
                     },
-                    width: 150
+                    width: 250
                 },
                 {
                     text: '描述 <span class="admin-color-red">+</span>',
-                    dataIndex: 'desc',
+                    dataIndex: 'depict',
                     editor: {
                         xtype: 'textarea',
                         allowBlank: false
                     },
                     flex: 1
                 },
-                {
-                    text: '英文 <span class="admin-color-red">+</span>',
-                    dataIndex: 'ename',
-                    editor: {
-                        xtype: 'textfield',
-                        allowBlank: false
-                    },
-                    width: 150
-                },
-                {text: '计数', dataIndex: 'counter'}
+                {text: '计数', dataIndex: 'count'},
+                {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
                 {
@@ -87,7 +83,8 @@ Ext.define('Admin.view.keyword.KeywordMainGrid', {
             plugins: [{
                 ptype: 'cellediting',
                 clicksToEdit: 2
-            }]
+            }],
+
         });
 
         me.callParent();

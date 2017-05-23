@@ -33,12 +33,13 @@ public class MediaService extends BaseService {
     @Autowired
     private UserService userService;
 
-    public String get (String a) {
+    public String get(String a) {
         return qiniuAuthUtil.getAccessDomain();
     }
 
     /**
      * 根据媒体类型 获取数据
+     *
      * @param
      * @return
      */
@@ -51,9 +52,9 @@ public class MediaService extends BaseService {
         int type = Integer.parseInt(
                 !StringUtils.isBlank(request.getParameter("type")) ? request.getParameter("type") : "0");
         int pageSize = Integer.parseInt(
-                !StringUtils.isBlank(request.getParameter("pageSize")) ? request.getParameter("pageSize") : Constant.PAGE_SIZE+"");
+                !StringUtils.isBlank(request.getParameter("pageSize")) ? request.getParameter("pageSize") : Constant.PAGE_SIZE + "");
         int pageNum = Integer.valueOf(
-                !StringUtils.isBlank(request.getParameter("page")) ? request.getParameter("page") : 1+"");
+                !StringUtils.isBlank(request.getParameter("page")) ? request.getParameter("page") : 1 + "");
         String sql = "";
         sql = " WHERE 1 = 1";
         Map<String, Object> params = new HashMap<String, Object>();
@@ -68,7 +69,7 @@ public class MediaService extends BaseService {
         if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)
                 && startDate.length() > 5 && endDate.length() > 5) {
             params.put("createDate", startDate);
-            params.put("endDate", endDate.replace("00:00:00","23:59:59"));
+            params.put("endDate", endDate.replace("00:00:00", "23:59:59"));
             sql += " AND createDate > :createDate AND createDate < :endDate";
         }
 
@@ -93,6 +94,7 @@ public class MediaService extends BaseService {
 
     /**
      * 更新
+     *
      * @param request
      * @return
      */
@@ -142,12 +144,11 @@ public class MediaService extends BaseService {
     }
 
     /**
-     *
      * @param request
-     * @param type 0->废弃,1->启用,2->删除
+     * @param type    0->废弃,1->启用,2->删除
      * @return
      */
-    public ObjectNode multifunctionMediaAH(HttpServletRequest request,int type) {
+    public ObjectNode multifunctionMediaAH(HttpServletRequest request, int type) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("result", "failed");
         objectNode.put("message", "");
@@ -309,6 +310,8 @@ public class MediaService extends BaseService {
                     media.setId(baseRepository.create(media));
                     result = "success";
                     log("媒体管理（新增）", media.toString());
+                    baseRepository.create(media);
+                    result = "success";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -321,11 +324,9 @@ public class MediaService extends BaseService {
     }
 
 
-
     /**
-     *
-     * @param bytes MultipartFile
-     * @param key 文件名
+     * @param bytes      MultipartFile
+     * @param key        文件名
      * @param uploadType 0-系统生成不允许覆盖,1-原始名称上传允许覆盖
      * @return
      * @throws QiniuException

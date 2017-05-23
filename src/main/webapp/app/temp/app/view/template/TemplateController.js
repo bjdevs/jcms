@@ -41,8 +41,8 @@ Ext.define('Admin.view.template.TemplateController', {
 
         if (count == 0) Ext.log('No selection');
 
-        templateGrid.down('button[action=save]').setDisabled(count < 1);
-        templateGrid.down('button[action=delete]').setDisabled(count < 1);
+        // templateGrid.down('button[action=save]').setDisabled(count < 1);
+        // templateGrid.down('button[action=delete]').setDisabled(count < 1);
     },
 
     onAddBtnClicked: function (button) {

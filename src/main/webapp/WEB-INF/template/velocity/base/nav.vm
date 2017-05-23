@@ -1,8 +1,12 @@
 document.write(
 '<ul>'+
-#foreach($item  in $nav)
-    '$item'+
-#end
+    #foreach($item  in $main)
+        '$item'+
+    #end
 '</ul>'+
-'<script type="text/javascript" src=${resURLPrefix}/base/nav_deputy.html></script>'
+'<ol>'+
+    #foreach($item in $deputy)
+        '$item'+
+    #end
+'</ol>'
 );

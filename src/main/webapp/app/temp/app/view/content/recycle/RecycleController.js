@@ -54,10 +54,50 @@ Ext.define('Admin.view.content.recycle.RecycleController', {
         var ctrl = this,
             grid = button.up('grid');
 
-        // todo edit
-        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
-        });
+
+        var idArray = grid.getSelection();
+        var ids = new Array();
+        for (var i = 0; i < idArray.length; i++) {
+            ids[i] = idArray[i].id;
+
+
+            // todo edit
+            ctrl.sendAjaxFromIds(button.action, button.text, grid, {
+                url: '/cn/article/articleButton',
+                method: 'POST',
+                params: {
+                    type: button.action,
+                    ids: ids
+                },
+                waitMsg: '正在修改中，请等待片刻...',
+                submitEmptyText: false,
+                success: function (result, response) {
+                    var data = JSON.parse(result.responseText);
+                    if (data.success) {
+                        Ext.MessageBox.show({
+                            title: '操作提示',
+                            closable: 'true',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO,
+                            align: 'center',
+                            message: '操作成功'
+                        });
+                    } else {
+                        Ext.MessageBox.show({
+                            title: '操作提示',
+                            closable: 'true',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR,
+                            align: 'center',
+                            message: '操作异常，请稍后再试...'
+                        });
+                    }
+                    var store = grid.getStore();
+                    store.getProxy().setExtraParam('page', 1);
+                    store.reload();
+                }
+            });
+        }
     }
 
 });
