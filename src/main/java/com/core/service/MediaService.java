@@ -40,9 +40,13 @@ public class MediaService extends BaseService {
     /**
      * 根据媒体类型 获取数据
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
      *
 >>>>>>> upstream/master
+=======
+     *
+>>>>>>> origin/master
      * @param
      * @return
      */
@@ -326,6 +330,7 @@ public class MediaService extends BaseService {
                     log("媒体管理（新增）", media.toString());
                     result = "success";
                     objectNode.put("url", media.getRealUrl());
+                    result = "success";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
