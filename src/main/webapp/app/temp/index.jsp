@@ -1,6 +1,10 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
     <meta charset="UTF-8">
     <title>黄梅老祖寺-后台</title>
     <!-- extjs.css -->
@@ -34,21 +38,23 @@
     <!-- kindeditor -->
     <script charset="utf-8" src="resources/kindeditor/kindeditor-all-min.js"></script>
     <script charset="utf-8" src="resources/kindeditor/lang/zh_CN.js"></script>
-
-    <!-- clipboard -->
-    <!--<script type="text/javascript" src="${func:root()}/v3/resources/clipboard/clipboard.js"></script>-->
-    <!-- json2 -->
-    <!--<script type="text/javascript" src="${func:root()}/v3/resources/js/plugins/json2/json2.min.js"></script>-->
-
-    <!-- extjs.plugins -->
-    <!--<script type="text/javascript" src="${func:root()}/v3/resources/admin-plugins.js"></script>-->
-    <!--<script type="text/javascript" src="${func:root()}/v3/resources/extjs-plugins.js"></script>-->
+    <jsp:include page="/WEB-INF/admin/_script.jspf"></jsp:include>
 
 </head>
 <body>
 <script type="text/javascript">
     var _am = {
-        currentUser: {name: '黎思'}
+        login:{
+            submitURL:"/cn/admin/login"
+        },
+        currentUser: {
+            id: "${user.id}",
+            account: "${user.account}",
+            name: "${user.name}",
+            phone: "${user.phone}",
+            mail: "${user.mail}",
+            depict: "${user.depict}"
+        }
     };
 </script>
 <!-- 系统入口 -->

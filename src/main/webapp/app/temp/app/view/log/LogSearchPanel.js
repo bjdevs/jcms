@@ -19,7 +19,7 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             store: {
                                 proxy: {
                                     type: 'ajax',
-                                    url: _ADMIN.root + '/log/select.do',
+                                    url: './logList',
                                     extraParams: {
                                         groupField: 'module'
                                     },
@@ -44,7 +44,7 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             store: {
                                 proxy: {
                                     type: 'ajax',
-                                    url: _ADMIN.root + '/log/select.do',
+                                    url: './logList',
                                     extraParams: {
                                         groupField: 'action'
                                     },

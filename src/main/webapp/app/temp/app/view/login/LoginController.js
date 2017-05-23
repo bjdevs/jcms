@@ -13,7 +13,7 @@ Ext.define('Admin.view.login.LoginController', {
         if (form.isValid()) {
             //form.submit();
             form.submit({
-                url: "./login",
+                url: "/cn/admin/login",
                 method: "POST",
                 //waitMsg: '登录中，稍等片刻...',
                 submitEmptyText: false,

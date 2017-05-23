@@ -6,6 +6,7 @@ import com.core.repository.BaseRepository;
 import com.core.repository.sqlBuilder.Page;
 import com.core.security.SupportFactory;
 import com.core.util.IpUtil;
+import com.core.util.ProjectUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -122,6 +123,9 @@ public class BaseService {
         com.core.domain.Log log = new com.core.domain.Log();
         log.setUserId(user.getId());
         log.setName(user.getAccount());
+
+        //log.setAction(action.length() > 50 ? action.substring(0,49) : action);
+        //log.setContent(content.length() > 100 ? content.substring(0,99) : content);
         log.setAction(action);
         log.setContent(content);
         log.setIp(IpUtil.getIp(request));
@@ -144,5 +148,4 @@ public class BaseService {
             throw new RuntimeException(e);
         }
     }
-
 }

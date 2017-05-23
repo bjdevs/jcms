@@ -148,4 +148,18 @@ public class Media {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "id=" + id +
+                ", uId=" + uId +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", url='" + url + '\'' +
+                ", cId=" + cId +
+                ", status=" + status +
+                ", createDate=" + createDate +
+                '}';
+    }
 }
