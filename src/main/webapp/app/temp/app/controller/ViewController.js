@@ -154,13 +154,11 @@ Ext.define('Admin.controller.ViewController', {
 
                 view.add(win);
             }
-
             win.show();
 
         } else {
             Ext.MessageBox.confirm('提示', '共选中【' + ids.length + '】项，确定要【' + text + '】吗？', function (result) {
                 if (result === 'no') return;
-
                 Ext.Ajax.request(cfg);
             });
         }
@@ -295,7 +293,7 @@ Ext.define('Admin.controller.ViewController', {
         });
 
     },
-
+  
     /**
      *
      * @param view

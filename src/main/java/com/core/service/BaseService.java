@@ -174,5 +174,4 @@ public class BaseService {
         }
         return contentArray;
     }
-
 }
