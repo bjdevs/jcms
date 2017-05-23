@@ -13,15 +13,6 @@ public class Constant {
 
     public static final int ARTICLE_CONTENT_LENGTH = 255;
 
-    /**
-     * 适用
-     * 登录、分类、模板、头条套红、媒体类型
-     * Media：1图片、2音频、3文档
-     */
-    public static final byte GENERAL_ID_ZERO = 0;
-    public static final byte GENERAL_ID_ONE = 1;
-    public static final byte GENERAL_ID_TWO = 2;
-    public static final byte GENERAL_ID_THREE = 3;
     public static final int PAGE_SIZE = 25;
 
 

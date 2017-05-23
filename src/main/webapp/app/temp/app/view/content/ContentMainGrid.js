@@ -170,26 +170,26 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 }
             case 'hAId':
                 if(value == 0){
-                    return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
-                } else {
                     return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
+                } else {
+                    return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
                 }
                 /*switch (value) {
-                    case 1:
-                        return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
                     case 0:
+                        return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
+                    case 1:
                         return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
                 }*/
             case 'hPId':
                 if(value == 0){
-                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
-                } else {
                     return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
+                } else {
+                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
                 }
                 /*switch (value) {
-                    case 2:
-                        return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
                     case 0:
+                        return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
+                    case 2:
                         return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
                 }*/
             default:

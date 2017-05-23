@@ -6,6 +6,9 @@ Ext.define('Admin.view.publish.publishController', {
     control: {
         'publish-mgrid button[action=publish]': {
             click: 'onClickBtnPublish'
+        },
+        'publish-mgrid button[action=refresh]': {
+            click: 'onRefreshBtnClicked'
         }
     }
 });

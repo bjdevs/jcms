@@ -292,8 +292,6 @@
             'color-stop(0, #f22),color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff),' +
             'color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2),color-stop(1, #f22) );' +
             'color:transparent;-webkit-background-clip: text;font-size:5em;');
-    console.log("%c", "padding:50px 300px;line-height:120px;" +
-            "background:url('http://note.youdao.com/yws/public/resource/666584082b02a9c346980f6d1c7e68e0/xmlnote/5A5314A1694E4ED28E9E5383E9FC2A6B/17113') no-repeat;");
 </script>
 </body>
 </html>

@@ -43,6 +43,8 @@ Ext.application({
         // 发布管理
         'Admin.view.publish.Publish',
 
+        'Admin.view.media.Media',
+
         // 栏目维护
         'category.Category',
         'template.Template',

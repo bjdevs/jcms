@@ -26,11 +26,54 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             click: 'onEditBtnClicked'
         },
         '#nav button[action=release]': {
-            click: 'onBtnClicked'
+            click: 'onBtnClickedRelease'
         },
         '#nav button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         }
+
+    },
+
+    /*重置*/
+    onResetBtnClickedNav: function (button) {
+        var id = button.up().up().up().up().id;
+        id = id.split('-');
+        id = id[id.length - 1];
+        var type = id == 'sub' ? 'deputy' : 'main';
+        var content = button.up().up().query('[name=content]')[0];
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/cn/article/resetNav',
+            params: {
+                type: type
+            },
+            success: function (response) {
+                var data = JSON.parse(response.responseText);
+                if(data.success){
+                    content.setValue(data.nav);
+                }
+            }
+        });
+    },
+
+    onBtnClickedRelease:  function () {
+        Ext.Ajax.request({
+            url : '/cn/article/create/nav',
+            method: 'POST',
+            waitMsg: '正在发布，请稍候...',
+            success: function (response) {
+                var data = JSON.parse(response.responseText);
+                if (data.success){
+                    Ext.ux.Msg.info('发布成功', function() {
+                    });
+                }else {
+                    Ext.ux.Msg.info('程序异常，请稍后再试...', function() {
+                    });
+                }
+            }
+
+
+        });
     },
 
     onBeforeRender: function (panel, eOpts) {

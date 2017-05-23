@@ -243,7 +243,7 @@ Ext.define('Admin.view.content.ContentController', {
                 params: {
                     content: editor.isEmpty() ? "" : editor.html(),
                     category: view.id,
-                    userId: _am.currentUser.name,
+                    userId: _am.currentUser.id,
                     authorStr: _am.currentUser.name
                 },
                 waitMsg: '正在提交中，请等待片刻...',

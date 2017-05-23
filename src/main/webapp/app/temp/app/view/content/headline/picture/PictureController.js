@@ -25,8 +25,8 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         'content-headline-picture-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=content-headline-text]': {
-            click: 'onTextHeadLineBtnClicked'
+        'content-headline-picture-mgrid button[action=content-headline-picture]': {
+            click: 'onPictureHeadLineBtnClicked'
         }
     },
 
@@ -48,9 +48,21 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var selected = grid.getSelection();
+        if (selected.length == 0){
+            return;
+        }
+        var id = selected[0].data.id;
+        var status = selected[0].data.status;
+        var redStatus = selected[0].data.redStatus;
+        var cateOrderBy = selected[0].data.cateOrderBy;
+        var name = selected[0].data.name;
+
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/updateHeadLine?' + button.action +
+            '&id='+id+'&status='+status+'&redStatus='+redStatus+
+            '&cateOrderBy='+cateOrderBy+'&name='+name
         });
     },
 
@@ -60,11 +72,11 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/headLineBtn?' + button.action + '&type=2'
         });
     },
 
-    onTextHeadLineBtnClicked: function (button) {
+    onPictureHeadLineBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView(),// picture-mgrid
 
@@ -74,7 +86,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             category = ownerView.id.split('-'),
             category = category[category.length-1],
 
-            winReference = 'content-headline-text-win-' + category;
+            winReference = 'content-headline-picture-win-' + category;
 
         view.up().hide(); // 关闭当前窗口,再打开新窗口
 
@@ -89,8 +101,8 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                     data: {
                         category: category,
                         categoryName: ownerView.getTitle(),
-                        subItem: 'content-headline-text-mgrid',
-                        type: 'text'
+                        subItem: 'content-headline-picture-mgrid',
+                        type: 'picture'
                     }
                 }
             });
@@ -99,5 +111,34 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         }
 
         win.show();
+    },
+    onSubmitBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView(),
+
+            ownerView = view.up();// content
+
+
+        var form = view.down('form').getForm();
+
+        var id = view.query('[name=id]')[0].value;
+
+        ctrl.formSubmit(form, {
+            url: '/cn/article/createHeadLine?id='+id+'&type=2' // todo edit
+            // url: 'data/ajax.json?id='+id+'&type=1' // todo edit
+        }, function (form, action) {
+            Ext.ux.Msg.info('保存成功', function () {
+
+                view.hide();
+
+                var grid = ownerView.down('grid'),
+                    store = grid.getStore();
+
+                store.reload();
+
+                grid.getSelectionModel().deselectAll();
+
+            });
+        });
     }
 });
