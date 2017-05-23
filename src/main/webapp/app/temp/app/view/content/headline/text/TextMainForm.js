@@ -12,7 +12,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
     maximized: true,// 默认最大化窗口
     maximizable: false, // 不支持放大 or 缩小
     width: 1000,
-    height: 800,
+    // height: 800,
     layout: 'border',
 
     initComponent: function () {
@@ -23,7 +23,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                 xtype: 'panel',
                 region: 'center',
                 layout: 'form',
-                minHeight: 400,
+                // minHeight: 400,
                 border: false,
                 scrollable: 'y',
                 items: [
@@ -31,7 +31,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                         border: false,
 
                         xtype: 'form',
-                        height: '100%',
+                        // height: '100%',
                         defaults: {
                             xtype: 'fieldcontainer',
                             defaults: {
@@ -128,7 +128,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                         store: {
                                             proxy: {
                                                 type: 'ajax',
-                                                url: 'data/categorys.json',
+                                                url: '/cn/article/categoryENameList',
                                                 reader: {
                                                     type: 'json',
                                                     rootProperty: 'rows'
@@ -136,7 +136,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                             },
                                             autoLoad: true
                                         },
-                                        displayField: 'name',
+                                        displayField: 'eName',
                                         valueField: 'id',
                                         msgTarget: 'side'
                                     }
@@ -164,11 +164,11 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                     }
                 ]
             },
-                {
+                /*{
                     region: 'south',
-                    height: 350,
+                    height: 300,
                     items: new Admin.view.workbench.WorkbenchMainGrid()
-                }
+                }*/
             ]
         });
 

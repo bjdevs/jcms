@@ -88,7 +88,6 @@ Ext.define('Admin.controller.AppController', {
                     newView = Ext.create({xtype: me.loginViewType});
 
                 } else {
-
                     try {
                         newView = Ext.create({
                             id: 'main-panel-' + hashTag,

@@ -12,6 +12,7 @@ public class Category {
     private String eName;
     private int parentId;
     private int tId;
+    private int tAId;
     private int status;
     private Date createDate;
     private Date updateDate;
@@ -80,6 +81,14 @@ public class Category {
         this.updateDate = updateDate;
     }
 
+    public int gettAId() {
+        return tAId;
+    }
+
+    public void settAId(int tAId) {
+        this.tAId = tAId;
+    }
+
     @Override
     public String toString() {
         return "Category{" +
@@ -88,6 +97,7 @@ public class Category {
                 ", eName='" + eName + '\'' +
                 ", parentId=" + parentId +
                 ", tId=" + tId +
+                ", tAId=" + tAId +
                 ", status=" + status +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +

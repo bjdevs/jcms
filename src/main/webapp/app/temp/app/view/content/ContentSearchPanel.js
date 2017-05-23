@@ -32,7 +32,8 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                             endDateField: 'search-enddate',
                             editable: false,
                             format: 'Y-m-d',
-                            submitFormat: 'Y-m-d'
+                            submitFormat: 'Y-m-d',
+                            emptyText: ''
                         },
                         {
                             xtype: 'datefield',
@@ -42,7 +43,8 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                             editable: false,
                             startDateField: 'search-startdate',
                             format: 'Y-m-d',
-                            submitFormat: 'Y-m-d'
+                            submitFormat: 'Y-m-d',
+                            emptyText: ''
                         },
                         {
                             xtype: 'button',

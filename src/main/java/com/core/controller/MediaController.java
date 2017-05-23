@@ -28,7 +28,8 @@ public class MediaController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/mediaList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void mediaTypeShow(HttpServletRequest request,HttpServletResponse response) throws Exception {
+
+    public void mediaTypeShow(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.getWriter().print(mediaService.getList(request));
     }
 
@@ -47,18 +48,18 @@ public class MediaController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/mediaDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaDeleteAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request,2).toString();
+        return mediaService.multifunctionMediaAH(request, 2).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/mediaEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaEnabledAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request,1).toString();
+        return mediaService.multifunctionMediaAH(request, 1).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/mediaAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaAbandonAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request,0).toString();
+        return mediaService.multifunctionMediaAH(request, 0).toString();
     }
 }

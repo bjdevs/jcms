@@ -11,6 +11,8 @@ public class Constant {
 
     public static final String WINDOW_TITLE_SUFFIX = "_黄梅老祖寺";
 
+    public static final int ARTICLE_CONTENT_LENGTH = 255;
+
     public static final int PAGE_SIZE = 25;
 
 
@@ -19,6 +21,7 @@ public class Constant {
      * 文章 0-初稿 / 1-已签 /  5-返工  / 9-已发 /  10+-已删
      * 头条 0-未发 / 9-已发
      */
+    public static final int ARTICLE_ID_MINUS = -1;
     public static final int ARTICLE_ID_ZERO = 0;
     public static final int ARTICLE_ID_ONE = 1;
     public static final int ARTICLE_ID_FIVE = 5;

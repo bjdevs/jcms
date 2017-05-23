@@ -16,21 +16,21 @@
     </div>
 
     <div class="breadcrumb">
-        当前位置：#if($article.showCategory) <a href="$article.categoryUrl">$article.category</a> > #end $article.title
+        当前位置：#if($article.showCategory) <a href="$article.categoryUrl">$!article.category</a> > #end $article.title
     </div>
 
     <div class="layer2 layer2-1 article">
         <h2>$article.title</h2>
 
         <div class="source">
-            　$article.publishDate　来源：$article.source
-            　作者：$article.author
+            　$!article.publishDate　来源：$!article.source
+            　作者：$!article.author
         </div>
         <div class="detail">
             $article.content
         </div>
         <div class="paginator">
-            $article.pageContent
+            $!article.pageContent
         </div>
         <div class="qrcode">
             <div id="code"></div>

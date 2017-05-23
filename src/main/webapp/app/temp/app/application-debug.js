@@ -37,7 +37,13 @@ Ext.application({
         //'content.news.News',
         'content.Content',
         'content.recycle.Recycle',
+        'content.index.embed.Futian',
+        'content.index.embed.Contact',
 
+        // 发布管理
+        'Admin.view.publish.Publish',
+
+        'Admin.view.media.Media',
 
         // 栏目维护
         'category.Category',
