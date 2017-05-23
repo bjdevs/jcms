@@ -10,7 +10,7 @@ Ext.define('Admin.view.media.MediaGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: './mediaList',
+                    url: '/cn/admin/mediaList',
                     reader: {
                         type: 'json',
                         rootProperty: 'data',

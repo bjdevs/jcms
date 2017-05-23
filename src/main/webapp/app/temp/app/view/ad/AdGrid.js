@@ -10,7 +10,7 @@ Ext.define('Admin.view.ad.AdGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: './adList',
+                    url: '/cn/admin/adList',
                     reader: {
                         type: 'json',
                         rootProperty: 'data',

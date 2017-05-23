@@ -147,7 +147,7 @@ Ext.define('Admin.view.ad.AdController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: './adUpdate'
+            url: '/cn/admin/adUpdate'
         });
     },
 
@@ -157,7 +157,7 @@ Ext.define('Admin.view.ad.AdController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './adDelete'
+            url: '/cn/admin/adDelete'
         });
     },
 
@@ -167,7 +167,7 @@ Ext.define('Admin.view.ad.AdController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './adEnabled'
+            url: '/cn/admin/adEnabled'
         });
     },
     onAbandonBtnClicked: function (button) {
@@ -176,7 +176,7 @@ Ext.define('Admin.view.ad.AdController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './adAbandon'
+            url: '/cn/admin/adAbandon'
         });
     },
     onEditBtnClicked: function (button) {
@@ -226,7 +226,7 @@ Ext.define('Admin.view.ad.AdController', {
         var form = view.down('form').getForm();
         if (form.isValid()) {
             form.submit({
-                url: "./adCreate",
+                url: "/cn/admin/adCreate",
                 method: "POST",
                 submitEmptyText: false,
                 waitMsg: '上传中，稍等片刻...',
