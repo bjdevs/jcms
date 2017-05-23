@@ -30,7 +30,7 @@
             $article.content
         </div>
         <div class="paginator">
-            $article.pageContent
+            $!article.pageContent
         </div>
         <div class="qrcode">
             <div id="code"></div>

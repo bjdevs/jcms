@@ -9,7 +9,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
     initComponent: function () {
         var me = this;
-        var contentId = 'content-area-'+me.id + new Date().getTime();
+        var contentId = 'content-area-' + me.id + new Date().getTime();
 
         var form = Ext.create({
             xtype: 'form',
@@ -24,7 +24,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
             },
 
             defaultType: 'textfield',
-
+            height: '100%',
             items: [
                 {
                     fieldLabel: 'newsId',
@@ -184,15 +184,15 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     // id: 'content',
                     // beforeLabelTextTpl: '',
                     width: '100%',
-                    height: 460,
+                    height: '100%',
                     border: 0,
                     // anchor: '100% 100%',
                     xtype: 'panel',
-                    html: '<textarea id='+contentId+' style="width: 100%; height: 480px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
+                    html: '<textarea id=' + contentId + ' style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
                     listeners: {
                         afterrender: function (self, eOpts) {
                             // editor = KindEditor.create('#' + self.id, {
-                            editor = KindEditor.create('#'+contentId, {
+                            editor = KindEditor.create('#' + contentId, {
                                 resizeType: 1,
                                 allowPreviewEmoticons: false,
                                 items: [

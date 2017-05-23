@@ -11,14 +11,14 @@ Ext.define('Admin.controller.ViewController', {
         searchGridSuffix: '-mgrid'
     },
 
-    getContentPanel: function() {
+    getContentPanel: function () {
         return Admin.app.getController('AppController').getContentPanel();
     },
 
     /**
      * searchpanel - 查询
      */
-    onSearchPanelQuery: function() {
+    onSearchPanelQuery: function () {
         var ctrl = this,
             view = ctrl.getView(),
 
@@ -31,11 +31,11 @@ Ext.define('Admin.controller.ViewController', {
 
         var filters = [];
 
-        Ext.each(searchComs, function(item, index, allItems) {
+        Ext.each(searchComs, function (item, index, allItems) {
             var key = item.itemId.slice(searchPrefix.length),
                 value = item.getValue();
 
-            if(value && typeof value === 'string') {
+            if (value && typeof value === 'string') {
                 value = value.indexOf('全部') > -1 ? '' : value;
             } else if (item.xtype == 'datefield') {
                 value = Ext.Date.format(value, 'Y-m-d H:i:s');
@@ -48,7 +48,7 @@ Ext.define('Admin.controller.ViewController', {
         });
 
         // 实现远程过滤 , 目前在这里设置,是为了节省store的一行代码,可能有未知异常,需要注意
-        if(!store.getRemoteFilter()) store.setRemoteFilter(true);
+        if (!store.getRemoteFilter()) store.setRemoteFilter(true);
         store.setFilters(filters);
 
     },
@@ -56,7 +56,7 @@ Ext.define('Admin.controller.ViewController', {
     /**
      * searchpanel - 重置
      */
-    onSearchPanelReset: function() {
+    onSearchPanelReset: function () {
         var ctrl = this,
             view = ctrl.getView(),
 
@@ -67,7 +67,7 @@ Ext.define('Admin.controller.ViewController', {
         var grid = view.down(view.xtype + searchGridSuffix),
             store = grid.getStore();
 
-        Ext.each(searchComs, function(item, index, allItems) {
+        Ext.each(searchComs, function (item, index, allItems) {
             item.setValue('');
         });
         store.clearFilter();
@@ -79,7 +79,7 @@ Ext.define('Admin.controller.ViewController', {
      * @param formCfg
      * @param callback
      */
-    formSubmit: function(form, formCfg, callback) {
+    formSubmit: function (form, formCfg, callback) {
         var cfg = Ext.apply({
             submitEmptyText: false, // 不发送空值,默认会发送
             url: '',
@@ -98,22 +98,22 @@ Ext.define('Admin.controller.ViewController', {
      * @param grid
      * @param ajaxCfg
      */
-    sendAjaxFromIds: function(action, text, grid, ajaxCfg) {
-        if(!action) {
+    sendAjaxFromIds: function (action, text, grid, ajaxCfg) {
+        if (!action) {
             Ext.log('缺少action');
             return;
         }
 
         var ids = [];
 
-        Ext.each(grid.getSelection(), function(item, index, allItems) {
+        Ext.each(grid.getSelection(), function (item, index, allItems) {
 
-            if(item.id !== 0) {
+            if (item.id !== 0) {
                 ids.push(item.id);
             }
         });
 
-        if(ids.length == 0) return;
+        if (ids.length == 0) return;
 
         var cfg = Ext.apply({
             url: '',
@@ -121,14 +121,14 @@ Ext.define('Admin.controller.ViewController', {
                 method: action,
                 ids: ids
             },
-            success: function(response, opts) {
+            success: function (response, opts) {
                 var obj = Ext.decode(response.responseText);
 
                 var success = obj['success'],
                     msg = obj['msg'];
 
-                if(success) {
-                    Ext.ux.Msg.info(text + '成功', function() {
+                if (success) {
+                    Ext.ux.Msg.info(text + '成功', function () {
                         // 不需要重置pageNo
                         grid.getStore().reload();
                         grid.getSelectionModel().deselectAll();
@@ -154,13 +154,11 @@ Ext.define('Admin.controller.ViewController', {
 
                 view.add(win);
             }
-
             win.show();
 
         } else {
             Ext.MessageBox.confirm('提示', '共选中【' + ids.length + '】项，确定要【' + text + '】吗？', function (result) {
                 if (result === 'no') return;
-
                 Ext.Ajax.request(cfg);
             });
         }
@@ -173,37 +171,37 @@ Ext.define('Admin.controller.ViewController', {
      * @param grid
      * @param ajaxCfg
      */
-    sendAjaxFromData: function(action, text, grid, ajaxCfg) {
-        if(!action) {
+    sendAjaxFromData: function (action, text, grid, ajaxCfg) {
+        if (!action) {
             Ext.log('缺少action');
             return;
         }
 
         var data = [];
 
-        Ext.each(grid.getSelection(), function(item, index, allItems) {
-            if(item.dirty) {
+        Ext.each(grid.getSelection(), function (item, index, allItems) {
+            if (item.dirty) {
                 data.push(item.data);
             }
         });
 
-		    if(data.length == 0) return;
+        if (data.length == 0) return;
 
-		
+
         var cfg = Ext.apply({
             url: '',
             params: {
                 method: action,
                 data: Ext.util.JSON.encode(data)
             },
-            success: function(response, opts) {
+            success: function (response, opts) {
                 var obj = Ext.decode(response.responseText);
 
                 var success = obj['success'],
                     msg = obj['msg'];
 
-                if(success) {
-                    Ext.ux.Msg.info(text + '成功', function() {
+                if (success) {
+                    Ext.ux.Msg.info(text + '成功', function () {
                         // 不需要重置pageNo
                         grid.getStore().reload();
                         grid.getSelectionModel().deselectAll();
@@ -226,7 +224,7 @@ Ext.define('Admin.controller.ViewController', {
      * 按钮点击 - 刷新 grid store
      * @param button
      */
-    onRefreshBtnClicked: function(button) {
+    onRefreshBtnClicked: function (button) {
 
         // 重置分页
         var grid = button.up('grid'),
@@ -242,7 +240,7 @@ Ext.define('Admin.controller.ViewController', {
      * common - 表单重置
      * @param button
      */
-    onResetBtnClicked: function(button) {
+    onResetBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView();
 
@@ -251,7 +249,7 @@ Ext.define('Admin.controller.ViewController', {
 
 
     /* temp function */
-    onBtnClicked: function(button) {
+    onBtnClicked: function (button) {
         Ext.log(button.text);
     },
 
@@ -268,19 +266,34 @@ Ext.define('Admin.controller.ViewController', {
      * @param button
      */
     onClickBtnPublish: function (button) {
+        var grid = button.up().up().up().down('grid');
         Ext.Ajax.request({
-            url : '/cn/article/publishAll',
+            url: '/cn/article/create/index',
             method: 'POST',
+            params: {
+                userId: _am.currentUser.id
+            },
             waitMsg: '正在发布，请稍候...',
             success: function (response) {
-                console.log(response);
+                var data = JSON.parse(response.responseText);
+                if (data.success) {
+                    Ext.ux.Msg.info('发布成功', function () {
+                        grid.getStore().reload();
+                        grid.getSelectionModel().deselectAll();
+                    });
+                } else {
+                    Ext.ux.Msg.info('发布失败，请稍候再试...', function () {
+                        grid.getStore().reload();
+                        grid.getSelectionModel().deselectAll();
+                    });
+                }
             }
 
 
         });
 
-    }
-
+    },
+  
     /**
      *
      * @param view
@@ -295,7 +308,7 @@ Ext.define('Admin.controller.ViewController', {
      * }
      *
      */
-    setCurrentView: function(options) {
+    setCurrentView: function (options) {
         options = Ext.apply({
             xtype: 'panel',
             window: false,
@@ -312,7 +325,7 @@ Ext.define('Admin.controller.ViewController', {
             windowCfg = options.windowCfg,
             targetCfg = options.targetCfg;
 
-        if(inWindow) {
+        if (inWindow) {
             var cfg = Ext.apply({
                 xtype: 'basewindow',
                 items: [
@@ -324,7 +337,7 @@ Ext.define('Admin.controller.ViewController', {
 
             Ext.create(cfg);
 
-        } else if(openWindow) {
+        } else if (openWindow) {
 
             var cfg = Ext.apply({
                 xtype: 'basewindow',
@@ -333,7 +346,7 @@ Ext.define('Admin.controller.ViewController', {
 
             Ext.create(cfg);
 
-        } else if(window) {
+        } else if (window) {
             var cfg = Ext.apply({
                 xtype: xtype,
                 autoShow: true

@@ -40,8 +40,19 @@ public class ArticleController {
     @ResponseBody
     @RequestMapping(value = "/headLine", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type){
-
         return articleService.headLineList(category, type).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name){
+        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/headLineBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type){
+        return articleService.headLineBtn(method, ids, type).toString();
     }
 
     @ResponseBody
@@ -99,6 +110,12 @@ public class ArticleController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/categoryENameList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String categoryENameList(){
+        return articleService.categoryENameList().toString();
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/templateList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String templateList(){
         return articleService.templateList().toString();
@@ -141,10 +158,21 @@ public class ArticleController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/publishAll", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String publishAll(){
-        return articleService.publishAll().toString();
+    @RequestMapping(value = "/createHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String createHeadLine(HttpServletRequest request){
+        return articleService.createHeadLine(request).toString();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/mediaImgList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String mediaList(String category){
+        return articleService.mediaList(category).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/resetNav", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String resetNav(String type){
+        return articleService.resetNav(type).toString();
+    }
 
 }
