@@ -105,6 +105,7 @@ public class MediaService extends BaseService {
         objectNode.put("success", true);
         try {
             String data = request.getParameter("data");
+            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
             Media media = null;
             Media mediaOld = null;
             ObjectMapper mapper = new ObjectMapper();
@@ -131,8 +132,10 @@ public class MediaService extends BaseService {
                         mediaOld.setStatus(media.getStatus());
                         baseRepository.update(mediaOld);
                         objectNode.put("result", "success");
+                        stringBuilder.append(mediaOld.getId()).append(",");
                     }
                 }
+                log("广告管理（更新）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,6 +155,8 @@ public class MediaService extends BaseService {
         objectNode.put("success", true);
         try {
             String[] ids = request.getParameterValues("ids");
+            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
+            String typeStr = "";
             Media media = null;
             for (String num : ids) {
                 long id = Long.parseLong(num);
@@ -161,26 +166,31 @@ public class MediaService extends BaseService {
                 if (media != null && media.getId() > 0) {
                     if (type == 0) { // 废弃
                         media.setStatus(Constant.GENERAL_ID_ZERO);
+                        typeStr = "废弃";
                         baseRepository.update(media);
                     }
                     if (type == 1) { // 启用
                         media.setStatus(Constant.GENERAL_ID_ONE);
+                        typeStr = "启用";
                         baseRepository.update(media);
                     }
                     if (type == 2) { // 删除
                         qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
+                        typeStr = "删除";
                         baseRepository.delete(Media.class, media.getId());
                     }
                     objectNode.put("result", "success");
+                    stringBuilder.append(media.getId()).append(",");
                 }
             }
+            log("媒体管理（"+typeStr+"）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return objectNode;
     }
 
-    public String createMedia(MultipartHttpServletRequest msr) {
+    public String createMedia(MultipartHttpServletRequest msr) throws Exception {
         Iterator<String> fileNames = msr.getFileNames();
         ObjectNode objectNode = objectMapper.createObjectNode();
 
@@ -205,6 +215,7 @@ public class MediaService extends BaseService {
                         e.printStackTrace();
                     }
                     result = "success";
+                    log("媒体管理（更新）", mediaOld.toString());
                 }
             }
         } else {
@@ -296,6 +307,9 @@ public class MediaService extends BaseService {
                     media.setCreateDate(new Date());
                     media.setStatus(Constant.GENERAL_ID_ONE);
                     media.setuId((byte) userInfo.getId());
+                    media.setId(baseRepository.create(media));
+                    result = "success";
+                    log("媒体管理（新增）", media.toString());
                     baseRepository.create(media);
                     result = "success";
                 }

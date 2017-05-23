@@ -6,7 +6,6 @@
     pageContext.setAttribute("MEDIA_TYPE_PICTURE", Constant.MEDIA_TYPE_PICTURE);
     pageContext.setAttribute("MEDIA_TYPE_AUDIO", Constant.MEDIA_TYPE_AUDIO);
     pageContext.setAttribute("MEDIA_TYPE_DOCUMENT", Constant.MEDIA_TYPE_DOCUMENT);
-
 %>
 
 <script>

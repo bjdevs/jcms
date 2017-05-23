@@ -49,6 +49,7 @@ Ext.define('Admin.view.login.Login', {
                 {
                     xtype: 'form',
                     url: _am.login.submitURL + location.search,  // todo edit
+                    method: "POST",
 
                     baseCls: 'x-plain',
 
@@ -65,14 +66,14 @@ Ext.define('Admin.view.login.Login', {
                     defaultType: 'textfield',
 
                     items: [
-                        {
+                        /*{
                             xtype: 'displayfield',
                             fieldCls: 'c-red',
                             value: _am.login.error // todo edit
-                        },
+                        },*/
                         {
                             fieldLabel: '帐号',
-                            name: 'username', // todo edit
+                            name: 'account', // todo edit
                             reference: 'username',
                             publishes: 'value',
                             allowBlank: false,
@@ -84,22 +85,22 @@ Ext.define('Admin.view.login.Login', {
                             fieldLabel: '密码',
                             allowBlank: false,
                             blankText: '请填写您的帐号密码'
-                        },
+                        }/*,
                         {
                             xtype: 'hidden',
                             name: 'return',
                             value: _am.login.returnURL + location.search // todo edit
-                        }
+                        }*/
                     ],
                     buttons: [
-                        {
+                        /*{
                             xtype: 'tbtext',
                             bind: {
                                 html: '<a href="' + _am.login.editPasswordURL + '{username.value}' + '">忘记密码？</a>' // todo edit
                             }
 
                         },
-                        '->',
+                        '->',*/
                         {
                             text: '重置',
                             iconCls: 'x-fa fa-undo',

@@ -190,6 +190,17 @@
       ]
     },
     {
+      "text": "广告管理",
+      "iconCls": "x-fa fa-cog",
+      "children": [
+        {
+          "viewType": "ad",
+          "text": "广告维护",
+          "leaf": true
+        }
+      ]
+    },
+    {
       "text": "帐户资料",
       "iconCls": "x-fa fa-user",
       "children": [
