@@ -144,7 +144,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: './mediaUpdate'
+            url: '/cn/admin/mediaUpdate'
         });
     },
 
@@ -154,7 +154,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './mediaDelete'
+            url: '/cn/admin/mediaDelete'
         });
     },
 
@@ -164,7 +164,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './mediaEnabled'
+            url: '/cn/admin/mediaEnabled'
         });
     },
     onAbandonBtnClicked: function (button) {
@@ -173,7 +173,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: './mediaAbandon'
+            url: '/cn/admin/mediaAbandon'
         });
     },
     onEditBtnClicked: function (button) {
@@ -219,7 +219,7 @@ Ext.define('Admin.view.media.MediaController', {
         var form = view.down('form').getForm();
         if (form.isValid()) {
             form.submit({
-                url: "./mediaCreate",
+                url: "/cn/admin/mediaCreate",
                 method: "POST",
                 submitEmptyText: false,
                 waitMsg: '上传中，稍等片刻...',

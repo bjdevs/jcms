@@ -40,6 +40,7 @@ public class MediaService extends BaseService {
     /**
      * 根据媒体类型 获取数据
      *
+     *
      * @param
      * @return
      */
@@ -197,6 +198,8 @@ public class MediaService extends BaseService {
         String result = "failed";
         String message = "";
         objectNode.put("success", true);
+        // kindEditor : error=0 => upload success
+        int error = 0;
 
         String id = msr.getParameter("id");
         String title = msr.getParameter("title");
@@ -241,10 +244,12 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.IMG_FILTER)) {
                             message = Constant.IMG_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_PICTURE_MAX_SIZE) {
                             message = "上传图片超过最大上限 10MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     case Constant.MEDIA_TYPE_AUDIO:
@@ -252,10 +257,12 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.AUDIO_FILTER)) {
                             message = Constant.AUDIO_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_AUDIO_MAX_SIZE) {
                             message = "上传音频超过最大上限 30MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     case Constant.MEDIA_TYPE_DOCUMENT:
@@ -263,26 +270,31 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.DOCUMENT_FILTER)) {
                             message = Constant.DOCUMENT_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_DOCUMENT_MAX_SIZE) {
                             message = "上传文档超过最大上限 20MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     default:
                         message = Constant.NO_SUPPORT_TYPE;
                         isImage = false;
+                        error = 1;
                 }
                 // 检查上传文件名是否合法
                 if (ruleType == 1) {
                     if (!fileName.matches(Constant.FILERULE_FILTER)) {
                         message = Constant.FILERULE_FILTER_MSG;
                         isImage = false;
+                        error = 1;
                     }
                 }
                 if (fileNameArray.length != 2) {
                     message = "上传文件丢失扩展名";
                     isImage = false;
+                    error = 1;
                 }
                 if (isImage) {
                     // 七牛
@@ -310,7 +322,8 @@ public class MediaService extends BaseService {
                     media.setId(baseRepository.create(media));
                     result = "success";
                     log("媒体管理（新增）", media.toString());
-                    baseRepository.create(media);
+                    result = "success";
+                    objectNode.put("url", media.getRealUrl());
                     result = "success";
                 }
             } catch (Exception e) {
@@ -320,6 +333,7 @@ public class MediaService extends BaseService {
         objectNode.put("result", result);
         objectNode.put("message", message);
         objectNode.put("success", true);
+        objectNode.put("error", error);
         return objectNode.toString();
     }
 

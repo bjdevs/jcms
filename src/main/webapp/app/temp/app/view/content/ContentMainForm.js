@@ -203,11 +203,12 @@ Ext.define('Admin.view.content.ContentMainForm', {
                                     'quickformat', 'pagebreak', 'fullscreen'
                                 ],
                                 allowFileUpload: false,
-                                uploadJson: "media/create", // todo edit
+                                uploadJson: "/cn/admin/mediaCreate", // todo edit
                                 fillDescAfterUploadImage: true,
                                 formatUploadUrl: false,
                                 extraFileUploadParams: {
-                                    type: 1
+                                    type: 1,
+                                    rule:0
                                 }
                             });
                         }

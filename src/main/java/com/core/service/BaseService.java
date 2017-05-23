@@ -149,7 +149,6 @@ public class BaseService {
             throw new RuntimeException(e);
         }
     }
-}
 
     public <T> void delete(Class<T> type, long id){
         baseRepository.delete(type, id);
