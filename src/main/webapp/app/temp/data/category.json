@@ -1,0 +1,63 @@
+{
+  "children": [
+    {
+      "viewType": "content-news",
+      "text": "新闻法讯",
+      "split": true,
+      "checked": false,
+      "leaf": true,
+      "name": "category"
+    },
+    {
+      "viewType": "content-life",
+      "text": "生活禅",
+      "split": true,
+      "checked": false,
+      "leaf": true,
+      "name": "category"
+    },
+    {
+      "viewType": "content-ziyunfoguo",
+      "text": "紫云佛国",
+      "split": true,
+      "checked": false,
+      "leaf": true,
+      "name": "category"
+    },
+    {
+      "viewType": "content-medical",
+      "text": "禅医养生",
+      "split": true,
+      "checked": false,
+      "leaf": true
+    },
+    {
+      "viewType": "content-knowledge",
+      "text": "佛教常识",
+      "split": true,
+      "checked": false,
+      "leaf": true
+    },
+    {
+      "viewType": "content-depository",
+      "text": "藏经阁",
+      "split": true,
+      "checked": false,
+      "leaf": true
+    },
+    {
+      "viewType": "content-law",
+      "text": "紫云法务",
+      "split": true,
+      "checked": false,
+      "leaf": true
+    },
+    {
+      "viewType": "content-waterzen",
+      "text": "水墨禅韵",
+      "split": true,
+      "checked": false,
+      "leaf": true
+    }
+  ]
+}

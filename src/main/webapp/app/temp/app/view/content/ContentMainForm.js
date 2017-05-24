@@ -9,11 +9,12 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
     initComponent: function () {
         var me = this;
+        var contentId = 'content-area-' + me.id + new Date().getTime();
 
         var form = Ext.create({
             xtype: 'form',
 
-            layout: 'anchor',
+            // layout: 'anchor',
             bodyPadding: 10,
             defaults: {
                 anchor: '100%',
@@ -23,7 +24,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
             },
 
             defaultType: 'textfield',
-
+            height: '100%',
             items: [
                 {
                     fieldLabel: 'newsId',
@@ -38,7 +39,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     defaultType: 'textfield',
 
                     items: {
-                        name: 'name',
+                        name: 'title',
                         allowBlank: false,
                         width: '50%'
                     }
@@ -50,24 +51,29 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
+                    beforeLabelTextTpl: '',
 
                     items: {
-                        name: 'name',
-                        allowBlank: false,
-                        width: '50%'
+                        name: 'source',
+                        // allowBlank: false,
+                        width: '50%',
+                        emptyText: '黄梅老祖寺'
                     }
                 },
                 {
                     xtype: 'fieldcontainer',
                     fieldLabel: '作者',
 
+                    name: 'authors',
+                    beforeLabelTextTpl: '',
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
 
                     items: {
-                        name: 'name',
-                        allowBlank: false,
+                        name: 'author',
+                        // allowBlank: false,
+                        emptyText: _am.currentUser.name,
                         width: '50%'
                     }
                 },
@@ -81,9 +87,9 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
                     items: [
                         {
-                            name: 'name',
+                            name: 'depict',
                             allowBlank: false,
-                            minLength: 50,
+                            minLength: 5,
                             maxLength: 200,
                             width: '50%'
                         },
@@ -104,13 +110,12 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
                     items: [
                         {
-
                             xtype: 'tagfield',
-                            name: 'name',
+                            name: 'kId',
                             store: {
                                 proxy: {
                                     type: 'ajax',
-                                    url: 'data/keywords.json',
+                                    url: '/cn/article/getKeyWord',
                                     reader: {
                                         type: 'json',
                                         rootProperty: 'rows'
@@ -149,7 +154,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     items: {
                         xtype: 'combobox',
 
-                        name: '',
+                        name: 'sId',
                         store: {
                             proxy: {
                                 type: 'ajax',
@@ -168,20 +173,26 @@ Ext.define('Admin.view.content.ContentMainForm', {
                         typeAhead: true,
                         forceSelection: true,
                         emptyText: '请选择系列',
-                        allowBlank: false,
+                        // allowBlank: false, // 允许空白
                         width: '50%'
                     }
                 },
                 {
-                    xtype: 'textarea',
-                    itemId: 'content-area',
-                    name: 'desc',
-                    beforeLabelTextTpl: '',
+                    // xtype: 'textarea',
+                    // itemId: 'content-area',
+                    // name: 'content'+me.id,
+                    // id: 'content',
+                    // beforeLabelTextTpl: '',
                     width: '100%',
-                    height: 460,
+                    height: '100%',
+                    border: 0,
+                    // anchor: '100% 100%',
+                    xtype: 'panel',
+                    html: '<textarea id=' + contentId + ' style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
                     listeners: {
                         afterrender: function (self, eOpts) {
-                            editor = KindEditor.create('#' + self.id, {
+                            // editor = KindEditor.create('#' + self.id, {
+                            editor = KindEditor.create('#' + contentId, {
                                 resizeType: 1,
                                 allowPreviewEmoticons: false,
                                 items: [
@@ -192,11 +203,12 @@ Ext.define('Admin.view.content.ContentMainForm', {
                                     'quickformat', 'pagebreak', 'fullscreen'
                                 ],
                                 allowFileUpload: false,
-                                uploadJson: "media/create", // todo edit
+                                uploadJson: "/cn/admin/mediaCreate", // todo edit
                                 fillDescAfterUploadImage: true,
                                 formatUploadUrl: false,
                                 extraFileUploadParams: {
-                                    type: 1
+                                    type: 1,
+                                    rule:0
                                 }
                             });
                         }
@@ -214,6 +226,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                 {
                     text: '提交',
                     iconCls: 'x-fa fa-floppy-o',
+                    name: 'content-btn',
                     tooltip: '快捷键：Ctrl+Enter',
                     disabled: true,
                     formBind: true,  // 表单验证通过后才能点击

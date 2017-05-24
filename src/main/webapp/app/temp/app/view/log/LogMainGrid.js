@@ -10,21 +10,25 @@ Ext.define('Admin.view.log.LogMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/log/list.do',
+                    url: './logList',
                     reader: {
                         type: 'json',
-                        rootProperty: 'rows'
+                        rootProperty: 'data',
+                        totalProperty: 'totalData'
+                    },
+                    extraParams: {
+                        pageSize: pageSize
                     }
                 },
                 autoLoad: true
             }),
             columns: [
-                { text: 'ID', dataIndex: 'operateLogId', width: 80 },
-                { text: '动作', dataIndex: 'action' },
-                { text: '模块', dataIndex: 'module' },
+                { text: 'ID', dataIndex: 'id', width: 80 },
+                { text: '模块', dataIndex: 'name', width: 150 },
+                { text: '动作', dataIndex: 'action', width: 100 },
+                { text: '内容', dataIndex: 'content', width: 700 },
                 { text: 'IP', dataIndex: 'ip', width: 180 },
-                { text: '详情', dataIndex: 'logDetail', renderer: me.renderer, flex: 1 },
-                { text: '操作人', dataIndex: 'operate_name' },
+                { text: '操作人', dataIndex: 'account', width: 80},
                 { text: '操作时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'Y-m-d H:i:s', width: 150 }
             ],
             tbar: [

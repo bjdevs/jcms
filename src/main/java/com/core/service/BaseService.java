@@ -5,7 +5,9 @@ import com.core.domain.User;
 import com.core.repository.BaseRepository;
 import com.core.repository.sqlBuilder.Page;
 import com.core.security.SupportFactory;
+import com.core.util.Constant;
 import com.core.util.IpUtil;
+import com.core.util.ProjectUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -114,14 +116,14 @@ public class BaseService {
         return page;
     }
 
-    public void log(String action, String content) throws Exception {
+    public void log(String name, String action, String content) throws Exception {
         User user = (User) request.getAttribute("user");
         if (user == null || user.getId() == 0) {
             user = supportFactory.getSecuritySupport().getUserInfo();
         }
         com.core.domain.Log log = new com.core.domain.Log();
-        log.setUserId(user.getId());
-        log.setName(user.getAccount());
+        log.setAccount(user.getAccount());
+        log.setName(name);
         log.setAction(action);
         log.setContent(content);
         log.setIp(IpUtil.getIp(request));
@@ -145,4 +147,32 @@ public class BaseService {
         }
     }
 
+    public <T> void delete(Class<T> type, long id){
+        baseRepository.delete(type, id);
+    }
+
+    /**
+     * 建立文本数组
+     *
+     * @param content
+     * @return
+     */
+    public String[] builderContentArray(String content) {
+
+        /*
+        * 未实现 文章分页功能
+        * */
+
+        int size = content.length() / Constant.ARTICLE_CONTENT_LENGTH;
+        size = content.length() % Constant.ARTICLE_CONTENT_LENGTH == 0 ? size : size + 1;
+
+        String[] contentArray = new String[size];
+
+        for (int i = 0; i < size; i++) {
+            int index = (i + 1) * Constant.ARTICLE_CONTENT_LENGTH;
+            index = index < content.length() ? index : content.length();
+            contentArray[i] = content.substring(i * Constant.ARTICLE_CONTENT_LENGTH, index);
+        }
+        return contentArray;
+    }
 }

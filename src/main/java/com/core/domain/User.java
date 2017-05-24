@@ -105,4 +105,16 @@ public class User {
     public void setLastLoginDate(Date lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", depict='" + depict + '\'' +
+                ", phone='" + phone + '\'' +
+                ", mail='" + mail + '\'' +
+                '}';
+    }
 }

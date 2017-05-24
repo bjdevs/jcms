@@ -26,19 +26,62 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             click: 'onEditBtnClicked'
         },
         '#nav button[action=release]': {
-            click: 'onBtnClicked'
+            click: 'onBtnClickedRelease'
         },
         '#nav button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         }
+
+    },
+
+    /*重置*/
+    onResetBtnClickedNav: function (button) {
+        var id = button.up().up().up().up().id;
+        id = id.split('-');
+        id = id[id.length - 1];
+        var type = id == 'sub' ? 'deputy' : 'main';
+        var content = button.up().up().query('[name=content]')[0];
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/cn/article/resetNav',
+            params: {
+                type: type
+            },
+            success: function (response) {
+                var data = JSON.parse(response.responseText);
+                if(data.success){
+                    content.setValue(data.nav);
+                }
+            }
+        });
+    },
+
+    onBtnClickedRelease:  function () {
+        Ext.Ajax.request({
+            url : '/cn/article/create/nav',
+            method: 'POST',
+            waitMsg: '正在发布，请稍候...',
+            success: function (response) {
+                var data = JSON.parse(response.responseText);
+                if (data.success){
+                    Ext.ux.Msg.info('发布成功', function() {
+                    });
+                }else {
+                    Ext.ux.Msg.info('程序异常，请稍后再试...', function() {
+                    });
+                }
+            }
+
+
+        });
     },
 
     onBeforeRender: function (panel, eOpts) {
         this.onRefresh(panel);
-
     },
     onRefreshBtnClicked: function () {
-        this.onRefresh(this.getView());
+        var view = this.getView();
+        this.onRefresh(view);
     },
 
     onRefresh: function (panel) {
@@ -47,13 +90,12 @@ Ext.define('Admin.view.content.index.nav.NavController', {
 
             navType = view.id.split('-'),
             navType = navType[navType.length - 1];
-
         Ext.Ajax.request({
-            url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
+            url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
+            // url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
         }).then(function (response, opts) {
                 var obj = Ext.decode(response.responseText);
                 panel.setHtml(obj);
-
 
                 var status = obj['status'],
                     statusText = '', statusColor = '';
@@ -117,8 +159,10 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         // render
         var record = view.down('#nav').data,
             form = win.down('form').getForm();
+        var content = record['content'].replace(/,/g, "\n");
+
         form.findField('id').setValue(record['id']);
-        form.findField('content').setValue(record['content']);
+        form.findField('content').setValue(content);
     },
 
     onBtnClicked: function (button) {
@@ -140,14 +184,13 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         var form = view.down('form').getForm();
 
         ctrl.formSubmit(form, {
-            url: 'data/ajax.json' // todo edit
+            url: '/cn/article/updateArticleForId' // todo edit
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 
                 view.hide();
 
-               ctrl.onRefresh(ownerView);
-
+                ctrl.onRefresh(ownerView);
             });
         });
     }

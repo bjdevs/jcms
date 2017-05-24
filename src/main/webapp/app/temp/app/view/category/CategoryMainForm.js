@@ -49,7 +49,7 @@ Ext.define('Admin.view.category.CategoryMainForm', {
                     fieldLabel: '路径英文',
                     allowBlank: false
                 },
-                {
+                /*{
                     xtype: 'combobox',
                     fieldLabel: '目录模板',
                     name: '',
@@ -94,7 +94,7 @@ Ext.define('Admin.view.category.CategoryMainForm', {
                     forceSelection: true,
                     emptyText: '请选择',
                     allowBlank: false
-                },
+                },*/
                 {
                     xtype: 'textarea',
                     name: 'desc',

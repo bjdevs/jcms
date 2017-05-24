@@ -5,7 +5,7 @@ Ext.define('Admin.view.common.panel.BaseGridPanel', {
 
     viewConfig: {
         enableTextSelection: true, // grid cell 支持文本复制
-        emptyText: '<h3>No matching results</h3>'
+        emptyText: '<h3>没有数据</h3>'
     },
 
     selModel: {

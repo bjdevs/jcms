@@ -8,9 +8,13 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
 
         Ext.apply(me, {
             store: Ext.create('Ext.data.Store', {
+                remoteFilter: true,
                 proxy: {
                     type: 'ajax',
-                    url: 'data/workbenchs.json',
+                    url: '/cn/article/articleList',
+                    extraParams:{
+                        category: 'all'
+                    },
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -28,7 +32,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                 {text: '作者', dataIndex: 'author'},
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '更新时间', dataIndex: 'lastChange', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
                 {
@@ -84,7 +88,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                         beforerender: function (panel, eOpts) {
 
                             Ext.Ajax.request({
-                                url: 'data/fileinfo.json'
+                                url: '/cn/article/getFileInfo'
                             }).then(function (response, opts) {
                                     var obj = Ext.decode(response.responseText);
                                     panel.setHtml(obj);

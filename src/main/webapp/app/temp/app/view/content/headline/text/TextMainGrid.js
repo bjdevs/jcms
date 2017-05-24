@@ -17,9 +17,10 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: 'data/texts.json',
+                    url: '/cn/article/headLine',
                     extraParams: {
-                        category: viewModel.get('category') || ''
+                        category: viewModel.get('category') || '',
+                        type: 'text'
                     },
                     reader: {
                         type: 'json',
@@ -34,7 +35,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 {text: 'ID', dataIndex: 'id', width: 80},
                 {
                     text: '次序 <span class="admin-color-red">+</span>',
-                    dataIndex: 'rank',
+                    dataIndex: 'cateOrderBy',
                     editor: {
                         xtype: 'numberfield',
                         allowBlank: false,
@@ -43,13 +44,30 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     },
                     width: 80
                 },
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80},
-                {text: '标题', dataIndex: 'title', renderer: me.renderer, flex: 1},
+                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                    editor: {
+                        xtype: 'combo',
+                        store: [
+                            [0, '未发'],
+                            [9, '已发']
+                        ],
+                        editable: false, // 不允许编辑
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        allowBlank: false
+                    }
+                },
+                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                },
                 {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '套红 <span class="admin-color-red">+</span>', dataIndex: 'redStatus', xtype: 'checkcolumn'},
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '更新时间', dataIndex: 'lastChange', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
 
             ],
             tbar: [
@@ -77,14 +95,14 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 '->',
                 {
                     xtype: 'button',
-                    text: '栏目图片列表',
+                    text: '栏目文章列表',
                     userCls: 'admin-label-button',
                     action: 'content-headline-picture'
                 }
             ],
             plugins: [{
                 ptype: 'cellediting',
-                clicksToEdit: 2
+                clicksToEdit: 1
             }]
         });
 
@@ -102,19 +120,12 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 switch (value) {
                     case 0:
                         metaData.tdStyle = 'color:#0066FF';
-                        return '初稿';
-                    case 1:
-                        metaData.tdStyle = 'color:blank';
-                        return '已签';
-                    case 5:
-                        metaData.tdStyle = 'color:#FF6633';
-                        return '返工';
+                        return '未发';
                     case 9:
                         metaData.tdStyle = 'color:blank';
                         return '已发';
-                    case 10:
-                        metaData.tdStyle = 'color:red';
-                        return '已删';
+                    default:
+                        return value;
                 }
             /* case 'rank':
              var up = '<button class="x-fa fa-arrow-up admin-label-button" action="set-rank-up" title="升级"></button>',

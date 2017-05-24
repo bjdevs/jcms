@@ -26,7 +26,7 @@ Ext.define('Admin.view.content.headline.text.TextController', {
             click: 'onRefreshBtnClicked'
         },
         'content-headline-text-mgrid button[action=content-headline-picture]': {
-            click: 'onPictureHeadLineBtnClicked'
+            click: 'onTextHeadLineBtnClicked'
         }
     },
 
@@ -48,9 +48,21 @@ Ext.define('Admin.view.content.headline.text.TextController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var selected = grid.getSelection();
+        if (selected.length == 0){
+            return;
+        }
+        var id = selected[0].data.id;
+        var status = selected[0].data.status;
+        var redStatus = selected[0].data.redStatus;
+        var cateOrderBy = selected[0].data.cateOrderBy;
+        var name = selected[0].data.name;
+
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/updateHeadLine?' + button.action +
+            '&id='+id+'&status='+status+'&redStatus='+redStatus+
+            '&cateOrderBy='+cateOrderBy+'&name='+name
         });
     },
 
@@ -60,11 +72,11 @@ Ext.define('Admin.view.content.headline.text.TextController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/headLineBtn?' + button.action + '&type=1'
         });
     },
 
-    onPictureHeadLineBtnClicked: function (button) {
+    onTextHeadLineBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView(),// text-mgrid
 
@@ -89,8 +101,8 @@ Ext.define('Admin.view.content.headline.text.TextController', {
                     data: {
                         category: category,
                         categoryName: ownerView.getTitle(),
-                        subItem: 'content-headline-picture-mgrid',
-                        type: 'picture'
+                        subItem: 'content-headline-text-mgrid',
+                        type: 'text'
                     }
                 }
             });
@@ -110,8 +122,10 @@ Ext.define('Admin.view.content.headline.text.TextController', {
 
         var form = view.down('form').getForm();
 
+        var id = view.query('[name=id]')[0].value;
+
         ctrl.formSubmit(form, {
-            url: 'data/ajax.json' // todo edit
+            url: '/cn/article/createHeadLine?id='+id+'&type=1' // todo edit
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 

@@ -1,6 +1,7 @@
 package com.core.service;
 
 import com.core.config.Config;
+import com.core.controller.ArticleController;
 import com.core.domain.*;
 import com.core.util.Constant;
 import com.core.util.IpUtil;
@@ -9,6 +10,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.ToolContext;
 import org.apache.velocity.tools.ToolManager;
+import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -16,6 +18,8 @@ import org.springframework.web.util.HtmlUtils;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yk on 2017/4/24.
@@ -37,8 +41,8 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 首页
      */
-    public void staticIndex() {
-
+    public ObjectNode staticIndex(int userId) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
         /**
          * 结合后台--待完善目标
          * 1、模版路径根据template表中数据获取
@@ -46,6 +50,9 @@ public class HomePageService extends BaseService {
          * 3、获取登录的admin信息
          * 4、其他细节
          */
+
+        long publishId = createPublishLog(userId, "首页静态化");
+        PublishLog publishLog = find(PublishLog.class, publishId);
 
         String staticResPrefix = config.getStaticResourceURLPrefix();
         String listDomain = config.getListDomain();
@@ -58,214 +65,257 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("winTitle", "首页_" + config.getProjectName());
         toolManagerContext.put("depict", "首页,描述");
 
-        // 焦点图
-        Map<String, Object> focus = staticOtherModules(Constant.CATEGORY_ID_FOCUS, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("focus", focus);
+        try {
 
-        // 新闻法讯
-        Map<String, Object> news = staticOtherModules(Constant.CATEGORY_ID_NEWS, Constant.GENERAL_ID_ONE);
-        toolManagerContext.put("news", news);
+            // 焦点图
+            Map<String, Object> focus = staticOtherModules(Constant.CATEGORY_ID_FOCUS, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("focus", focus);
 
-        // 生活禅
-        Map<String, Object> life = staticOtherModules(Constant.CATEGORY_ID_LIFE, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("life", life);
+            // 新闻法讯
+            Map<String, Object> news = staticOtherModules(Constant.CATEGORY_ID_NEWS, Constant.GENERAL_ID_ONE);
+            toolManagerContext.put("news", news);
 
-        // 紫云佛国
-        Map<String, Object> ziyun = staticOtherModules(Constant.CATEGORY_ID_ZIYUNFOGUO, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("ziyun", ziyun);
+            // 生活禅
+            Map<String, Object> life = staticOtherModules(Constant.CATEGORY_ID_LIFE, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("life", life);
 
-        // 佛教常识
-        Map<String, Object> knowledge = staticOtherModules(Constant.CATEGORY_ID_KNOWLEDGE, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("knowledge", knowledge);
+            // 紫云佛国
+            Map<String, Object> ziyun = staticOtherModules(Constant.CATEGORY_ID_ZIYUNFOGUO, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("ziyun", ziyun);
 
-        // 禅医养生
-        Map<String, Object> medical = staticOtherModules(Constant.CATEGORY_ID_MEDICAL, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("medical", medical);
+            // 佛教常识
+            Map<String, Object> knowledge = staticOtherModules(Constant.CATEGORY_ID_KNOWLEDGE, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("knowledge", knowledge);
 
-        // 藏经阁
-        Map<String, Object> depository = staticOtherModules(Constant.CATEGORY_ID_DEPOSITORY, Constant.GENERAL_ID_ONE);
-        toolManagerContext.put("depository", depository);
+            // 禅医养生
+            Map<String, Object> medical = staticOtherModules(Constant.CATEGORY_ID_MEDICAL, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("medical", medical);
 
-        // 水墨禅韵
-        Map<String, Object> waterzen = staticOtherModules(Constant.CATEGORY_ID_WATERZEN, Constant.GENERAL_ID_TWO);
-        toolManagerContext.put("waterzen", waterzen);
+            // 藏经阁
+            Map<String, Object> depository = staticOtherModules(Constant.CATEGORY_ID_DEPOSITORY, Constant.GENERAL_ID_ONE);
+            toolManagerContext.put("depository", depository);
 
-        create("/index.html", "base/index.vm", toolManagerContext);
-        createLog("首页模块静态化");
+            // 水墨禅韵
+            Map<String, Object> waterzen = staticOtherModules(Constant.CATEGORY_ID_WATERZEN, Constant.GENERAL_ID_TWO);
+            toolManagerContext.put("waterzen", waterzen);
+
+            // 导航
+            staticNav();
+
+            // 广种福田、联系我们
+            staticFutian();
+
+            // 紫云法务
+            staticFawu();
+
+            create("/index.html", "base/index.vm", toolManagerContext);
+
+            publishLog.setFinishDate(new Date());
+            update(publishLog);
+            objectNode.put("success", true);
+
+        } catch (Exception e) {
+            publishLog.setStatus(0);
+            publishLog.setFinishDate(new Date());
+            update(publishLog);
+            objectNode.put("success", false);
+        }
+
+        return objectNode;
     }
 
     /**
      * 静态化 导航
      */
-    public void staticNav(String type) {
-        String[] navs;
-        ToolContext toolManagerContext = toolManager.createContext();
-        if ("main".equals(type) || "all".equals(type)) {
-            // main nav
-            navs = searchNav("main");
-            String staticResPrefix = config.getStaticResourceURLPrefix();
-            toolManagerContext.put("resURLPrefix", staticResPrefix);
-            toolManagerContext.put("nav", navs);
-
+    public ObjectNode staticNav() {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        long id = createPublishLog(1, "导航");
+        PublishLog publishLog = find(PublishLog.class, id);
+        try {
+            String[] nav;
+            ToolContext toolManagerContext = toolManager.createContext();
+            nav = searchNav("main");
+            toolManagerContext.put("main", nav);
+            nav = searchNav("deputy");
+            toolManagerContext.put("deputy", nav);
             create("/base/nav.html", "base/nav.vm", toolManagerContext);
-            createLog("主导航静态化");
+            objectNode.put("success", true);
+        } catch (Exception e) {
+            publishLog.setStatus(0);
+            objectNode.put("success", false);
         }
-
-        if ("deputy".equals(type) || "all".equals(type)) {
-            // deputy nav
-            navs = searchNav("deputy");
-            toolManagerContext.put("nav", navs);
-
-            create("/base/nav_deputy.html", "base/nav_1.vm", toolManagerContext);
-            createLog("副导航静态化");
-        }
-
-    }
-
-    /**
-     * 静态化 导航重置
-     */
-    public void staticNavReset(String type) {
-        String content = "";
-        String[] navs;
-        StringBuffer sb = new StringBuffer();
-        ToolContext toolManagerContext = toolManager.createContext();
-        Article article = null;
-
-        if ("mainReset".equals(type) || "all".equals(type)) {
-            navs = searchNavReset("main");
-            for (int i = 0; i < navs.length; i++) {
-                sb.append(navs[i]).append(",");
-            }
-            String staticResPrefix = config.getStaticResourceURLPrefix();
-            toolManagerContext.put("resURLPrefix", staticResPrefix);
-            toolManagerContext.put("nav", navs);
-            create("/base/nav.html", "base/nav.vm", toolManagerContext);
-
-            article = find(Article.class, 1);
-            int size = sb.length();
-            int row = size / 254;
-            if (row > 0) {
-                String row1 = sb.substring(0, 254);
-                String row2 = sb.substring(row1.length(), sb.length());
-                article.setContent(row1);
-                SubArticle subArticle = find(SubArticle.class, 1);
-                subArticle.setContent(row2);
-                update(subArticle);
-                content = "重置主导航";
-            } else {
-                article.setContent(sb.toString());
-            }
-        }
-
-        if ("deputyReset".equals(type) || "all".equals(type)) {
-            navs = searchNavReset("deputy");
-            for (int i = 0; i < navs.length; i++) {
-                sb.append(navs[i]).append(",");
-            }
-            toolManagerContext.put("nav", navs);
-            create("/base/nav_deputy.html", "base/nav_1.vm", toolManagerContext);
-
-            article = find(Article.class, 2);
-            article.setContent(sb.toString());
-            content = "重置副导航";
-        }
-
-        update(article);
-        createLog(content);
+        publishLog.setFinishDate(new Date());
+        update(publishLog);
+        return objectNode;
     }
 
     /**
      * 静态化 广种福田、联系我们
      */
     public void staticFutian() {
-        String[] resultFutian = searchFutian();
-        List<String[]> resultContact = searchContact();
+        long id = createPublishLog(1, "广种福田、联系我们");
+        PublishLog publishLog = find(PublishLog.class, id);
+        try {
+            String[] resultFutian = searchFutian();
+            List<String[]> resultContact = searchContact();
 
-        ToolContext toolManagerContext = toolManager.createContext();
-        toolManagerContext.put("futian", resultFutian);
-        toolManagerContext.put("contact", resultContact);
+            ToolContext toolManagerContext = toolManager.createContext();
+            toolManagerContext.put("futian", resultFutian);
+            toolManagerContext.put("contact", resultContact);
 
-        create("/base/futian.html", "base/futian.vm", toolManagerContext);
-        createLog("广种福田、联系我们");
+            create("/base/futian.html", "base/futian.vm", toolManagerContext);
+
+        } catch (Exception e) {
+            publishLog.setStatus(0);
+        }
+        publishLog.setFinishDate(new Date());
+        update(publishLog);
+
     }
 
     /**
      * 静态化 紫云法务
      */
     public void staticFawu() {
-        Map map = new HashedMap();
-        List<String[]> res = new ArrayList<String[]>();
+        long id = createPublishLog(1, "紫云法务");
+        PublishLog publishLog = find(PublishLog.class, id);
 
-        String name = find(Category.class, Constant.CATEGORY_ID_LAW).geteName();
+        try {
+            Map map = new HashedMap();
+            List<String[]> res = new ArrayList<String[]>();
 
-        map.put("name", name);
+            String name = find(Category.class, Constant.CATEGORY_ID_LAW).geteName();
+            map.put("name", name);
 
-        List<String[]> resultList = searchFawu();
-        for (int i = 0; i < resultList.size(); i++) {
-            String[] result = resultList.get(i);
-            if (i == 0) {
-                String title = result.length >= 0 ? result[0] : "";
-                if (title.length() > 7) {
-                    title = title.substring(0, title.length() > 6 ? 6 : title.length()) + "...";
-                    result[0] = title;
-                }
-            } else {
+            List<String[]> resultList = searchFawu();
+            for (int i = 0; i < resultList.size(); i++) {
+                String[] result = resultList.get(i);
+
                 String title = result.length >= 0 ? result[0] : "";
                 if (title.length() > 5) {
                     title = title.substring(0, title.length() >= 4 ? 4 : title.length()) + "...";
                     result[0] = title;
                 }
+
+                String content = result.length >= 3 ? result[2] : "";
+                content = contentReplace(content);
+                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "...";
+                result[2] = content;
+                res.add(i, result);
             }
 
-            String content = result.length >= 3 ? result[2] : "";
-            content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "...";
-            result[2] = content;
+            ToolContext toolManagerContext = toolManager.createContext();
+            toolManagerContext.put("law", map);
+            toolManagerContext.put("content", res);
 
-            res.add(i, result);
+            create("/base/fawu.html", "base/fawu.vm", toolManagerContext);
+
+        } catch (Exception e) {
+            publishLog.setStatus(0);
         }
 
-        ToolContext toolManagerContext = toolManager.createContext();
-        toolManagerContext.put("law", map);
-        toolManagerContext.put("content", res);
+        publishLog.setFinishDate(new Date());
+        update(publishLog);
 
-        create("/base/fawu.html", "base/fawu.vm", toolManagerContext);
-        createLog("紫云法务");
     }
 
     /**
      * 静态化 广告位
      */
     public void staticAd() {
-        List<Ad> resultAdList = searchAd();
+        long id = createPublishLog(1, "广告位");
+        PublishLog publishLog = find(PublishLog.class, id);
+        try {
+            List<Ad> resultAdList = searchAd();
 
-        ToolContext toolManagerContext = toolManager.createContext();
-        toolManagerContext.put("ad", resultAdList);
+            ToolContext toolManagerContext = toolManager.createContext();
+            toolManagerContext.put("ad", resultAdList);
 
-        create("/base/banner.html", "base/banner.vm", toolManagerContext);
-        createLog("广告位");
+            create("/base/banner.html", "base/banner.vm", toolManagerContext);
+
+        } catch (Exception e) {
+            publishLog.setStatus(0);
+        }
+        publishLog.setFinishDate(new Date());
+        update(publishLog);
+
     }
 
     /**
      * 静态化 活动通知
      */
     public void staticNotice() {
-        List<Article> resultAdList = searchNotice();
-        List<String[]> list = new ArrayList<String[]>();
-        ToolContext toolManagerContext = toolManager.createContext();
+        long id = createPublishLog(1, "活动通知");
+        PublishLog publishLog = find(PublishLog.class, id);
+        try {
+            List<Article> resultAdList = searchNotice();
+            List<String[]> list = new ArrayList<String[]>();
+            ToolContext toolManagerContext = toolManager.createContext();
 
-        for (int i = 0; i < resultAdList.size(); i++) {
-            Article article = resultAdList.get(i);
-            String[] items = new String[2];
-            items[0] = article.getUrl();
-            items[1] = article.getTitle();
-            list.add(i, items);
+            for (int i = 0; i < resultAdList.size(); i++) {
+                Article article = resultAdList.get(i);
+                String[] items = new String[2];
+                items[0] = article.getUrl();
+                items[1] = article.getTitle();
+                list.add(i, items);
+            }
+
+            toolManagerContext.put("notice", list);
+
+            create("/base/notice.html", "base/notice.vm", toolManagerContext);
+        } catch (Exception e) {
+            publishLog.setStatus(0);
         }
 
-        toolManagerContext.put("notice", list);
+        publishLog.setFinishDate(new Date());
+        update(publishLog);
 
-        create("/base/notice.html", "base/notice.vm", toolManagerContext);
-        createLog("活动通知");
+    }
+
+    /**
+     * 发布文章
+     *
+     * @param id
+     * @return
+     */
+    public String articlePublish(long id) {
+        String templatePath = null;
+        String articlePath = null;
+        String staticResPrefix = config.getStaticResourceURLPrefix();
+
+        ToolContext toolManagerContext = toolManager.createContext();
+
+        //返回绑定的文件路径
+        toolManagerContext.put("resURLPrefix", staticResPrefix);
+
+        Article article = find(Article.class, id);
+        article.setPublishDate(new Date());
+        if (null != article) {
+            KeyWord keyWord = find(KeyWord.class, article.getkId());
+            if (null != keyWord) {
+                toolManagerContext.put("keyWord", keyWord.getName());
+            }
+            toolManagerContext.put("winTitle", article.getTitle());
+            toolManagerContext.put("depict", article.getDepict());
+
+            Category category = find(Category.class, article.getcId());
+            articlePath = category.getName();
+            Map<String, Object> map = getStaticArticleInfoMap(article);
+            map.put("showCategory", category.geteName());
+            map.put("category", category.geteName());
+            map.put("categoryUrl", "栏目list链接");
+            map.put("publishDate", new SimpleDateFormat("yyyy-MM-dd").format(article.getPublishDate()));
+
+            Template template = find(Template.class, category.gettAId());
+            templatePath = "/base/" + template.getFileName();
+
+            toolManagerContext.put("article", map);
+            articlePath = "/base/" + articlePath + "/" + article.getId() + ".html";
+
+            create(articlePath, templatePath, toolManagerContext);
+
+        }
+        return staticResPrefix + articlePath;
     }
 
 
@@ -278,7 +328,8 @@ public class HomePageService extends BaseService {
      */
     private String create(String create, String templatePath, ToolContext toolManagerContext) {
         String createPath = config.getArticleDir();
-        fileCheck(createPath, "base");
+        String checkPath = create.substring(0, create.lastIndexOf("/"));
+        fileCheck(createPath, checkPath);
         String flag = "success";
         VelocityEngine velocityEngine;
         PrintWriter printWriter;
@@ -321,20 +372,24 @@ public class HomePageService extends BaseService {
                 news = new String[3];
                 other = new ArrayList<String[]>();
                 headLine = headLines.size() > 0 ? headLines.get(0) : null;
-                if (null != headLine) {
+                if (null != headLine && headLine.getId() > 0) {
                     article = find(Article.class, headLine.getaId());
-                    news[0] = article.getUrl();
-                    news[1] = headLine.getName();
-                    news[2] = article.getDepict();
+                    if (null != article) {
+                        news[0] = article.getUrl();
+                        news[1] = headLine.getName();
+                        news[2] = article.getDepict();
+                    }
                     map.put("first", news);
                 }
                 for (int i = 1; i < headLines.size(); i++) {
                     news = new String[2];
                     HeadLine headLineOther = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
-                    news[0] = article.getUrl();
-                    news[1] = headLineOther.getName();
+                    if (null != article) {
+                        news[0] = article.getUrl();
+                        news[1] = headLineOther.getName();
 //                    news[2] = article.getDepict();
+                    }
                     other.add(i - 1, news);
                 }
                 map.put("other", other);
@@ -350,12 +405,14 @@ public class HomePageService extends BaseService {
                 // 文章链接，头条标题，文章描述，文章日期，头条图片
                 news = new String[5];
                 headLine = headLines.size() > 0 ? headLines.get(0) : null;
-                if (null != headLine) {
+                if (null != headLine  && headLine.getId() > 0) {
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
-                    news[0] = article.getUrl();
-                    news[1] = headLine.getName();
-                    news[2] = article.getDepict();
+                    if (null != article) {
+                        news[0] = article.getUrl();
+                        news[1] = headLine.getName();
+                        news[2] = article.getDepict();
+                    }
                     news[3] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     news[4] = null != media ? media.getUrl() : null;
                 }
@@ -366,8 +423,10 @@ public class HomePageService extends BaseService {
                     news = new String[3];
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
-                    news[0] = article.getUrl();
-                    news[1] = headLine.getName();
+                    if (null != article) {
+                        news[0] = article.getUrl();
+                        news[1] = headLine.getName();
+                    }
                     news[2] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     other.add(i, news);
                 }
@@ -380,8 +439,10 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     String[] items = new String[2];
-                    items[0] = article.getUrl();
-                    items[1] = headLine.getName();
+                    if (null != article) {
+                        items[0] = article.getUrl();
+                        items[1] = headLine.getName();
+                    }
                     list.add(i, items);
                 }
                 map.put("list", list);
@@ -394,9 +455,11 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
-                    news[0] = article.getDepict();
-                    news[1] = article.getUrl();
-                    news[2] = media.getUrl();
+                    if (null != article) {
+                        news[0] = headLine.getName();
+                        news[1] = article.getUrl();
+                        news[2] = media.getUrl();
+                    }
                     list.add(news);
                 }
                 map.put("list", list);
@@ -409,10 +472,12 @@ public class HomePageService extends BaseService {
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
                     news = new String[4];
-                    news[0] = headLine.getName();
-                    news[1] = article.getUrl();
-                    news[2] = media.getUrl();
-                    news[3] = media.getUrl();
+                    if (null != article) {
+                        news[0] = headLine.getName();
+                        news[1] = article.getUrl();
+                        news[2] = media.getUrl();
+                        news[3] = media.getUrl();
+                    }
                     list.add(i, news);
                 }
 
@@ -437,6 +502,33 @@ public class HomePageService extends BaseService {
     }
 
     /* ==========================获取静态化数据=============================*/
+
+    /**
+     * 静态化文章 封装数据
+     *
+     * @param article
+     * @return
+     */
+    public Map<String, Object> getStaticArticleInfoMap(Article article) {
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        StringBuffer sb = new StringBuffer();
+        sb.append(article.getContent());
+        params.put("aId", article.getId());
+        List<SubArticle> subArticles = list(SubArticle.class, "WHERE aId = :aId ORDER BY seq ASC", params);
+        for (int i = 0; i < subArticles.size(); i++) {
+            SubArticle subArticle = subArticles.get(i);
+            sb.append(subArticle.getContent());
+        }
+        map.put("title", article.getTitle());
+        map.put("publishDate", article.getPublishDate());
+        map.put("source", article.getSource());
+        map.put("author", article.getAuthor());
+        map.put("content", sb.toString());
+        map.put("categoryId", article.getcId());
+        return map;
+    }
+
 
     /**
      * 获取主/副导航数据
@@ -615,7 +707,7 @@ public class HomePageService extends BaseService {
      * @param type
      * @return
      */
-    private String[] searchNavReset(String type) {
+    public String[] searchNavReset(String type) {
         String[] navs = null;
         String templatePath = config.getArticleDir() + File.separator
                 + "static" + File.separator + "html" + File.separator;
@@ -671,15 +763,27 @@ public class HomePageService extends BaseService {
      *
      * @param content
      */
-    private void createLog(String content) {
-        Log log = new Log();
-        log.setUserId(1);
-        log.setName("admin");
-        log.setAction("首页静态化");
-        log.setIp(IpUtil.getIp(request));
-        log.setContent(content);
-        log.setCreateDate(new Date());
-        create(log);
+    private long createPublishLog(int userId, String content) {
+        PublishLog publishLog = new PublishLog();
+        publishLog.setUserId(userId);
+        publishLog.setCategory(content);
+        publishLog.setStatus(1);
+        publishLog.setRequestDate(new Date());
+
+        return create(publishLog);
+    }
+
+    /**
+     * 去掉文章中的空格换行符
+     *
+     * @param content
+     * @return
+     */
+    public String contentReplace(String content) {
+        Pattern p = Pattern.compile("\\s*|\t|\r|\n|<br />");
+        Matcher m = p.matcher(content);
+        content = m.replaceAll("");
+        return content;
     }
 
 }
