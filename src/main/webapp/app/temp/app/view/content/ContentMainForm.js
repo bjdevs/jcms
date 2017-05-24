@@ -184,7 +184,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     // id: 'content',
                     // beforeLabelTextTpl: '',
                     width: '100%',
-                    height: '100%',
+                    height: 480,
                     border: 0,
                     // anchor: '100% 100%',
                     xtype: 'panel',
@@ -217,12 +217,14 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
             ],
             buttons: [
-                {
-                    text: '预览',
-                    iconCls: 'x-fa fa-eye',
-                    action: 'preview',
-                    handler: 'onPreviewBtnClicked'
-                },
+                /*{
+                 text: '预览',
+                 iconCls: 'x-fa fa-eye',
+                 action: 'preview',
+                 disabled: true,
+                 formBind: true,
+                 handler: 'onPreviewBtnClicked'
+                 },*/
                 {
                     text: '提交',
                     iconCls: 'x-fa fa-floppy-o',

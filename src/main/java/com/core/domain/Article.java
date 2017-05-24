@@ -15,7 +15,6 @@ public class Article {
     private String depict;
     private String url;
     private String content;
-    private int kId;
     private int sId;
     private int tId;
     private int hAId;
@@ -89,14 +88,6 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public int getkId() {
-        return kId;
-    }
-
-    public void setkId(int kId) {
-        this.kId = kId;
     }
 
     public int getsId() {
@@ -190,7 +181,6 @@ public class Article {
                 ", depict='" + depict + '\'' +
                 ", url='" + url + '\'' +
                 ", content='" + content + '\'' +
-                ", kId=" + kId +
                 ", sId=" + sId +
                 ", tId=" + tId +
                 ", hAId=" + hAId +

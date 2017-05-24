@@ -49,8 +49,12 @@ Ext.define('Admin.view.content.ContentController', {
         },
         'content-mgrid button[action=content-headline-picture]': {
             click: 'onPictureHeadLineBtnClicked'
+        },
+        'content-mgrid button[action=preview]': {
+            click: 'onPreviewBtnClicked'
         }
-    },
+    }
+    ,
 
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
@@ -67,6 +71,7 @@ Ext.define('Admin.view.content.ContentController', {
         newsGrid.down('button[action=move]').setDisabled(count < 1);
         newsGrid.down('button[action=delete]').setDisabled(count < 1);
         newsGrid.down('button[action=release]').setDisabled(count < 1);
+        newsGrid.down('button[action=preview]').setDisabled(count != 1);
     },
 
     onItemClick: function (grid, record, item, index, e, eOpts) {
@@ -369,6 +374,32 @@ Ext.define('Admin.view.content.ContentController', {
                 });
             })
         }
+    },
+    onPreviewBtnClicked: function (button) {
+        var id = button.up().up().up().down('grid').getSelection()[0].id;
+
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/cn/article/articlePreview',
+            params: {
+                id: id
+            },
+            success: function (response) {
+                console.log(response);
+                var data = response.responseText;
+                console.log(data);
+                if (data.indexOf('true') > -1) {
+                    var preview = JSON.parse(data);
+                    var url = preview.preview;
+                    window.open("http://" + url);
+                } else {
+                    Ext.ux.Msg.info('发布失败，请稍候再试...', function () {
+                        grid.getStore().reload();
+                        grid.getSelectionModel().deselectAll();
+                    });
+                }
+            }
+        });
     }
 
 });
