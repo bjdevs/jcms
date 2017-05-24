@@ -135,7 +135,7 @@ public class MediaService extends BaseService {
                         stringBuilder.append(mediaOld.getId()).append(",");
                     }
                 }
-                log("广告管理（更新）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+                log("广告管理", "更新", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class MediaService extends BaseService {
                     stringBuilder.append(media.getId()).append(",");
                 }
             }
-            log("媒体管理（"+typeStr+"）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            log("媒体管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -217,7 +217,7 @@ public class MediaService extends BaseService {
                         e.printStackTrace();
                     }
                     result = "success";
-                    log("媒体管理（更新）", mediaOld.toString());
+                    log("媒体管理", "更新", mediaOld.toString());
                 }
             }
         } else {
@@ -320,7 +320,7 @@ public class MediaService extends BaseService {
                     media.setuId((byte) userInfo.getId());
                     media.setId(baseRepository.create(media));
                     result = "success";
-                    log("媒体管理（新增）", media.toString());
+                    log("媒体管理", "新增", media.toString());
                     result = "success";
                     objectNode.put("url", media.getRealUrl());
                     result = "success";
@@ -335,7 +335,6 @@ public class MediaService extends BaseService {
         objectNode.put("error", error);
         return objectNode.toString();
     }
-
 
     /**
      * @param bytes      MultipartFile

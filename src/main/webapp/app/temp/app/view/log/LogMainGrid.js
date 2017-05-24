@@ -24,10 +24,11 @@ Ext.define('Admin.view.log.LogMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '模块', dataIndex: 'action', width: 150 },
-                { text: '内容', dataIndex: 'content', width: 600 },
+                { text: '模块', dataIndex: 'name', width: 150 },
+                { text: '动作', dataIndex: 'action', width: 100 },
+                { text: '内容', dataIndex: 'content', width: 700 },
                 { text: 'IP', dataIndex: 'ip', width: 180 },
-                { text: '操作人', dataIndex: 'user', width: 80},
+                { text: '操作人', dataIndex: 'account', width: 80},
                 { text: '操作时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'Y-m-d H:i:s', width: 150 }
             ],
             tbar: [

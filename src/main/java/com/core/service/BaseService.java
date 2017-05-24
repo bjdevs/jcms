@@ -116,17 +116,14 @@ public class BaseService {
         return page;
     }
 
-    public void log(String action, String content) throws Exception {
+    public void log(String name, String action, String content) throws Exception {
         User user = (User) request.getAttribute("user");
         if (user == null || user.getId() == 0) {
             user = supportFactory.getSecuritySupport().getUserInfo();
         }
         com.core.domain.Log log = new com.core.domain.Log();
-        log.setUserId(user.getId());
-        log.setName(user.getAccount());
-
-        //log.setAction(action.length() > 50 ? action.substring(0,49) : action);
-        //log.setContent(content.length() > 100 ? content.substring(0,99) : content);
+        log.setAccount(user.getAccount());
+        log.setName(name);
         log.setAction(action);
         log.setContent(content);
         log.setIp(IpUtil.getIp(request));
