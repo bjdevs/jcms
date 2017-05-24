@@ -1,8 +1,8 @@
-Ext.define('Admin.view.media.MediaController', {
+Ext.define('Admin.view.ad.AdController', {
     extend: 'Admin.controller.ViewController',
-    alias: 'controller.media',
+    alias: 'controller.ad',
 
-    module: 'media',
+    module: 'ad',
 
     url: 'Super Awesome',
 
@@ -11,35 +11,38 @@ Ext.define('Admin.view.media.MediaController', {
     },
 
     control: {
-        'media-mgrid': {
+        'ad-mgrid': {
             selectionchange: 'onSelectionChange',
             itemclick: 'onItemClick'
         },
-        'media-mgrid button[action=add]': {
+        'ad-mgrid button[action=add]': {
             click: 'onAddBtnClicked'
         },
-        'media-mgrid button[action=save]': {
+        'ad-mgrid button[action=save]': {
             click: 'onSaveBtnClicked'
         },
-        'media-mgrid button[action=delete]': {
+        'ad-mgrid button[action=delete]': {
             click: 'onDeleteBtnClicked'
         },
-        'media-mgrid button[action=refresh]': {
+        'ad-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         },
-        'media-mgrid button[action=enabled]': {
+        'ad-mgrid button[action=enabled]': {
             click: 'onEnabledBtnClicked'
         },
-        'media-mgrid button[action=abandon]': {
+        'ad-mgrid button[action=abandon]': {
             click: 'onAbandonBtnClicked'
         },
-        'media-mgrid button[action=edit]': {
+        'ad-mgrid button[action=edit]': {
             click: 'onEditBtnClicked'
         },
-        'media-sp button[action=search]': {
+        'ad-mgrid button[action=publish]': {
+            click: 'onPublishBtnClicked'
+        },
+        'ad-sp button[action=search]': {
             click: 'onSearchPanelQuery'
         },
-        'media-sp button[action=reset]': {
+        'ad-sp button[action=reset]': {
             click: 'onSearchPanelReset'
         }
     },
@@ -50,16 +53,16 @@ Ext.define('Admin.view.media.MediaController', {
             viewModel = ctrl.getViewModel() || {};
 
         var module = ctrl['module'],
-            mediaGrid = view.down(module + ctrl.getSearchGridSuffix()),
+            adGrid = view.down(module + ctrl.getSearchGridSuffix()),
             count = !selected ? 0 : selected.length;
 
         if (count == 0) Ext.log('No selection');
 
-        mediaGrid.down('button[action=save]').setDisabled(count < 1);
-        mediaGrid.down('button[action=delete]').setDisabled(count < 1);
-        mediaGrid.down('button[action=enabled]').setDisabled(count < 1);
-        mediaGrid.down('button[action=abandon]').setDisabled(count < 1);
-        mediaGrid.down('button[action=edit]').setDisabled(count < 1);
+        adGrid.down('button[action=save]').setDisabled(count < 1);
+        adGrid.down('button[action=delete]').setDisabled(count < 1);
+        adGrid.down('button[action=enabled]').setDisabled(count < 1);
+        adGrid.down('button[action=abandon]').setDisabled(count < 1);
+        adGrid.down('button[action=edit]').setDisabled(count < 1);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
@@ -81,12 +84,12 @@ Ext.define('Admin.view.media.MediaController', {
 
                 //alert('【' + id + '】' + target.getAttribute('title'));
 
-                var win = ctrl.lookupReference('media-mform');
+                var win = ctrl.lookupReference('ad-mform');
 
                 if (!win) {
                     win = Ext.create({
-                        reference: 'media-mform',
-                        xtype: 'media-mform'
+                        reference: 'ad-mform',
+                        xtype: 'ad-mform'
                     });
 
                     view.add(win);
@@ -115,12 +118,12 @@ Ext.define('Admin.view.media.MediaController', {
         var ctrl = this,
             view = ctrl.getView();
 
-        var win = ctrl.lookupReference('media-mform');
+        var win = ctrl.lookupReference('ad-mform');
 
         if (!win) {
             win = Ext.create({
-                reference: 'media-mform',
-                xtype: 'media-mform'
+                reference: 'ad-mform',
+                xtype: 'ad-mform'
             });
 
             view.add(win);
@@ -144,7 +147,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: '/cn/admin/mediaUpdate'
+            url: '/cn/admin/adUpdate'
         });
     },
 
@@ -154,7 +157,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/admin/mediaDelete'
+            url: '/cn/admin/adDelete'
         });
     },
 
@@ -164,7 +167,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/admin/mediaEnabled'
+            url: '/cn/admin/adEnabled'
         });
     },
     onAbandonBtnClicked: function (button) {
@@ -173,7 +176,7 @@ Ext.define('Admin.view.media.MediaController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/admin/mediaAbandon'
+            url: '/cn/admin/adAbandon'
         });
     },
     onEditBtnClicked: function (button) {
@@ -181,12 +184,12 @@ Ext.define('Admin.view.media.MediaController', {
             view = ctrl.getView(),
             grid = button.up("grid");
 
-        var win = ctrl.lookupReference('media-mform');
+        var win = ctrl.lookupReference('ad-mform');
 
         if (!win) {
             win = Ext.create({
-                reference: 'media-mform',
-                xtype: 'media-mform'
+                reference: 'ad-mform',
+                xtype: 'ad-mform'
             });
 
             view.add(win);
@@ -212,6 +215,10 @@ Ext.define('Admin.view.media.MediaController', {
         submitButton.setHidden(false);
     },
 
+    onPublishBtnClicked: function (button) {
+
+    },
+
     onSubmitBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView();
@@ -219,7 +226,7 @@ Ext.define('Admin.view.media.MediaController', {
         var form = view.down('form').getForm();
         if (form.isValid()) {
             form.submit({
-                url: "/cn/admin/mediaCreate",
+                url: "/cn/admin/adCreate",
                 method: "POST",
                 submitEmptyText: false,
                 waitMsg: '上传中，稍等片刻...',
@@ -229,7 +236,7 @@ Ext.define('Admin.view.media.MediaController', {
                         case 'success' :
                             Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
                                 view.hide();
-                                var grid = view.up().down('media-mgrid'),
+                                var grid = view.up().down('ad-mgrid'),
                                     store = grid.getStore();
 
                                 store.getProxy().setExtraParam('page', 1);

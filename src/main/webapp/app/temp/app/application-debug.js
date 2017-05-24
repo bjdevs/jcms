@@ -53,6 +53,9 @@ Ext.application({
         // 媒体管理
         'media.Media',
 
+        // 广告管理
+        'ad.Ad',
+
         // 帐户资料
         'account.AccountEditSetting',
         'account.AccountEditPwd',
@@ -83,16 +86,16 @@ Ext.application({
 
         var view = 'Admin.view.main.Main';
         if (!_am.currentUser.name) {
-            view = 'Admin.view.auth.login.Login';
+            //view = 'Admin.view.auth.login.Login';
+            view = 'Admin.view.login.Login';
 
             Ext.create(view);
-
+            //document.location = "login.jsp";
         } else {
             this.setMainView({
                 xclass: view
             });
         }
-
     },
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',

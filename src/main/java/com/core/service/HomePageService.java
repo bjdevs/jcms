@@ -1,6 +1,7 @@
 package com.core.service;
 
 import com.core.config.Config;
+import com.core.controller.ArticleController;
 import com.core.domain.*;
 import com.core.util.Constant;
 import com.google.gson.JsonObject;
@@ -261,13 +262,13 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("notice", list);
 
             create("/base/notice.html", "base/notice.vm", toolManagerContext, null);
+
         } catch (Exception e) {
             publishLog.setStatus(0);
         }
 
         publishLog.setFinishDate(new Date());
         update(publishLog);
-
     }
 
     /**

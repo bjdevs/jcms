@@ -5,6 +5,7 @@ import com.core.domain.User;
 import com.core.repository.SecurityRepository;
 import com.core.util.Constant;
 import com.core.util.EncryptUtil;
+import com.core.util.ProjectUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

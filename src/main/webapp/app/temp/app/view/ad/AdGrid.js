@@ -1,6 +1,6 @@
-Ext.define('Admin.view.media.MediaGrid', {
+Ext.define('Admin.view.ad.AdGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'media-mgrid',
+    xtype: 'ad-mgrid',
 
     initComponent: function () {
         var me = this;
@@ -10,7 +10,7 @@ Ext.define('Admin.view.media.MediaGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: '/cn/admin/mediaList',
+                    url: '/cn/admin/adList',
                     reader: {
                         type: 'json',
                         rootProperty: 'data',
@@ -24,35 +24,6 @@ Ext.define('Admin.view.media.MediaGrid', {
             }),
             columns: [
                 // todo edit {dataIndex}
-                {text: '序号', dataIndex: 'id', width: 80},
-                {
-                    text: '标题 <span class="admin-color-red">+</span>',
-                    dataIndex: 'title',
-                    width: 250,
-                    editor: {
-                        xtype: 'textfield',
-                        allowBlank: false
-                    }
-                },
-                {
-                    text: '类型',
-                    dataIndex: 'type',
-                    width: 80,
-                    renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
-                        switch (value) {
-                            case MEDIA_TYPE_PICTURE:
-                                return '图片';
-                            case MEDIA_TYPE_AUDIO:
-                                return '音频';
-                            case MEDIA_TYPE_DOCUMENT:
-                                return '文档';
-                            default :
-                                return value;
-                        }
-                    }
-                },
-                {text: '地址', dataIndex: 'url', width: 400},
-                {text: '预览', dataIndex: 'preview', width: 50},
                 {
                     text: '状态',
                     dataIndex: 'status',
@@ -68,19 +39,56 @@ Ext.define('Admin.view.media.MediaGrid', {
                         }
                     }
                 },
-                {text: '创建人', dataIndex: 'user', width: 80},
-                {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '序号', dataIndex: 'id', width: 80},
+                {
+                    text: '标题 <span class="admin-color-red">+</span>',
+                    dataIndex: 'name',
+                    width: 250,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                },
+                {
+                    text: '尺寸 <span class="admin-color-red">+</span>',
+                    dataIndex: 'size',
+                    width: 80,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                },
+                {
+                    text: '链接 <span class="admin-color-red">+</span>',
+                    dataIndex: 'url',
+                    width: 400,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                },
+                {
+                    text: '素材 <span class="admin-color-red">+</span>',
+                    dataIndex: 'materialUrl',
+                    width: 400,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                },
+                {text: '更新人', dataIndex: 'user', width: 100},
+                {text: '更新时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
                 {
                     xtype: 'button',
-                    text: '上传',
-                    iconCls: 'x-fa fa-upload',
+                    text: '新增',
+                    iconCls: 'x-fa fa-plus',
                     action: 'add'
                 },
                 {
                     xtype: 'button',
-                    text: '启用',
+                    text: '审核',
                     iconCls: 'x-fa fa-check',
                     disabled: true,
                     action: 'enabled'
@@ -94,10 +102,10 @@ Ext.define('Admin.view.media.MediaGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '编辑',
-                    iconCls: 'x-fa fa-pencil-square-o',
+                    text: '删除',
+                    iconCls: 'x-fa fa-trash-o',
                     disabled: true,
-                    action: 'edit'
+                    action: 'delete'
                 },
                 {
                     xtype: 'button',
@@ -108,10 +116,10 @@ Ext.define('Admin.view.media.MediaGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '删除',
-                    iconCls: 'x-fa fa-trash-o',
+                    text: '发布',
+                    iconCls: 'x-fa fa-paper-plane-o',
                     disabled: true,
-                    action: 'delete'
+                    action: 'publish'
                 },
 
                 '-',

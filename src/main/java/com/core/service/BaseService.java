@@ -7,6 +7,7 @@ import com.core.repository.sqlBuilder.Page;
 import com.core.security.SupportFactory;
 import com.core.util.Constant;
 import com.core.util.IpUtil;
+import com.core.util.ProjectUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -115,14 +116,14 @@ public class BaseService {
         return page;
     }
 
-    public void log(String action, String content) throws Exception {
+    public void log(String name, String action, String content) throws Exception {
         User user = (User) request.getAttribute("user");
         if (user == null || user.getId() == 0) {
             user = supportFactory.getSecuritySupport().getUserInfo();
         }
         com.core.domain.Log log = new com.core.domain.Log();
-        log.setUserId(user.getId());
-        log.setName(user.getAccount());
+        log.setAccount(user.getAccount());
+        log.setName(name);
         log.setAction(action);
         log.setContent(content);
         log.setIp(IpUtil.getIp(request));

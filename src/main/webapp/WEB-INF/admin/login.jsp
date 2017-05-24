@@ -146,7 +146,6 @@
                             handler: onSubmitBtnClicked
                         }
                     ]
-
                 }
             ]
         });

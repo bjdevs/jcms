@@ -821,11 +821,9 @@ public class ArticleService extends BaseService {
                 update(article);
             }
         }
-
         objectNode.put("success", true);
         return objectNode;
     }
-
 
     /////////////////////////////////////////////////
 

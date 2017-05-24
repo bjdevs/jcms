@@ -105,6 +105,7 @@ public class MediaService extends BaseService {
         objectNode.put("success", true);
         try {
             String data = request.getParameter("data");
+            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
             Media media = null;
             Media mediaOld = null;
             ObjectMapper mapper = new ObjectMapper();
@@ -131,8 +132,10 @@ public class MediaService extends BaseService {
                         mediaOld.setStatus(media.getStatus());
                         baseRepository.update(mediaOld);
                         objectNode.put("result", "success");
+                        stringBuilder.append(mediaOld.getId()).append(",");
                     }
                 }
+                log("广告管理", "更新", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,6 +155,8 @@ public class MediaService extends BaseService {
         objectNode.put("success", true);
         try {
             String[] ids = request.getParameterValues("ids");
+            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
+            String typeStr = "";
             Media media = null;
             for (String num : ids) {
                 long id = Long.parseLong(num);
@@ -161,32 +166,39 @@ public class MediaService extends BaseService {
                 if (media != null && media.getId() > 0) {
                     if (type == 0) { // 废弃
                         media.setStatus(Constant.GENERAL_ID_ZERO);
+                        typeStr = "废弃";
                         baseRepository.update(media);
                     }
                     if (type == 1) { // 启用
                         media.setStatus(Constant.GENERAL_ID_ONE);
+                        typeStr = "启用";
                         baseRepository.update(media);
                     }
                     if (type == 2) { // 删除
                         qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
+                        typeStr = "删除";
                         baseRepository.delete(Media.class, media.getId());
                     }
                     objectNode.put("result", "success");
+                    stringBuilder.append(media.getId()).append(",");
                 }
             }
+            log("媒体管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return objectNode;
     }
 
-    public String createMedia(MultipartHttpServletRequest msr) {
+    public String createMedia(MultipartHttpServletRequest msr) throws Exception {
         Iterator<String> fileNames = msr.getFileNames();
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         String result = "failed";
         String message = "";
         objectNode.put("success", true);
+        // kindEditor : error=0 => upload success
+        int error = 0;
 
         String id = msr.getParameter("id");
         String title = msr.getParameter("title");
@@ -205,6 +217,7 @@ public class MediaService extends BaseService {
                         e.printStackTrace();
                     }
                     result = "success";
+                    log("媒体管理", "更新", mediaOld.toString());
                 }
             }
         } else {
@@ -230,10 +243,12 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.IMG_FILTER)) {
                             message = Constant.IMG_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_PICTURE_MAX_SIZE) {
                             message = "上传图片超过最大上限 10MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     case Constant.MEDIA_TYPE_AUDIO:
@@ -241,10 +256,12 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.AUDIO_FILTER)) {
                             message = Constant.AUDIO_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_AUDIO_MAX_SIZE) {
                             message = "上传音频超过最大上限 30MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     case Constant.MEDIA_TYPE_DOCUMENT:
@@ -252,26 +269,31 @@ public class MediaService extends BaseService {
                         if (!fileName.matches(Constant.DOCUMENT_FILTER)) {
                             message = Constant.DOCUMENT_FILTER_MSG;
                             isImage = false;
+                            error = 1;
                         }
                         if (msrFileSize > Constant.UPLOAD_DOCUMENT_MAX_SIZE) {
                             message = "上传文档超过最大上限 20MB，请重新上传";
                             isImage = false;
+                            error = 1;
                         }
                         break;
                     default:
                         message = Constant.NO_SUPPORT_TYPE;
                         isImage = false;
+                        error = 1;
                 }
                 // 检查上传文件名是否合法
                 if (ruleType == 1) {
                     if (!fileName.matches(Constant.FILERULE_FILTER)) {
                         message = Constant.FILERULE_FILTER_MSG;
                         isImage = false;
+                        error = 1;
                     }
                 }
                 if (fileNameArray.length != 2) {
                     message = "上传文件丢失扩展名";
                     isImage = false;
+                    error = 1;
                 }
                 if (isImage) {
                     // 七牛
@@ -296,7 +318,11 @@ public class MediaService extends BaseService {
                     media.setCreateDate(new Date());
                     media.setStatus(Constant.GENERAL_ID_ONE);
                     media.setuId((byte) userInfo.getId());
-                    baseRepository.create(media);
+                    media.setId(baseRepository.create(media));
+                    result = "success";
+                    log("媒体管理", "新增", media.toString());
+                    result = "success";
+                    objectNode.put("url", media.getRealUrl());
                     result = "success";
                 }
             } catch (Exception e) {
@@ -306,9 +332,9 @@ public class MediaService extends BaseService {
         objectNode.put("result", result);
         objectNode.put("message", message);
         objectNode.put("success", true);
+        objectNode.put("error", error);
         return objectNode.toString();
     }
-
 
     /**
      * @param bytes      MultipartFile
