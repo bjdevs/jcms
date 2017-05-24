@@ -57,7 +57,7 @@ public class UserService extends BaseService {
             user.setId(baseRepository.create(user));
 
             // Log in to the database
-            log("账户创建", user.toString());
+            log("账户", "创建", user.toString());
 
             objectNode.put("result", "success");
 
@@ -105,6 +105,7 @@ public class UserService extends BaseService {
             }
             objectNode.put("result", "success");
             objectNode.put("success", true);
+            log("账户", "更新", user.toString());
             return objectNode;
 
         } catch (Exception e) {
@@ -160,6 +161,7 @@ public class UserService extends BaseService {
             }
             objectNode.put("result", result);
             objectNode.put("success", true);
+            log("账户", "更新", "密码修改:"+user.toString());
             return objectNode;
         } catch (Exception e) {
             logger.error(e);

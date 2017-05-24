@@ -15,51 +15,33 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                         {
                             xtype: 'combo',
                             fieldLabel: '模块',
-                            itemId: 'search-module',
-                            store: {
-                                proxy: {
-                                    type: 'ajax',
-                                    url: './logList',
-                                    extraParams: {
-                                        groupField: 'module'
-                                    },
-                                    reader: {
-                                        type: 'json',
-                                        rootProperty: 'rows'
-                                    }
-                                }
-                            },
-                            displayField: 'text',
-                            valueField: 'text',
-                            queryMode: 'remote',
-                            triggerAction: 'all',
-                            typeAhead: true,
-                            forceSelection: true
+                            itemId: 'search-name',
+                            store: [
+                                [100, '全部'],
+                                [101, "媒体管理"],
+                                [102, '广告管理']
+                            ],
+                            editable: false // 不允许编辑
                         },
                         {
                             // 手动输入条件时会进行二次远程查询 TODO
                             xtype: 'combo',
                             fieldLabel: '动作',
                             itemId: 'search-action',
-                            store: {
-                                proxy: {
-                                    type: 'ajax',
-                                    url: './logList',
-                                    extraParams: {
-                                        groupField: 'action'
-                                    },
-                                    reader: {
-                                        type: 'json',
-                                        rootProperty: 'rows'
-                                    }
-                                }
-                            },
-                            displayField: 'text',
-                            valueField: 'text',
-                            queryMode: 'remote',
-                            triggerAction: 'all',
-                            typeAhead: true,
-                            forceSelection: true
+                            store: [
+                                [100, "全部"],
+                                [200, "新增"],
+                                [201, "修改"],
+                                [202, "删除"],
+                                [203, "启用"],
+                                [204, "废弃"],
+                                [205, "初稿"],
+                                [206, "已签"],
+                                [207, "返工"],
+                                [208, "已发"],
+                                [209, "已删"]
+                            ],
+                            editable: false // 不允许编辑
                         },
                         {
                             xtype: 'textfield',

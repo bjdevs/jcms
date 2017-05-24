@@ -110,7 +110,7 @@ public class AdService extends BaseService {
             ad.setId(baseRepository.create(ad));
             // 执行保存的逻辑
             result = "success";
-            log("广告管理（新增）", ad.toString());
+            log("广告管理", "新增", ad.toString());
         }
         objectNode.put("message", message);
         objectNode.put("result", result);
@@ -155,7 +155,7 @@ public class AdService extends BaseService {
                     stringBuilder.append(ad.getId()).append(",");
                 }
             }
-            log("广告管理（"+typeStr+"）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            log("广告管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
             objectNode.put("result", "success");
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,7 +206,7 @@ public class AdService extends BaseService {
                     stringBuilder.append(ad.getId()).append(",");
                 }
             }
-            log("广告管理（更新）", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            log("广告管理", "更新", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();
         }

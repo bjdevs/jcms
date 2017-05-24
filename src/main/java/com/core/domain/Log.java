@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Log {
     private long id;
-    private long userId;
+    private String account;
     private String name;
 
     private String action;
@@ -25,12 +25,12 @@ public class Log {
         this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getName() {
