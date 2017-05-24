@@ -64,4 +64,3 @@ src/main/resource/system.d.properties
 *.iml
 
 resin-config.xml
-src/main/webapp/app/application.js
