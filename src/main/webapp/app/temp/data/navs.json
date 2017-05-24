@@ -213,6 +213,11 @@
           "viewType": "account-editpwd",
           "text": "密码修改",
           "leaf": true
+        },
+        {
+          "viewType": "account-mgrid",
+          "text": "用户管理",
+          "leaf": true
         }
       ]
     },

@@ -62,7 +62,6 @@ Ext.define('Admin.view.ad.AdController', {
         adGrid.down('button[action=delete]').setDisabled(count < 1);
         adGrid.down('button[action=enabled]').setDisabled(count < 1);
         adGrid.down('button[action=abandon]').setDisabled(count < 1);
-        adGrid.down('button[action=edit]').setDisabled(count < 1);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,

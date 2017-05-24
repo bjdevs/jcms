@@ -1,6 +1,12 @@
-Ext.define('Admin.view.media.MediaGrid', {
+Ext.define('Admin.view.account.AccountGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'media-mgrid',
+    xtype: 'account-mgrid',
+
+    requires: [
+        'Admin.view.account.AccountController'
+    ],
+
+    controller: 'account',
 
     initComponent: function () {
         var me = this;
@@ -9,7 +15,7 @@ Ext.define('Admin.view.media.MediaGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: '/cn/admin/mediaList',
+                    url: '/cn/admin/accountList',
                     reader: {
                         type: 'json',
                         rootProperty: 'data',
@@ -24,57 +30,62 @@ Ext.define('Admin.view.media.MediaGrid', {
             columns: [
                 // todo edit {dataIndex}
                 {text: '序号', dataIndex: 'id', width: 80},
+                {text: '账号', dataIndex: 'account', width: 100},
                 {
-                    text: '标题 <span class="admin-color-red">+</span>',
-                    dataIndex: 'title',
-                    width: 250,
+                    text: '姓名 <span class="admin-color-red">+</span>',
+                    dataIndex: 'name',
+                    width: 100,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
                     }
                 },
+                // {text: '密码', dataIndex: 'password', width: 280},
                 {
-                    text: '类型',
-                    dataIndex: 'type',
-                    width: 80,
-                    renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
-                        switch (value) {
-                            case MEDIA_TYPE_PICTURE:
-                                return '图片';
-                            case MEDIA_TYPE_AUDIO:
-                                return '音频';
-                            case MEDIA_TYPE_DOCUMENT:
-                                return '文档';
-                            default :
-                                return value;
-                        }
+                    text: '手机 <span class="admin-color-red">+</span>',
+                    dataIndex: 'phone',
+                    width: 120,
+                    editor: {
+                        vtype: 'phone',
+                        allowBlank: false,
+                        maxLength: 20
                     }
                 },
-                {text: '地址', dataIndex: 'url', width: 400},
-                {text: '预览', dataIndex: 'preview', width: 50},
+                {
+                    text: '邮箱 <span class="admin-color-red">+</span>',
+                    dataIndex: 'mail',
+                    width: 200,
+                    editor: {
+                        vtype: 'email',
+                        allowBlank: false,
+                        maxLength: 50
+                    }
+                },
+                {text: '描述', dataIndex: 'depict', width: 250},
                 {
                     text: '状态',
                     dataIndex: 'status',
-                    width: 100,
+                    width: 60,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case 1:
                                 return '<span style="color: green">启用</span>';
                             case 0:
-                                return '<span style="color: red">废弃</span>';
+                                return '<span style="color: red">禁用</span>';
                             default :
                                 return value;
                         }
                     }
                 },
-                {text: '创建人', dataIndex: 'user', width: 80},
-                {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
+                {text: '最后登录时间', dataIndex: 'lastLoginDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 130},
+                {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 130},
+                {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 130}
             ],
             tbar: [
                 {
                     xtype: 'button',
-                    text: '上传',
-                    iconCls: 'x-fa fa-upload',
+                    text: '新增',
+                    iconCls: 'x-fa fa-plus',
                     action: 'add'
                 },
                 {
@@ -86,17 +97,10 @@ Ext.define('Admin.view.media.MediaGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '废弃',
+                    text: '禁用',
                     iconCls: 'x-fa fa-ban',
                     disabled: true,
                     action: 'abandon'
-                },
-                {
-                    xtype: 'button',
-                    text: '编辑',
-                    iconCls: 'x-fa fa-pencil-square-o',
-                    disabled: true,
-                    action: 'edit'
                 },
                 {
                     xtype: 'button',
@@ -105,14 +109,6 @@ Ext.define('Admin.view.media.MediaGrid', {
                     disabled: true,
                     action: 'save'
                 },
-                {
-                    xtype: 'button',
-                    text: '删除',
-                    iconCls: 'x-fa fa-trash-o',
-                    disabled: true,
-                    action: 'delete'
-                },
-
                 '-',
                 {
                     xtype: 'button',
