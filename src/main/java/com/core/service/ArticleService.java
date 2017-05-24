@@ -46,7 +46,8 @@ public class ArticleService extends BaseService {
         if ("recycle".equals(cName)) {
             sql.append("status >= :status");
         } else if ("all".equals(cName)) {
-            sql.append("status < :status");
+            param.put("status", Constant.ARTICLE_ID_NINE);
+            sql.append("status = :status AND id > 4");
         } else {
             cId = getCategoryId(cName, false);
             if (cId == 0) {
@@ -161,15 +162,8 @@ public class ArticleService extends BaseService {
         }
         source = (null == source || "".equals(source)) ? "黄梅老祖寺" : source;
 
-        for (String idStr : kIds) {
-            if (isNumeric(idStr)) {
-                generalArticleService.updateKeyWordToCount(Long.parseLong(idStr));
-            } else {
-                generalArticleService.createKeyWord(idStr);
-            }
-        }
-        for (String s : sIds) {
-            System.out.println("待处理 --- sId: " + s);
+        for (String sId : sIds) {
+            // 连载 暂不处理
         }
 
         Article article = new Article();
@@ -179,8 +173,6 @@ public class ArticleService extends BaseService {
         article.setTitle(title);
         article.setDepict(depict);
         article.setContent(contentArray[0]);
-        // 需要存储一个keyWord与article多对多关系id
-        article.setkId(2);
         // 连载Id，默认为 0
         article.setsId(0);
         // 需要一个模版Id
@@ -192,11 +184,30 @@ public class ArticleService extends BaseService {
         article.setCreateDate(new Date());
 
         long articleId = create(article);
+        int count = 1;
+        if (articleId > 0) {
+            for (String idStr : kIds) {
+                ArticleKeyWord articleKeyWord = new ArticleKeyWord();
+                articleKeyWord.setaId(Integer.parseInt(articleId + ""));
+                int keyId = 0;
+                if (isNumeric(idStr)) {
+                    keyId = Integer.parseInt(idStr);
+                    generalArticleService.updateKeyWordToCount(Long.parseLong(idStr));
+                } else {
+                    long id = generalArticleService.createKeyWord(idStr);
+                    keyId = Integer.parseInt(id + "");
+                }
+                articleKeyWord.setkId(keyId);
+                articleKeyWord.setOrderBy(count);
+                create(articleKeyWord);
+                count++;
+            }
+        }
 
-        String path = homePageService.articlePublish(articleId);
+        /*String path = homePageService.articlePublish(articleId);
         article = find(Article.class, articleId);
-        article.setUrl(config.getStaticResourceURLPrefix() + path);
-        update(article);
+        article.setUrl(path);
+        update(article);*/
         if (articleId > 0) {
             createSubArticleForContents(articleId, contentArray);
 
@@ -209,6 +220,27 @@ public class ArticleService extends BaseService {
             objectNode.put("success", false);
             return objectNode;
         }
+
+    }
+
+    /**
+     * 预览文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode articlePreview(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        String path = homePageService.articlePublish(id, "preview");
+
+        if (path.length() > 0) {
+            objectNode.put("success", true);
+            objectNode.put("preview", path);
+        } else {
+            objectNode.put("success", true);
+        }
+        return objectNode;
     }
 
     /**
@@ -237,10 +269,7 @@ public class ArticleService extends BaseService {
                 // 发布
                 for (int i = 0; i < ids.length; i++) {
                     long id = Long.parseLong(ids[i]);
-                    System.out.println("id: " + id);
-                    // 发布文章有问题
-                    String path = homePageService.articlePublish(id);
-                    System.out.println("path: " + path);
+                    String path = homePageService.articlePublish(id, null);
                     Article article = find(Article.class, id);
                     article.setUrl(path);
                     update(article);

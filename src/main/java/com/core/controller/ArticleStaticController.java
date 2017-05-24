@@ -63,10 +63,4 @@ public class ArticleStaticController extends BaseController {
         return getViewRedirect("/article/index.html");
     }
 
-    /*@ResponseBody
-    @RequestMapping("/articlePublish")
-    public String articlePublish(long id){
-        return homePageService.articlePublish(id).toString();
-    }*/
-
 }
