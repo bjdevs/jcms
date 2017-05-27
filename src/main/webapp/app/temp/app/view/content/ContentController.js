@@ -94,6 +94,23 @@ Ext.define('Admin.view.content.ContentController', {
         tabPanel.setActiveTab(tab);
     },
 
+    onUpdateBtnClicked: function (button) {
+        var grid = button.up().up(),
+            tabPanel = button.up().up().up().up().up().down('contentPanel'),
+            selected = grid.getSelection()[0];
+
+        var tab = tabPanel.add({
+            id: 'article-' + selected.id,
+            title: selected.data.title,
+            noRoute: true,
+            xtype: 'main-panel-article',
+            // html: selected.data.content
+
+        });
+
+        tabPanel.setActiveTab(tab);
+    },
+
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
             view = ctrl.getView(), // news
