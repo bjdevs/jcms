@@ -58,18 +58,18 @@ Ext.define('Admin.view.content.index.nav.Nav', {
                             iconCls: 'x-fa fa-paper-plane-o',
                             action: 'release'
                         },
-                        '-',
+                        /*'-',
                         {
                             xtype: 'button',
                             text: '刷新',
                             iconCls: 'x-fa fa-refresh',
                             action: 'refresh'
-                        },
+                        },*/
                         '->',
                         {
                             xtype: 'component',
                             reference: 'status',
-                            tpl: '状态：<span style="color:{statusColor}">{statusText}</span> | 更新人：{updateOne} | 更新时间：{updateDate}'
+                            tpl: '状态：<span style="color:{statusColor}">{statusText}</span> <!--| 更新人：{updateOne}--> | 更新时间：{updateDate}'
 
                         }
                     ]

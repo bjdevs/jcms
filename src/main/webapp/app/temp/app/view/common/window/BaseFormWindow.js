@@ -21,7 +21,10 @@ Ext.define('Admin.view.common.window.BaseFormWindow', {
     },
 
     listeners: {
-        beforeshow: function () {
+        /*beforeshow: function () {
+            this.down('form').getForm().reset();
+        },*/
+        beforeclose: function () {
             this.down('form').getForm().reset();
         }
     }

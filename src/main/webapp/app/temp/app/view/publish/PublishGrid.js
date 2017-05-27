@@ -6,10 +6,12 @@ Ext.define('Admin.view.publish.PublishGrid', {
         var me = this;
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/publishList',
+                    // pagination: false,
+                    remoteSort: true,
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'

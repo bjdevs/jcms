@@ -1,32 +1,29 @@
-Ext.define('Admin.view.content.headline.picture.PictureController', {
+Ext.define('Admin.view.content.index.embed.FocusController', {
     extend: 'Admin.controller.ViewController',
-    alias: 'controller.content-headline-picture',
+    alias: 'controller.content-index-embed-focus',
 
-    module: 'content-headline-picture',
+    module: 'content-index-embed-focus',
 
     url: 'Super Awesome',
 
     init: function () {
-        console.log(this)
+        // console.log(this)
     },
 
     control: {
 
-        'content-headline-picture-mgrid': {
+        'content-headline-focus-mgrid': {
             selectionchange: 'onSelectionChange'
         },
 
-        'content-headline-picture-mgrid button[action=save]': {
+        'content-headline-focus-mgrid button[action=save]': {
             click: 'onSaveBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=delete]': {
+        'content-headline-focus-mgrid button[action=delete]': {
             click: 'onBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=refresh]': {
+        'content-headline-focus-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
-        },
-        'content-headline-picture-mgrid button[action=content-headline-picture]': {
-            click: 'onPictureHeadLineBtnClicked'
         }
     },
 
@@ -72,13 +69,13 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/article/headLineBtn?' + button.action + '&type=2'
+            url: '/cn/article/headLineBtn?' + button.action + '&type=1'
         });
     },
 
-    onPictureHeadLineBtnClicked: function (button) {
+    onTextHeadLineBtnClicked: function (button) {
         var ctrl = this,
-            view = ctrl.getView(),// picture-mgrid
+            view = ctrl.getView(),// text-mgrid
 
             ownerView = view.up().up(),// content
             ownerCtrl = ownerView.getController(), // content
@@ -101,8 +98,8 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                     data: {
                         category: category,
                         categoryName: ownerView.getTitle(),
-                        subItem: 'content-headline-picture-mgrid',
-                        type: 'picture'
+                        subItem: 'content-headline-text-mgrid',
+                        type: 'text'
                     }
                 }
             });
@@ -112,6 +109,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
         win.show();
     },
+
     onSubmitBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView(),
@@ -126,7 +124,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         var userId = _am.currentUser.id;
 
         ctrl.formSubmit(form, {
-            url: '/cn/article/createHeadLine?id=' + id + '&type=2&userId=' + userId
+            url: '/cn/article/createHeadLine?id=' + id + '&type=1&userId=' + userId
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 
@@ -142,4 +140,5 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             });
         });
     }
+
 });

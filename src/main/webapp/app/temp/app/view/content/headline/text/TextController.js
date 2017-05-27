@@ -49,7 +49,7 @@ Ext.define('Admin.view.content.headline.text.TextController', {
             grid = button.up('grid');
 
         var selected = grid.getSelection();
-        if (selected.length == 0){
+        if (selected.length == 0) {
             return;
         }
         var id = selected[0].data.id;
@@ -61,8 +61,8 @@ Ext.define('Admin.view.content.headline.text.TextController', {
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
             url: '/cn/article/updateHeadLine?' + button.action +
-            '&id='+id+'&status='+status+'&redStatus='+redStatus+
-            '&cateOrderBy='+cateOrderBy+'&name='+name
+            '&id=' + id + '&status=' + status + '&redStatus=' + redStatus +
+            '&cateOrderBy=' + cateOrderBy + '&name=' + name
         });
     },
 
@@ -84,7 +84,7 @@ Ext.define('Admin.view.content.headline.text.TextController', {
             ownerCtrl = ownerView.getController(), // content
 
             category = ownerView.id.split('-'),
-            category = category[category.length-1],
+            category = category[category.length - 1],
 
             winReference = 'content-headline-picture-win-' + category;
 
@@ -124,8 +124,10 @@ Ext.define('Admin.view.content.headline.text.TextController', {
 
         var id = view.query('[name=id]')[0].value;
 
+        var userId = _am.currentUser.id;
+
         ctrl.formSubmit(form, {
-            url: '/cn/article/createHeadLine?id='+id+'&type=1' // todo edit
+            url: '/cn/article/createHeadLine?id=' + id + '&type=1&userId=' + userId
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 

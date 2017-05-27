@@ -1,21 +1,10 @@
-Ext.define('Admin.view.content.ContentMainForm', {
-    extend: 'Admin.view.common.window.BaseFormWindow',
-    xtype: 'content-mform',
-
-    controller: 'content',
-
-    maximized: true,// 默认最大化窗口
-    maximizable: false, // 不允许放大 or 缩小
-
-    viewModel: {
-        data: {
-            article: null
-        }
-    },
+Ext.define('Admin.view.content.ArticleUpdateHandlePanel', {
+    extend: 'Admin.view.common.panel.BaseSearchPanel',
+    xtype: 'article-handle',
 
     initComponent: function () {
         var me = this;
-        var contentId = 'content-area-' + me.id + new Date().getTime();
+        var defaults = me.subDefaults;
 
         var form = Ext.create({
             xtype: 'form',
@@ -34,8 +23,6 @@ Ext.define('Admin.view.content.ContentMainForm', {
             items: [
                 {
                     fieldLabel: 'newsId',
-                    name: 'id',
-                    bind: '{article.id}',
                     hidden: true
                 },
                 {
@@ -45,10 +32,9 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
-                    // bind: '{article.title}',
+
                     items: {
                         name: 'title',
-
                         allowBlank: false,
                         width: '50%'
                     }
@@ -116,8 +102,6 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
-                    name: 'kId',
-                    // value: [],
 
                     items: [
                         {
@@ -187,44 +171,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                         // allowBlank: false, // 允许空白
                         width: '50%'
                     }
-                },
-                {
-                    // xtype: 'textarea',
-                    // itemId: 'content-area',
-                    // name: 'content'+me.id,
-                    // id: 'content',
-                    // beforeLabelTextTpl: '',
-                    width: '100%',
-                    height: 480,
-                    border: 0,
-                    name: 'content',
-                    // anchor: '100% 100%',
-                    xtype: 'panel',
-                    html: '<textarea id=' + contentId + ' style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
-                    listeners: {
-                        afterrender: function (self, eOpts) {
-                            // editor = KindEditor.create('#' + self.id, {
-                            editor = KindEditor.create('#' + contentId, {
-                                resizeType: 1,
-                                allowPreviewEmoticons: false,
-                                items: [
-                                    'fontname', 'fontsize', '|',
-                                    'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|',
-                                    'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
-                                    'table', 'emoticons', 'image', 'link', '|',
-                                    'quickformat', 'pagebreak', 'fullscreen'
-                                ],
-                                allowFileUpload: false,
-                                uploadJson: "/cn/admin/mediaCreate", // todo edit
-                                fillDescAfterUploadImage: true,
-                                formatUploadUrl: false,
-                                extraFileUploadParams: {
-                                    type: 1,
-                                    rule: 0
-                                }
-                            });
-                        }
-                    }
+
                 }
 
             ],
@@ -250,9 +197,8 @@ Ext.define('Admin.view.content.ContentMainForm', {
             ]
         });
 
-
         Ext.apply(me, {
-            items: form
+            items: form,
         });
 
         me.callParent();

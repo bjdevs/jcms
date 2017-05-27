@@ -7,7 +7,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
 
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 remoteFilter: true,
                 proxy: {
                     type: 'ajax',
@@ -86,7 +86,6 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                     },
                     listeners: {
                         beforerender: function (panel, eOpts) {
-
                             Ext.Ajax.request({
                                 url: '/cn/article/getFileInfo'
                             }).then(function (response, opts) {

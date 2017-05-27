@@ -80,8 +80,9 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         this.onRefresh(panel);
     },
     onRefreshBtnClicked: function () {
-        var view = this.getView();
-        this.onRefresh(view);
+        //  刷新显示有问题
+        // var view = this.getView();
+        // this.onRefresh(view);
     },
 
     onRefresh: function (panel) {
@@ -189,8 +190,8 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             Ext.ux.Msg.info('保存成功', function () {
 
                 view.hide();
-
-                ctrl.onRefresh(ownerView);
+                // 保存之后刷新显示有问题
+                // ctrl.onRefresh(ownerView);
             });
         });
     }

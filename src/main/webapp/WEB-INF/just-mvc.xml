@@ -69,6 +69,8 @@
           p:listParam="${config.hmlzs.domain.list.param}"
           p:domain="${config.hmlzs.domain}"
           p:projectName="${config.hmlzs.project.name}"
+          p:preTag="${lucene.preTag}"
+          p:postTag="${lucene.postTag}"
     >
     </bean>
 
@@ -85,7 +87,7 @@
           p:username="${db.username}"
           p:password="${db.password}"
           p:validationQuery="SELECT 1"
-            />
+    />
 
     <!-- tx -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -152,7 +154,7 @@
           c:autoConfig="true"
           c:includeDefaults="true"
           p:velocityEngine-ref="velocityEngine"
-            />
+    />
     <aop:aspectj-autoproxy/>
 
     <!-- Jackson json -->

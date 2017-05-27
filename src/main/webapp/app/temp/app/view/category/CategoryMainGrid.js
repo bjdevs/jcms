@@ -38,7 +38,7 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
 
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/categoryList',
@@ -68,9 +68,9 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
                     dataIndex: 'name',
                     width: 150,
                     /*editor: {
-                        xtype: 'textfield',
-                        allowBlank: false
-                    }*/
+                     xtype: 'textfield',
+                     allowBlank: false
+                     }*/
                 },
                 {text: '栏目模板', dataIndex: 'category_template', width: 150},
                 {text: '文章模板', dataIndex: 'article_template', width: 150},

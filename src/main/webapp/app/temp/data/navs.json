@@ -68,6 +68,11 @@
               "viewType": "content-index-embed-contact",
               "text": "联系我们",
               "leaf": true
+            },
+            {
+              "viewType": "content-index-embed-focus",
+              "text": "焦点图",
+              "leaf": true
             }
           ]
         },

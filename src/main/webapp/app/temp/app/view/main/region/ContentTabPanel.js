@@ -19,7 +19,10 @@ Ext.define('Admin.view.main.region.ContentTabPanel', {
         closeAction: 'destory' // 点击"关闭"进行销毁,
 
     },
-    plugins: Ext.create('Ext.ux.TabCloseMenu'),
+    plugins: [
+        Ext.create('Ext.ux.TabCloseMenu'),
+        'tabreorderer'
+    ],
 
     items: {
         title: '工作台',

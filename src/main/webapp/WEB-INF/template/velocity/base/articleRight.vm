@@ -49,6 +49,14 @@
 </div>
 #parse("/base/script.vm")
 <script>
+    jQuery('#map_container').css("width", 260);
+    // 紫云法务
+    $(".zyfw ul li").each(function (index) {
+        $(this).mouseenter(function () {
+            $("ul li:eq(" + index + "), ol li:eq(" + index + ")", ".zyfw").addClass("current").siblings().removeClass("current");
+        });
+    });
+
     // nav current category
     var liIndex = $article.categoryId -1;
     if($('#navbar > ul > li').length > liIndex){

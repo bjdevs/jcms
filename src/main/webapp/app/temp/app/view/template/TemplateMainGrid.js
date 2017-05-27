@@ -19,7 +19,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
             viewModel = me.getViewModel();
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/templateList',

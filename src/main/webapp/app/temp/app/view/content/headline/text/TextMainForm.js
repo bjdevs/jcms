@@ -115,7 +115,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                 items: [
                                     {
                                         xtype: 'itemselector',
-                                        name: 'category',
+                                        name: 'categoryName',
                                         height: 220,
                                         scrollable: 'y',
                                         imagePath: '../ux/images/',
@@ -165,10 +165,10 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                 ]
             },
                 /*{
-                    region: 'south',
-                    height: 300,
-                    items: new Admin.view.workbench.WorkbenchMainGrid()
-                }*/
+                 region: 'south',
+                 height: 300,
+                 items: new Admin.view.workbench.WorkbenchMainGrid()
+                 }*/
             ]
         });
 
