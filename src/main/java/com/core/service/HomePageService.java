@@ -168,7 +168,6 @@ public class HomePageService extends BaseService {
 
             create("/base/futian.html", "base/futian.vm", toolManagerContext, null);
             objectNode.put("success", true);
-
         } catch (Exception e) {
             publishLog.setStatus(0);
             objectNode.put("success", false);
