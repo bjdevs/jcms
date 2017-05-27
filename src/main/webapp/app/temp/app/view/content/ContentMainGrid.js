@@ -39,7 +39,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
             category = category[category.length - 1];
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 remoteFilter: true,
                 proxy: {
                     type: 'ajax',
@@ -58,7 +58,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 // todo edit {dataIndex}
 
                 {text: 'ID', dataIndex: 'id', width: 80},
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80},
+                {text: '状态', dataIndex: 'status', name: 'status', renderer: me.renderer, width: 80},
                 {text: '标题', dataIndex: 'title', renderer: me.renderer, flex: 1},
                 {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '作者', dataIndex: 'author'},
@@ -106,6 +106,13 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 },
                 {
                     xtype: 'button',
+                    text: '修改',
+                    iconCls: 'x-fa fa-trash-o',
+                    disabled: true,
+                    action: 'update'
+                },
+                {
+                    xtype: 'button',
                     text: '预览',
                     iconCls: 'x-fa fa-eye',
                     disabled: true,
@@ -138,12 +145,12 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                     userCls: 'admin-label-button',
                     action: 'content-headline-picture'
                 },
-                {
-                    xtype: 'button',
-                    text: '栏目预览',
-                    userCls: 'admin-label-button',
-                    action: 'preview'
-                }
+                /*{
+                 xtype: 'button',
+                 text: '栏目预览',
+                 userCls: 'admin-label-button',
+                 action: 'preview'
+                 }*/
             ]
         });
 

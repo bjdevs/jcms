@@ -1,6 +1,7 @@
 package com.core.service;
 
 import com.core.domain.*;
+import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
@@ -29,15 +30,12 @@ public class ArticleService extends BaseService {
     @Autowired
     private HomePageService homePageService;
 
-    @Autowired
-    private com.core.config.Config config;
-
     /**
      * 获取显示的数据
      *
      * @return
      */
-    public ObjectNode list(String cName, int page, int start, int limit, String idStr, String title, String startDate, String endDate) {
+    public ObjectNode list(String cName, int start, int limit, String idStr, String title, String startDate, String endDate) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("status", Constant.ARTICLE_ID_TEN);
         StringBuffer sql = new StringBuffer();
@@ -73,14 +71,26 @@ public class ArticleService extends BaseService {
             sql.append(" AND createDate BETWEEN :start AND :end");
         }
 
-        sql.append(" ORDER BY updateDate DESC,createDate DESC");
+        sql.append(" ORDER BY updateDate DESC, createDate DESC");
+
+        int count = count(Article.class, " " + sql.toString(), param);
 
         ObjectNode objectNode = objectMapper.createObjectNode();
+        sql.append(" LIMIT :start, :limit");
+        param.put("start", start);
+        param.put("limit", limit);
         List<Article> articles = list(Article.class, sql.toString(), param);
         ArrayNode arrayNode = objectMapper.createArrayNode();
         try {
             for (int i = 0; i < articles.size(); i++) {
                 Article article = articles.get(i);
+                StringBuffer sb = new StringBuffer();
+                sb.append(article.getContent());
+                List<SubArticle> subArticles = list(SubArticle.class, " WHERE aId=" + article.getId() + " ORDER By seq ASC");
+                for (int k = 0; k < subArticles.size(); k++) {
+                    sb.append(subArticles.get(k).getContent());
+                }
+                article.setContent(sb.toString());
                 ObjectNode jsonNodes = objectMapper.valueToTree(article);
                 jsonNodes.put("creator", getCreator(article.getuId()));
                 jsonNodes.put("category", getCategory(article.getcId()));
@@ -90,6 +100,7 @@ public class ArticleService extends BaseService {
             e.printStackTrace();
         }
         objectNode.put("rows", arrayNode);
+        objectNode.put("total", count);
 
         return objectNode;
     }
@@ -101,22 +112,26 @@ public class ArticleService extends BaseService {
      * @param type
      * @return
      */
-    public ObjectNode headLineList(String cName, String type) {
+    public ObjectNode headLineList(String cName, String type, int start, int limit) {
+
         ObjectNode objectNode = objectMapper.createObjectNode();
         Map<String, Object> param = new HashMap<String, Object>();
         long id = getCategoryId(cName, false);
         if (id == 0) {
             return null;
         }
-
         StringBuffer sql = new StringBuffer();
         int different = "text".equals(type) ? 1 : 2;
-        sql.append("WHERE cId = :cId AND different = :different ")
-                .append("ORDER BY cateOrderBy ASC, updateDate DESC, createDate DESC");
+        sql.append(" WHERE cId = :cId AND different = :different ")
+                .append("ORDER BY cateOrderBy ASC, updateDate DESC, createDate DESC ");
         param.put("cId", id);
         param.put("different", different);
-
+        int count = count(HeadLine.class, sql.toString(), param);
+        param.put("start", start);
+        param.put("limit", limit);
+        sql.append(" LIMIT :start, :limit ");
         List<HeadLine> headLines = list(HeadLine.class, sql.toString(), param);
+
         ObjectNode objectNode1;
         ArrayNode arrayNode = objectMapper.createArrayNode();
         for (int i = 0; i < headLines.size(); i++) {
@@ -127,6 +142,7 @@ public class ArticleService extends BaseService {
             arrayNode.add(objectNode1);
         }
         objectNode.put("rows", arrayNode);
+        objectNode.put("total", count);
         return objectNode;
     }
 
@@ -152,6 +168,7 @@ public class ArticleService extends BaseService {
         String category = request.getParameter("category");
         String content = request.getParameter("content");
         String userId = request.getParameter("userId");
+        String articleIdStr = request.getParameter("articleId");
 
         int categoryId = getCategoryIdForStr(category);
         String[] contentArray = builderContentArray(content);
@@ -167,6 +184,7 @@ public class ArticleService extends BaseService {
         }
 
         Article article = new Article();
+
         article.setuId(Integer.parseInt(userId));
         article.setAuthor(author);
         article.setSource(source);
@@ -183,9 +201,26 @@ public class ArticleService extends BaseService {
         article.setStatus(Constant.ARTICLE_ID_ZERO);
         article.setCreateDate(new Date());
 
-        long articleId = create(article);
+        long articleId = 0;
+        if (!StringUtils.isBlank(articleIdStr)) {
+            articleId = Long.parseLong(articleIdStr);
+            article.setId(articleId);
+            article.setUpdateDate(new Date());
+            update(article);
+            List<HeadLine> headLines = list(HeadLine.class, " WHERE aId = " + articleId);
+            for (int i = 0; i < headLines.size(); i++) {
+                delete(HeadLine.class, headLines.get(i).getId());
+            }
+        } else {
+            articleId = create(article);
+        }
+
         int count = 1;
         if (articleId > 0) {
+            List<ArticleKeyWord> articleKeyWords = list(ArticleKeyWord.class, " WHERE aId = " + articleId);
+            for (int i = 0; i < articleKeyWords.size(); i++) {
+                delete(ArticleKeyWord.class, articleKeyWords.get(i).getId());
+            }
             for (String idStr : kIds) {
                 ArticleKeyWord articleKeyWord = new ArticleKeyWord();
                 articleKeyWord.setaId(Integer.parseInt(articleId + ""));
@@ -194,7 +229,15 @@ public class ArticleService extends BaseService {
                     keyId = Integer.parseInt(idStr);
                     generalArticleService.updateKeyWordToCount(Long.parseLong(idStr));
                 } else {
-                    long id = generalArticleService.createKeyWord(idStr);
+                    long id = 0;
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("name", idStr);
+                    List<KeyWord> keyWords = list(KeyWord.class, "WHERE name = :name", params);
+                    if (keyWords.size() > 0) {
+                        id = keyWords.get(0).getId();
+                    } else {
+                        id = generalArticleService.createKeyWord(idStr);
+                    }
                     keyId = Integer.parseInt(id + "");
                 }
                 articleKeyWord.setkId(keyId);
@@ -208,6 +251,7 @@ public class ArticleService extends BaseService {
         article = find(Article.class, articleId);
         article.setUrl(path);
         update(article);*/
+
         if (articleId > 0) {
             createSubArticleForContents(articleId, contentArray);
 
@@ -221,6 +265,26 @@ public class ArticleService extends BaseService {
             return objectNode;
         }
 
+    }
+
+    /**
+     * 预览文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode articlePreview(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        String path = homePageService.articlePublish(id, "preview");
+
+        if (path.length() > 0) {
+            objectNode.put("success", true);
+            objectNode.put("preview", path);
+        } else {
+            objectNode.put("success", true);
+        }
+        return objectNode;
     }
 
     /**
@@ -272,6 +336,7 @@ public class ArticleService extends BaseService {
                     String path = homePageService.articlePublish(id, null);
                     Article article = find(Article.class, id);
                     article.setUrl(path);
+                    article.setPublishDate(new Date());
                     update(article);
                 }
 
@@ -314,7 +379,7 @@ public class ArticleService extends BaseService {
      *
      * @return
      */
-    public ObjectNode keyWordList(String type) {
+    public ObjectNode keyWordList(String type, int start, int limit) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         Map<String, Object> params = new HashMap<>();
         int minLimit = 0;
@@ -323,10 +388,15 @@ public class ArticleService extends BaseService {
         sb.append(" ORDER BY");
         params.put("minLimit", minLimit);
         params.put("maxLimit", maxLimit);
+        int count = 0;
         if ("list".equals(type)) {
             // 列表
             sb.append(" updateDate DESC, createDate DESC");
-            params = null;
+            params.clear();
+            params.put("start", start);
+            params.put("limit", limit);
+            count = count(KeyWord.class, sb.toString(), params);
+            sb.append(" LIMIT :start, :limit ");
         } else if ("hot".equals(type)) {
             // 热门
             sb.append(" COUNT DESC, updateDate DESC LIMIT :minLimit, :maxLimit");
@@ -340,6 +410,7 @@ public class ArticleService extends BaseService {
         }
 
         objectNode.put("rows", arrayNode);
+        objectNode.put("total", count);
 
         return objectNode;
     }
@@ -350,7 +421,7 @@ public class ArticleService extends BaseService {
      * @param data
      * @return
      */
-    public ObjectNode updateKeyWord(String method, String data, String[] ids) {
+    public ObjectNode updateKeyWord(String data, String[] ids) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         ArrayNode arrayNode;
         if (!StringUtils.isBlank(data)) {
@@ -404,10 +475,14 @@ public class ArticleService extends BaseService {
      *
      * @return
      */
-    public ObjectNode categoryList() {
+    public ObjectNode categoryList(int start, int limit) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         ArrayNode arrayNode = objectMapper.createArrayNode();
-        List<Category> categories = list(Category.class, " WHERE status > 0");
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("limit", limit);
+        List<Category> categories = list(Category.class, " WHERE status > 0 LIMIT :start, :limit", params);
+        int count = count(Category.class, " WHERE status > 0");
         ObjectNode objectNode1;
         for (int i = 0; i < categories.size(); i++) {
             Category category = categories.get(i);
@@ -418,6 +493,7 @@ public class ArticleService extends BaseService {
             arrayNode.add(objectNode1);
         }
         objectNode.put("rows", arrayNode);
+        objectNode.put("total", count);
         return objectNode;
     }
 
@@ -445,16 +521,18 @@ public class ArticleService extends BaseService {
      *
      * @return
      */
-    public ObjectNode templateList() {
+    public ObjectNode templateList(int start, int limit) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         ArrayNode arrayNode = objectMapper.createArrayNode();
-        List<Template> templates = list(Template.class, "ORDER BY updateDate DESC, createDate DESC");
+        List<Template> templates = list(Template.class, "ORDER BY updateDate DESC, createDate DESC LIMIT " + start + ", " + limit);
+        int count = count(Template.class, " ORDER BY updateDate DESC, createDate DESC");
         for (int i = 0; i < templates.size(); i++) {
             Template template = templates.get(i);
             arrayNode.add(objectMapper.valueToTree(template));
 
         }
         objectNode.put("rows", arrayNode);
+        objectNode.put("total", count);
         return objectNode;
     }
 
@@ -533,6 +611,7 @@ public class ArticleService extends BaseService {
         if (contents.length > 0) {
             Article article = find(Article.class, id);
             article.setContent(contents[0]);
+            article.setUpdateDate(new Date());
             update(article);
 
             Map<String, Object> params = new HashMap<>();
@@ -633,12 +712,12 @@ public class ArticleService extends BaseService {
     public ObjectNode getFileInfo() {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        int count = count(Article.class, " WHERE id > 4");
-
-        objectNode.put("article", count);
-        objectNode.put("picture", "待完善");
-        objectNode.put("voice", "待完善");
-
+        int articleCount = count(Article.class, " WHERE id > 4");
+        int picCount = count(Media.class, " WHERE type = " + Constant.MEDIA_TYPE_PICTURE);
+        int audioCount = count(Media.class, " WHERE type = " + Constant.MEDIA_TYPE_AUDIO);
+        objectNode.put("article", articleCount);
+        objectNode.put("picture", picCount);
+        objectNode.put("voice", audioCount);
         return objectNode;
     }
 
@@ -647,10 +726,10 @@ public class ArticleService extends BaseService {
      *
      * @return
      */
-    public ObjectNode publishList() {
+    public ObjectNode publishList(int page, int limit) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-
-        List<PublishLog> publishLogs = list(PublishLog.class, " ORDER BY requestDate DESC, finishDate DESC");
+        Page<PublishLog> publishLogPage = getPage(PublishLog.class, " ORDER BY requestDate DESC, finishDate DESC", null, limit, page);
+        List<PublishLog> publishLogs = publishLogPage.getResultList();
         ArrayNode arrayNode = objectMapper.createArrayNode();
         ObjectNode objectNode1;
         for (int i = 0; i < publishLogs.size(); i++) {
@@ -660,6 +739,7 @@ public class ArticleService extends BaseService {
             arrayNode.add(objectNode1);
         }
 
+        objectNode.put("total", publishLogPage.getTotalData());
         objectNode.put("rows", arrayNode);
         return objectNode;
     }
@@ -672,14 +752,10 @@ public class ArticleService extends BaseService {
     public ObjectNode createHeadLine(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        /*
-        * 需要传递一个 userId
-        *
-        * */
-
         String id = request.getParameter("id");
         String type = request.getParameter("type");
         String imageId = request.getParameter("imageId");
+        String userId = request.getParameter("userId");
         int mId = 0;
         if (type.equals("2")) {
             if (StringUtils.isBlank(imageId)) {
@@ -690,22 +766,32 @@ public class ArticleService extends BaseService {
         }
         String topTitle = request.getParameter("topTitle");
         String redStatus = request.getParameter("redStatus");
-        String[] categorys = request.getParameterValues("category");
+//        String[] categorys = request.getParameterValues("category");
+        String categoryName = request.getParameter("categoryName");
+
+        if (StringUtils.isBlank(categoryName)) {
+            objectNode.put("success", false);
+            return objectNode;
+        }
 
         if (null == id) {
             return null;
         }
 
+        String[] categorys = null;
+        if (categoryName.contains(",")) {
+            categorys = categoryName.split(",");
+        } else {
+            categorys = new String[]{categoryName};
+        }
+
         for (int i = 0; i < categorys.length; i++) {
             String category = categorys[i];
             if (null != category && category.length() > 0) {
-                int cId = Integer.parseInt(getCategoryId(category, true) + "");
-                if (isNumeric(category)) {
-                    cId = Integer.parseInt(category);
-                }
+                int cId = Integer.parseInt(category);
                 HeadLine headLine = new HeadLine();
 
-                headLine.setuId(2);
+                headLine.setuId(Integer.parseInt(userId));
 
                 headLine.setaId(Integer.parseInt(id));
                 headLine.setName(topTitle);
@@ -736,11 +822,10 @@ public class ArticleService extends BaseService {
      *
      * @return
      */
-    public ObjectNode mediaList(String category) {
+    public ObjectNode mediaList() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         ObjectNode objectNode1;
         ArrayNode arrayNode = objectMapper.createArrayNode();
-//        List<Media> medias = list(Media.class, "WHERE status=1 AND type=1 ORDER BY createDate DESC");
         List<Media> medias = list(Media.class, "WHERE status=1 ORDER BY createDate DESC");
         for (int i = 0; i < medias.size(); i++) {
             objectNode1 = objectMapper.valueToTree(medias.get(i));
@@ -766,7 +851,6 @@ public class ArticleService extends BaseService {
         }
         objectNode.put("success", true);
         objectNode.put("nav", sb.toString());
-        System.out.println(sb.toString());
         return objectNode;
     }
 
@@ -783,8 +867,11 @@ public class ArticleService extends BaseService {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         HeadLine headLine = find(HeadLine.class, id);
+
+        int red = redStatus.equals("true") ? 1 : 0;
+        if (isNumeric(redStatus)) red = Integer.parseInt(redStatus);
         headLine.setStatus(status);
-        headLine.setRedStatus(redStatus.equals("true") ? 1 : 0);
+        headLine.setRedStatus(red);
         headLine.setCateOrderBy(cateOrderBy);
         headLine.setName(name);
         headLine.setUpdateDate(new Date());
