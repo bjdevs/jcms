@@ -182,7 +182,7 @@
                              target="_blank">$!knowledge.first[1]</a></span><em>$!knowledge.first[3]</em>
                 </dt>
                 <dd>
-                    $!knowledge.first[2]<a href="$!knowledge.first[2]" target="_blank">[详细]</a>
+                    $!knowledge.first[2]<a href="$!knowledge.first[0]" target="_blank">[详细]</a>
                 </dd>
             </dl>
             <ul>
@@ -279,7 +279,7 @@
     });
 
     // audio
-    audiojs.events.ready(function () {
+    /*audiojs.events.ready(function () {
         var audio = audiojs.createAll()[0];
         $("#playlist li").click(function (e) {
             $(this).addClass("playing").siblings().removeClass("playing");
@@ -287,7 +287,7 @@
             audio.load($(this).attr("data-src"));
             audio.play();
         });
-    });
+    });*/
     console.log('%c黄梅老祖寺期待您的光临', 'background-image:-webkit-gradient( linear, left top, right top, ' +
             'color-stop(0, #f22),color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff),' +
             'color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2),color-stop(1, #f22) );' +

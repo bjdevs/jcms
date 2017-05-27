@@ -32,15 +32,15 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/articleList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String article(@RequestParam("category") String category, int page, int start, int limit, String id, String title, String startdate, String enddate) {
+    public String article(@RequestParam("category") String category, int start, int limit, String id, String title, String startdate, String enddate) {
 
-        return articleService.list(category, page, start, limit, id, title, startdate, enddate).toString();
+        return articleService.list(category, start, limit, id, title, startdate, enddate).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/headLine", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type) {
-        return articleService.headLineList(category, type).toString();
+    public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type, int page, int start, int limit) {
+        return articleService.headLineList(category, type, start, limit).toString();
     }
 
     @ResponseBody
@@ -59,6 +59,12 @@ public class ArticleController extends BaseController {
     @RequestMapping(value = "/getKeyWord", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String KeyWords() {
         return generalArticleService.getKeyWord().toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getArticleKeyWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String getArticleKeyWord(int aId) {
+        return generalArticleService.getArticleKeyWord(aId).toString();
     }
 
 
@@ -85,15 +91,15 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/keyWordList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String keyWordList(@RequestParam("type") String type) {
-        return articleService.keyWordList(type).toString();
+    public String keyWordList(@RequestParam("type") String type, int start, int limit) {
+        return articleService.keyWordList(type, start, limit).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/keyWordSave", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateKeyWord(@RequestParam("method") String method, String data, String[] ids) {
+    public String updateKeyWord(String data, String[] ids) {
 
-        return articleService.updateKeyWord(method, data, ids).toString();
+        return articleService.updateKeyWord(data, ids).toString();
     }
 
     @ResponseBody
@@ -105,8 +111,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/categoryList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String categoryList() {
-        return articleService.categoryList().toString();
+    public String categoryList(int start, int limit) {
+        return articleService.categoryList(start, limit).toString();
     }
 
     @ResponseBody
@@ -117,8 +123,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/templateList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String templateList() {
-        return articleService.templateList().toString();
+    public String templateList(int start, int limit) {
+        return articleService.templateList(start, limit).toString();
     }
 
     @ResponseBody
@@ -153,8 +159,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/publishList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String publishList() {
-        return articleService.publishList().toString();
+    public String publishList(int page, int limit) {
+        return articleService.publishList(page, limit).toString();
     }
 
     @ResponseBody
@@ -165,8 +171,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/mediaImgList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String mediaList(String category) {
-        return articleService.mediaList(category).toString();
+    public String mediaList() {
+        return articleService.mediaList().toString();
     }
 
     @ResponseBody

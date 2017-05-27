@@ -25,6 +25,10 @@ public class Config {
     // 文章地址
     private String articleDir;
 
+    // 套红
+    private String preTag;
+    private String postTag;
+
     public String getDbName() {
         return dbName;
     }
@@ -119,5 +123,21 @@ public class Config {
 
     public void setArticleDir(String articleDir) {
         this.articleDir = articleDir;
+    }
+
+    public String getPreTag() {
+        return preTag;
+    }
+
+    public void setPreTag(String preTag) {
+        this.preTag = preTag;
+    }
+
+    public String getPostTag() {
+        return postTag;
+    }
+
+    public void setPostTag(String postTag) {
+        this.postTag = postTag;
     }
 }

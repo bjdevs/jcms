@@ -16,6 +16,25 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
         }
     },
 
+    onClickedRelease: function () {
+        // 广种福田
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/cn/article/create/embed',
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data);
+                if(data.success){
+                    Ext.ux.Msg.info('发布成功', function () {
+                    });
+                }else{
+                    Ext.ux.Msg.info('发布失败', function () {
+                    });
+                }
+            }
+        });
+    },
+
     /**
      * 刷新
      * @param button

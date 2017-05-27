@@ -1,17 +1,15 @@
-Ext.define('Admin.view.content.headline.text.TextMainGrid', {
+Ext.define('Admin.view.content.index.embed.FocusGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'content-headline-text-mgrid',
+    xtype: 'content-headline-focus-mgrid',
 
     requires: [
-        'Admin.view.content.headline.text.TextController'
+        'Admin.view.content.index.embed.FocusController'
     ],
 
-    controller: 'content-headline-text',
+    controller: 'content-index-embed-focus',
 
     initComponent: function () {
-        var me = this,
-            viewModel = me.getViewModel();
-
+        var me = this;
 
         Ext.apply(me, {
             store: Ext.create('Admin.store.API', {
@@ -19,8 +17,8 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     type: 'ajax',
                     url: '/cn/article/headLine',
                     extraParams: {
-                        category: viewModel.get('category') || '',
-                        type: 'text'
+                        category: 'focus',
+                        type: 'pic'
                     },
                     reader: {
                         type: 'json',
@@ -44,8 +42,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     },
                     width: 80
                 },
-                {
-                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -58,8 +55,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                         allowBlank: false
                     }
                 },
-                {
-                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -93,13 +89,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
-                },
-                '->',
-                {
-                    xtype: 'button',
-                    text: '栏目文章列表',
-                    userCls: 'admin-label-button',
-                    action: 'content-headline-picture'
                 }
             ],
             plugins: [{

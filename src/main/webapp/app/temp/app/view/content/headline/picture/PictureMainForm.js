@@ -165,7 +165,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                 items: [
                                     {
                                         xtype: 'itemselector',
-                                        name: 'category',
+                                        name: 'categoryName',
                                         height: 160,
                                         scrollable: 'y',
                                         imagePath: '../ux/images/',
@@ -214,11 +214,11 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                     }
                 ]
             }/*,
-                {
-                    region: 'south',
-                    height: 250,
-                    items: new Admin.view.workbench.WorkbenchMainGrid()
-                }*/
+             {
+             region: 'south',
+             height: 250,
+             items: new Admin.view.workbench.WorkbenchMainGrid()
+             }*/
             ]
         });
 

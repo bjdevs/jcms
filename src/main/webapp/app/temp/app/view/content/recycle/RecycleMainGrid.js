@@ -8,7 +8,7 @@ Ext.define('Admin.view.content.recycle.RecycleMainGrid', {
             category = category[category.length - 1];
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/articleList',

@@ -1,7 +1,6 @@
 package com.core.service;
 
 import com.core.config.Config;
-import com.core.controller.ArticleController;
 import com.core.domain.*;
 import com.core.util.Constant;
 import com.google.gson.JsonObject;
@@ -98,6 +97,9 @@ public class HomePageService extends BaseService {
             Map<String, Object> waterzen = staticOtherModules(Constant.CATEGORY_ID_WATERZEN, Constant.GENERAL_ID_TWO);
             toolManagerContext.put("waterzen", waterzen);
 
+            // 活动通知
+            staticNotice();
+
             // 导航
             staticNav();
 
@@ -114,6 +116,7 @@ public class HomePageService extends BaseService {
             objectNode.put("success", true);
 
         } catch (Exception e) {
+            e.printStackTrace();
             publishLog.setStatus(0);
             publishLog.setFinishDate(new Date());
             update(publishLog);
@@ -151,7 +154,8 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 广种福田、联系我们
      */
-    public void staticFutian() {
+    public ObjectNode staticFutian() {
+        ObjectNode objectNode = objectMapper.createObjectNode();
         long id = createPublishLog(1, "广种福田、联系我们");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
@@ -163,13 +167,15 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("contact", resultContact);
 
             create("/base/futian.html", "base/futian.vm", toolManagerContext, null);
-
+            objectNode.put("success", true);
         } catch (Exception e) {
             publishLog.setStatus(0);
+            objectNode.put("success", false);
         }
         publishLog.setFinishDate(new Date());
         update(publishLog);
 
+        return objectNode;
     }
 
     /**
@@ -247,15 +253,16 @@ public class HomePageService extends BaseService {
         long id = createPublishLog(1, "活动通知");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
-            List<Article> resultAdList = searchNotice();
+            List<HeadLine> resultHeadLine = searchNotice();
             List<String[]> list = new ArrayList<String[]>();
             ToolContext toolManagerContext = toolManager.createContext();
 
-            for (int i = 0; i < resultAdList.size(); i++) {
-                Article article = resultAdList.get(i);
+            for (int i = 0; i < resultHeadLine.size(); i++) {
+                HeadLine headLine = resultHeadLine.get(i);
+                Article article = find(Article.class, headLine.getaId());
                 String[] items = new String[2];
                 items[0] = article.getUrl();
-                items[1] = article.getTitle();
+                items[1] = headLine.getRedStatus() == 1 ? "<strong>" + headLine.getName() + config.getPostTag() : headLine.getName();
                 list.add(i, items);
             }
 
@@ -264,6 +271,7 @@ public class HomePageService extends BaseService {
             create("/base/notice.html", "base/notice.vm", toolManagerContext, null);
 
         } catch (Exception e) {
+            e.printStackTrace();
             publishLog.setStatus(0);
         }
 
@@ -328,23 +336,25 @@ public class HomePageService extends BaseService {
                 path = path.substring(0, path.lastIndexOf("/") + 1) + "cn/article/preview?id=" + id;
                 return path;
             } else {
-                return staticResPrefix + "/" + articlePath;
+                return staticResPrefix + articlePath;
             }
         }
         return null;
     }
 
     /**
-     * 创建静态页面
+     * * 创建静态页面
      *
      * @param create:静态文件放置路径
      * @param templatePath：模版文件路径
      * @param toolManagerContext：绑定的数据
+     * @param type：是否是预览
+     * @return
      */
     private String create(String create, String templatePath, ToolContext toolManagerContext, String type) {
 
         String createPath = config.getArticleDir();
-        if (null != type && "preview".equals(type)) {
+        if (null != type && ("preview".equals(type) || "jsp".equals(type))) {
             createPath = "";
         }
         String checkPath = create.substring(0, create.lastIndexOf("/"));
@@ -359,6 +369,7 @@ public class HomePageService extends BaseService {
 
             printWriter.flush();
         } catch (Exception e) {
+            e.printStackTrace();
             flag = "error";
             jsonObject.addProperty("message", e.getMessage());
         }
@@ -395,7 +406,7 @@ public class HomePageService extends BaseService {
                     article = find(Article.class, headLine.getaId());
                     if (null != article) {
                         news[0] = article.getUrl();
-                        news[1] = headLine.getName();
+                        news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[2] = article.getDepict();
                     }
                     map.put("first", news);
@@ -403,10 +414,10 @@ public class HomePageService extends BaseService {
                 for (int i = 1; i < headLines.size(); i++) {
                     news = new String[2];
                     HeadLine headLineOther = headLines.get(i);
-                    article = find(Article.class, headLine.getaId());
+                    article = find(Article.class, headLineOther.getaId());
                     if (null != article) {
                         news[0] = article.getUrl();
-                        news[1] = headLineOther.getName();
+                        news[1] = headLineOther.getRedStatus() == 1 ? config.getPreTag() + headLineOther.getName() + config.getPostTag() : headLineOther.getName();
 //                    news[2] = article.getDepict();
                     }
                     other.add(i - 1, news);
@@ -429,11 +440,16 @@ public class HomePageService extends BaseService {
                     Media media = find(Media.class, headLine.getmId());
                     if (null != article) {
                         news[0] = article.getUrl();
-                        news[1] = headLine.getName();
+                        news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[2] = article.getDepict();
                     }
                     news[3] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
-                    news[4] = null != media ? media.getUrl() : null;
+                    if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
+                        news[4] = null != media ? media.getPic_240x160() : null;
+                    } else {
+                        news[4] = null != media ? media.getPic_144x96() : null;
+                    }
+
                 }
                 map.put("first", news);
                 headLines = headLineService.searchHeadLine(articleId, Constant.GENERAL_ID_ONE, maxLimit);
@@ -444,7 +460,7 @@ public class HomePageService extends BaseService {
                     article = find(Article.class, headLine.getaId());
                     if (null != article) {
                         news[0] = article.getUrl();
-                        news[1] = headLine.getName();
+                        news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                     }
                     news[2] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     other.add(i, news);
@@ -460,7 +476,7 @@ public class HomePageService extends BaseService {
                     String[] items = new String[2];
                     if (null != article) {
                         items[0] = article.getUrl();
-                        items[1] = headLine.getName();
+                        items[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                     }
                     list.add(i, items);
                 }
@@ -475,9 +491,9 @@ public class HomePageService extends BaseService {
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
                     if (null != article) {
-                        news[0] = headLine.getName();
+                        news[0] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[1] = article.getUrl();
-                        news[2] = media.getUrl();
+                        news[2] = media.getPic_279x186();
                     }
                     list.add(news);
                 }
@@ -492,10 +508,10 @@ public class HomePageService extends BaseService {
                     Media media = find(Media.class, headLine.getmId());
                     news = new String[4];
                     if (null != article) {
-                        news[0] = headLine.getName();
+                        news[0] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[1] = article.getUrl();
-                        news[2] = media.getUrl();
-                        news[3] = media.getUrl();
+                        news[2] = media.getPic_630x420();
+                        news[3] = media.getPic_102x68();
                     }
                     list.add(i, news);
                 }
@@ -506,6 +522,32 @@ public class HomePageService extends BaseService {
                 return null;
         }
     }
+
+    /**
+     * 文章栏目列表
+     *
+     * @return
+     */
+    public ObjectNode staticArticleList() {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        String staticResPrefix = config.getStaticResourceURLPrefix();
+        ToolContext toolManagerContext = toolManager.createContext();
+
+        String path = System.getProperty("webapp.root") + "WEB-INF" + File.separator + "admin";
+
+        //返回绑定的文件路径
+        toolManagerContext.put("resURLPrefix", staticResPrefix);
+
+        create(path + "/articleList.jsp", "base/articleList.vm", toolManagerContext, "jsp");
+        create(path + "/photoList.jsp", "base/photoList.vm", toolManagerContext, "jsp");
+        objectNode.put("success", true);
+        return objectNode;
+    }
+
+
+
+    /* ==========================获取静态化数据=============================*/
+
 
     /**
      * 检查文件夹是否存在
@@ -519,8 +561,6 @@ public class HomePageService extends BaseService {
             file.mkdirs();
         }
     }
-
-    /* ==========================获取静态化数据=============================*/
 
     /**
      * 静态化文章 封装数据
@@ -712,12 +752,13 @@ public class HomePageService extends BaseService {
      *
      * @return
      */
-    private List<Article> searchNotice() {
+    private List<HeadLine> searchNotice() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("status", Constant.ARTICLE_ID_NINE);
+        paramMap.put("different", Constant.GENERAL_ID_ONE);
         paramMap.put("cId", Constant.CATEGORY_ID_NOTICE);
-        List<Article> adList = list(Article.class, " WHERE status = :status AND cId = :cId ORDER BY orderBy ASC", paramMap);
-        return adList.size() > 0 ? adList : null;
+//        List<Article> adList = list(Article.class, " WHERE status = :status AND cId = :cId ORDER BY orderBy ASC", paramMap);
+        List<HeadLine> headLines = list(HeadLine.class, "WHERE STATUS=9 AND cId=:cId AND different=:different ORDER BY cateOrderBy ASC", paramMap);
+        return headLines.size() > 0 ? headLines : null;
     }
 
     /**
@@ -755,6 +796,16 @@ public class HomePageService extends BaseService {
             e.printStackTrace();
         }
         return navs;
+    }
+
+    /**
+     * 获取文章列表数据
+     *
+     * @return
+     */
+    public Map<String, Object> searchArticleList() {
+
+        return null;
     }
 
     /**

@@ -254,14 +254,6 @@ Ext.define('Admin.controller.ViewController', {
     },
 
     /**
-     * 发布
-     * @param button
-     */
-    onClickedRelease: function (button) {
-        console.log("发布");
-    },
-
-    /**
      * 全局发布
      * @param button
      */
@@ -293,7 +285,7 @@ Ext.define('Admin.controller.ViewController', {
         });
 
     },
-  
+
     /**
      *
      * @param view

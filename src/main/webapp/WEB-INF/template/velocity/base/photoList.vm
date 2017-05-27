@@ -47,9 +47,18 @@
 
 #include("/base/foot.vm")
 </div>
+</div>
 #parse("/base/script.vm")
 
 <script>
+
+    // 紫云法务
+    $(".zyfw ul li").each(function (index) {
+        $(this).mouseenter(function () {
+            $("ul li:eq(" + index + "), ol li:eq(" + index + ")", ".zyfw").addClass("current").siblings().removeClass("current");
+        });
+    });
+
     // nav current category
     var liIndex = ${list.categoryId} -1;
     if($('#navbar > ul > li').length > liIndex){
