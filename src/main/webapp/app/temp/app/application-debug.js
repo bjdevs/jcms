@@ -11,7 +11,9 @@ Ext.application({
 
     requires: [
         'Ext.app.*',
-        'Ext.chart.*'
+        'Ext.chart.*',
+        'Admin.store.API',
+        'Admin.proxy.API'
     ],
 
     controllers: [
