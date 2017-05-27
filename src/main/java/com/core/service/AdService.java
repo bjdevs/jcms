@@ -138,6 +138,7 @@ public class AdService extends BaseService {
                 ad.setId(id);
                 ad = baseRepository.find(Ad.class, ad.getId());
                 if (ad !=null && ad.getId() > 0) {
+                    ad.setUpdateDate(new Date());
                     if (type == 0) { // 废弃
                         ad.setStatus(Constant.GENERAL_ID_ZERO);
                         typeStr = "废弃";

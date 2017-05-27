@@ -62,6 +62,8 @@ Ext.application({
         // 帐户资料
         'account.AccountEditSetting',
         'account.AccountEditPwd',
+        'account.AccountGrid',
+        'account.AccountForm',
 
         // 系统安全
         'auth.function.Function',

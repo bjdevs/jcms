@@ -100,7 +100,7 @@ public class MediaService extends BaseService {
      */
     public ObjectNode updateMedia(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.put("result", "failed");
+        String result = "failed";
         objectNode.put("message", "");
         objectNode.put("success", true);
         try {
@@ -131,10 +131,11 @@ public class MediaService extends BaseService {
                         mediaOld.setType(media.getType());
                         mediaOld.setStatus(media.getStatus());
                         baseRepository.update(mediaOld);
-                        objectNode.put("result", "success");
                         stringBuilder.append(mediaOld.getId()).append(",");
                     }
                 }
+                result = "success";
+                objectNode.put("result", result);
                 log("广告管理", "更新", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
             }
         } catch (Exception e) {
@@ -202,6 +203,9 @@ public class MediaService extends BaseService {
 
         String id = msr.getParameter("id");
         String title = msr.getParameter("title");
+        if (StringUtils.isBlank(title)) {
+            title = "文章配图";
+        }
 
         if (!StringUtils.isBlank(id) && !StringUtils.isBlank(title)) {
             Media media = new Media();
