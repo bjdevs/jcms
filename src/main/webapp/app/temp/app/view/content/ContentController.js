@@ -57,6 +57,24 @@ Ext.define('Admin.view.content.ContentController', {
         'content-mgrid button[action=preview]': {
             click: 'onPreviewBtnClicked'
         }
+    }
+    ,
+
+    onUpdateBtnClicked: function (button) {
+        var grid = button.up().up(),
+            tabPanel = button.up().up().up().up().up().down('contentPanel'),
+            selected = grid.getSelection()[0];
+
+        var tab = tabPanel.add({
+            id: 'article-' + selected.id,
+            title: selected.data.title,
+            noRoute: true,
+            xtype: 'main-panel-article',
+            // html: selected.data.content
+
+        });
+
+        tabPanel.setActiveTab(tab);
     },
 
     onUpdateBtnClicked: function (button) {

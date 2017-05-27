@@ -264,6 +264,47 @@ public class ArticleService extends BaseService {
             objectNode.put("success", false);
             return objectNode;
         }
+
+    }
+
+    /**
+     * 预览文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode articlePreview(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        String path = homePageService.articlePublish(id, "preview");
+
+        if (path.length() > 0) {
+            objectNode.put("success", true);
+            objectNode.put("preview", path);
+        } else {
+            objectNode.put("success", true);
+        }
+        return objectNode;
+    }
+
+    /**
+     * 预览文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode articlePreview(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        String path = homePageService.articlePublish(id, "preview");
+
+        if (path.length() > 0) {
+            objectNode.put("success", true);
+            objectNode.put("preview", path);
+        } else {
+            objectNode.put("success", true);
+        }
+        return objectNode;
     }
 
     /**
