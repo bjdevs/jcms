@@ -58,6 +58,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 // todo edit {dataIndex}
 
                 {text: 'ID', dataIndex: 'id', width: 80},
+                {text: 'sId', dataIndex: 'sId', width: 80, hidden: true},
                 {text: '状态', dataIndex: 'status', name: 'status', renderer: me.renderer, width: 80},
                 {text: '标题', dataIndex: 'title', renderer: me.renderer, flex: 1},
                 {text: '栏目', dataIndex: 'category', width: 150},
@@ -107,7 +108,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 {
                     xtype: 'button',
                     text: '修改',
-                    iconCls: 'x-fa fa-trash-o',
+                    iconCls: 'x-fa fa-recycle',
                     disabled: true,
                     action: 'update'
                 },
@@ -144,13 +145,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                     text: '栏目图片列表',
                     userCls: 'admin-label-button',
                     action: 'content-headline-picture'
-                },
-                /*{
-                 xtype: 'button',
-                 text: '栏目预览',
-                 userCls: 'admin-label-button',
-                 action: 'preview'
-                 }*/
+                }
             ]
         });
 
@@ -188,24 +183,12 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 } else {
                     return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
                 }
-            /*switch (value) {
-             case 0:
-             return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
-             case 1:
-             return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
-             }*/
             case 'hPId':
                 if (value == 0) {
                     return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
                 } else {
                     return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
                 }
-            /*switch (value) {
-             case 0:
-             return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
-             case 2:
-             return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
-             }*/
             default:
                 return value;
         }

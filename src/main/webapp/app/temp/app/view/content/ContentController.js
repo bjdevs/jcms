@@ -27,8 +27,8 @@ Ext.define('Admin.view.content.ContentController', {
             click: 'onAddBtnClicked'
         },
         'content-mgrid button[action=update]': {
-            // click: 'onUpdateBtnClicked'
-            click: 'onAddBtnClicked'
+            click: 'onUpdateBtnClicked'
+            // click: 'onAddBtnClicked'
         },
         'content-mgrid button[action=audit]': {
             click: 'onBtnClicked'
@@ -74,40 +74,29 @@ Ext.define('Admin.view.content.ContentController', {
 
         });
 
-        tabPanel.setActiveTab(tab);
-    },
-
-    onUpdateBtnClicked: function (button) {
-        var grid = button.up().up(),
-            tabPanel = button.up().up().up().up().up().down('contentPanel'),
-            selected = grid.getSelection()[0];
-
-        var tab = tabPanel.add({
-            id: 'article-' + selected.id,
-            title: selected.data.title,
-            noRoute: true,
-            xtype: 'main-panel-article',
-            // html: selected.data.content
-
+        var objects;
+        Ext.Ajax.request({
+            url: '/cn/article/getArticleKeyWord',
+            method: 'POST',
+            async: false,
+            params: {
+                aId: selected.id
+            },
+            success: function (response) {
+                var data = response.responseText;
+                var json = JSON.parse(data);
+                objects = json.rows;
+                var ob = new Array();
+                var ob1 = new Array();
+                for (var i = 0; i < objects.length; i++) {
+                    ob1 = [objects[i].name];
+                    ob[i] = ob1;
+                }
+                objects = ob;
+            }
         });
-
-        tabPanel.setActiveTab(tab);
-    },
-
-    onUpdateBtnClicked: function (button) {
-        var grid = button.up().up(),
-            tabPanel = button.up().up().up().up().up().down('contentPanel'),
-            selected = grid.getSelection()[0];
-
-        var tab = tabPanel.add({
-            id: 'article-' + selected.id,
-            title: selected.data.title,
-            noRoute: true,
-            xtype: 'main-panel-article',
-            // html: selected.data.content
-
-        });
-
+        selected.set("kId", objects);
+        tab.getViewModel().data.article = selected;
         tabPanel.setActiveTab(tab);
     },
 
@@ -119,13 +108,23 @@ Ext.define('Admin.view.content.ContentController', {
         var newsGrid = view.down('content' + ctrl.getSearchGridSuffix()),
             count = !selected ? 0 : selected.length;
 
+        var tag = false;
+        if (selected.length > 1) {
+            Ext.each(selected, function (item, index, allItems) {
+                var status = item.data.status;
+                if (status != 1) {
+                    tag = true;
+                }
+            });
+        }
+
         if (count == 0) Ext.log('No selection');
 
         newsGrid.down('button[action=audit]').setDisabled(count < 1);
         newsGrid.down('button[action=rework]').setDisabled(count < 1);
         newsGrid.down('button[action=move]').setDisabled(count < 1);
         newsGrid.down('button[action=delete]').setDisabled(count < 1);
-        newsGrid.down('button[action=release]').setDisabled(count != 1);
+        newsGrid.down('button[action=release]').setDisabled(tag);
         newsGrid.down('button[action=preview]').setDisabled(count != 1);
         newsGrid.down('button[action=update]').setDisabled(count != 1);
     },
@@ -248,7 +247,6 @@ Ext.define('Admin.view.content.ContentController', {
                     var data = response.responseText;
                     var json = JSON.parse(data);
                     objects = json.rows;
-                    console.log(objects.length);
                     var ob = new Array();
                     var ob1 = new Array();
                     for (var i = 0; i < objects.length; i++) {
@@ -275,7 +273,7 @@ Ext.define('Admin.view.content.ContentController', {
 
         var status = grid.getSelection()[0].data.status;
         if (button.text == "发布") {
-            if (status == 0) {
+            if (status == 0 || status == 5) {
                 Ext.ux.Msg.error('请先审核，再执行该操作', function () {
                 });
                 return;
@@ -358,7 +356,6 @@ Ext.define('Admin.view.content.ContentController', {
             view = ctrl.getView();
         var form = view.down('form').getForm();
 
-        console.log(form);
         var id = form.getValues().id;
         var msg = "新增";
         if (id) {
@@ -465,8 +462,6 @@ Ext.define('Admin.view.content.ContentController', {
                     submitEmptyText: false,
                     success: function (response, opts) {
                         var result = JSON.parse(response.responseText);
-                        console.log(result);
-                        console.log(response);
                         if (result) {
                             Ext.MessageBox.show({
                                 title: '操作提示',

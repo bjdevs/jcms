@@ -77,14 +77,6 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                             },
                             {
                                 items: [
-                                    /*{
-                                     xtype: 'filefield',
-                                     fieldLabel: '标题图片',
-                                     buttonText: '',
-                                     buttonConfig: {
-                                     iconCls: 'x-fa fa-file-image-o'
-                                     }
-                                     },*/
                                     {
                                         xtype: 'combobox',
                                         reference: 'media',
@@ -127,20 +119,17 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                         xtype: 'container',
                                         height: 150,
                                         items: {
-                                            // xtype: 'image',
                                             name: 'image',
                                             autoEl: {
                                                 tag: 'image',    //指定为img标签
                                                 src: 'resources/images/placeholder.jpg'    //指定url路径
                                             },
-                                            // src: 'resources/images/placeholder.jpg',
                                             height: 150,
                                             width: 300
                                         },
                                         style: {
                                             left: '80px'
                                         }
-
                                     }
                                 ]
                             },
@@ -213,12 +202,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                         ]
                     }
                 ]
-            }/*,
-             {
-             region: 'south',
-             height: 250,
-             items: new Admin.view.workbench.WorkbenchMainGrid()
-             }*/
+            }
             ]
         });
 

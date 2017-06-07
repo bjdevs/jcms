@@ -3,6 +3,8 @@ package com.core.service;
 import com.core.domain.*;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
+import com.core.util.IpUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -29,6 +31,8 @@ public class ArticleService extends BaseService {
 
     @Autowired
     private HomePageService homePageService;
+
+    private Log log;
 
     /**
      * 获取显示的数据
@@ -117,9 +121,9 @@ public class ArticleService extends BaseService {
         ObjectNode objectNode = objectMapper.createObjectNode();
         Map<String, Object> param = new HashMap<String, Object>();
         long id = getCategoryId(cName, false);
-        if (id == 0) {
+        /*if (id == 0) {
             return null;
-        }
+        }*/
         StringBuffer sql = new StringBuffer();
         int different = "text".equals(type) ? 1 : 2;
         sql.append(" WHERE cId = :cId AND different = :different ")
@@ -155,6 +159,7 @@ public class ArticleService extends BaseService {
     public ObjectNode createArticle(HttpServletRequest request) {
 
         ObjectNode objectNode = objectMapper.createObjectNode();
+        String type = "新增";
 
         String title = request.getParameter("title");
         String source = request.getParameter("source");
@@ -164,7 +169,7 @@ public class ArticleService extends BaseService {
         }
         String depict = request.getParameter("depict");
         String[] kIds = request.getParameterValues("kId");
-        String[] sIds = request.getParameterValues("sId");
+        String sId = request.getParameter("sId");
         String category = request.getParameter("category");
         String content = request.getParameter("content");
         String userId = request.getParameter("userId");
@@ -179,10 +184,6 @@ public class ArticleService extends BaseService {
         }
         source = (null == source || "".equals(source)) ? "黄梅老祖寺" : source;
 
-        for (String sId : sIds) {
-            // 连载 暂不处理
-        }
-
         Article article = new Article();
 
         article.setuId(Integer.parseInt(userId));
@@ -192,7 +193,7 @@ public class ArticleService extends BaseService {
         article.setDepict(depict);
         article.setContent(contentArray[0]);
         // 连载Id，默认为 0
-        article.setsId(0);
+        article.setsId(StringUtils.isBlank(sId) ? 0 : Integer.parseInt(sId));
         // 需要一个模版Id
         article.settId(0);
         article.sethAId(0);
@@ -203,6 +204,7 @@ public class ArticleService extends BaseService {
 
         long articleId = 0;
         if (!StringUtils.isBlank(articleIdStr)) {
+            type = "修改";
             articleId = Long.parseLong(articleIdStr);
             article.setId(articleId);
             article.setUpdateDate(new Date());
@@ -251,6 +253,14 @@ public class ArticleService extends BaseService {
         article = find(Article.class, articleId);
         article.setUrl(path);
         update(article);*/
+        log = new Log();
+        log.setIp(IpUtil.getIp(request));
+        log.setAccount(find(User.class, Integer.parseInt(userId)).getAccount());
+        log.setName("文章管理");
+        log.setAction(type);
+        log.setContent(type + "文章ID: " + articleId + " 、标题：" + title);
+        log.setCreateDate(new Date());
+        create(log);
 
         if (articleId > 0) {
             createSubArticleForContents(articleId, contentArray);
@@ -265,66 +275,6 @@ public class ArticleService extends BaseService {
             return objectNode;
         }
 
-    }
-
-    /**
-     * 预览文章
-     *
-     * @param id
-     * @return
-     */
-    public ObjectNode articlePreview(long id) {
-        ObjectNode objectNode = objectMapper.createObjectNode();
-
-        String path = homePageService.articlePublish(id, "preview");
-
-        if (path.length() > 0) {
-            objectNode.put("success", true);
-            objectNode.put("preview", path);
-        } else {
-            objectNode.put("success", true);
-        }
-        return objectNode;
-    }
-
-    /**
-     * 预览文章
-     *
-     * @param id
-     * @return
-     */
-    public ObjectNode articlePreview(long id) {
-        ObjectNode objectNode = objectMapper.createObjectNode();
-
-        String path = homePageService.articlePublish(id, "preview");
-
-        if (path.length() > 0) {
-            objectNode.put("success", true);
-            objectNode.put("preview", path);
-        } else {
-            objectNode.put("success", true);
-        }
-        return objectNode;
-    }
-
-    /**
-     * 预览文章
-     *
-     * @param id
-     * @return
-     */
-    public ObjectNode articlePreview(long id) {
-        ObjectNode objectNode = objectMapper.createObjectNode();
-
-        String path = homePageService.articlePublish(id, "preview");
-
-        if (path.length() > 0) {
-            objectNode.put("success", true);
-            objectNode.put("preview", path);
-        } else {
-            objectNode.put("success", true);
-        }
-        return objectNode;
     }
 
     /**
@@ -382,6 +332,7 @@ public class ArticleService extends BaseService {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
             success = false;
         }
         objectNode.put("success", success);
@@ -577,6 +528,29 @@ public class ArticleService extends BaseService {
     }
 
     /**
+     * 用于查询指定类型的template
+     *
+     * @param type
+     * @return
+     */
+    public ObjectNode templateListForId(int type) {
+        ObjectNode objectNode1 = objectMapper.createObjectNode();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", type);
+
+        List<Template> templates = list(Template.class, " WHERE type = :type ORDER BY updateDate DESC, createDate DESC", params);
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+
+        for (int i = 0; i < templates.size(); i++) {
+            arrayNode.add(objectMapper.valueToTree(templates.get(i)));
+        }
+
+        objectNode1.put("rows", arrayNode);
+        return objectNode1;
+    }
+
+    /**
      * 返回单个文章
      *
      * @return
@@ -636,6 +610,33 @@ public class ArticleService extends BaseService {
     }
 
     /**
+     * 返回单个内嵌文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode articleEmbedForId(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        Article article = find(Article.class, id);
+        StringBuffer contentSb = new StringBuffer();
+
+        if (null != article) {
+            contentSb.append(article.getContent());
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("aId", article.getId());
+            List<SubArticle> subArticles = list(SubArticle.class, "WHERE aId = :aId ORDER BY seq ASC", params);
+            for (int i = 0; i < subArticles.size(); i++) {
+                SubArticle subArticle = subArticles.get(i);
+                contentSb.append(subArticle.getContent());
+            }
+        }
+        objectNode.put("content", contentSb.toString());
+        return objectNode;
+    }
+
+
+    /**
      * 用于修改导航、...
      *
      * @param id
@@ -653,17 +654,32 @@ public class ArticleService extends BaseService {
             article.setContent(contents[0]);
             article.setUpdateDate(new Date());
             update(article);
+            // 调用文章处理
+            disposeSubArticle(id, contents);
 
-            Map<String, Object> params = new HashMap<>();
-            params.put("aId", id);
+        }
+        objectNode.put("success", true);
+        return objectNode;
+    }
 
-            List<SubArticle> subArticles = list(SubArticle.class, "WHERE aId = :aId", params);
-            for (int j = 0; j < subArticles.size(); j++) {
-                SubArticle subArticle = subArticles.get(j);
-                delete(SubArticle.class, subArticle.getId());
-            }
-            createSubArticleForContents(id, contents);
-
+    /**
+     * 用于修改紫云法务
+     *
+     * @param id
+     * @param content
+     * @return
+     */
+    public ObjectNode updateEmbedForId(long id, String content) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        content = content.replaceAll("\n\r*", "");
+        String[] contents = builderContentArray(content);
+        Article article = null;
+        if (contents.length > 0) {
+            article = find(Article.class, id);
+            article.setContent(contents[0]);
+            article.setUpdateDate(new Date());
+            update(article);
+            disposeSubArticle(id, contents);
         }
         objectNode.put("success", true);
         return objectNode;
@@ -762,6 +778,81 @@ public class ArticleService extends BaseService {
     }
 
     /**
+     * 修改文章
+     *
+     * @return
+     */
+    public ObjectNode updateArticle() {
+        ObjectNode objectNode1 = objectMapper.createObjectNode();
+
+        String id = request.getParameter("id");
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        String[] kIds = request.getParameterValues("kIds");
+        String depict = request.getParameter("depict");
+        String content = request.getParameter("content");
+        String account = request.getParameter("account");
+
+        Article article = find(Article.class, Long.parseLong(id));
+        if (null != article) {
+            article.setTitle(title);
+            article.setAuthor(author);
+            article.setDepict(depict);
+            String[] contents = builderContentArray(content);
+            article.setContent(contents[0]);
+            article.setUpdateDate(new Date());
+            int status = article.getStatus();
+            if (status == Constant.ARTICLE_ID_NINE) {
+                article.setStatus(Constant.ARTICLE_ID_FIVE);
+            }
+            update(article);
+            disposeSubArticle(Long.parseLong(id), contents);
+
+            Map<String, Object> params = new HashedMap();
+            params.put("aId", article.getId());
+            List<ArticleKeyWord> keyWords = list(ArticleKeyWord.class, " WHERE aId = :aId", params);
+            for (int i = 0; i < keyWords.size(); i++) {
+                delete(ArticleKeyWord.class, keyWords.get(i).getId());
+            }
+
+            for (int i = 0; i < kIds.length; i++) {
+                String kIdStr = kIds[i];
+                ArticleKeyWord articleKeyWord = new ArticleKeyWord();
+                articleKeyWord.setaId(Integer.parseInt(article.getId() + ""));
+                if (isNumeric(kIdStr)) {
+                    long kId = Long.parseLong(kIdStr);
+                    KeyWord keyWord = find(KeyWord.class, kId);
+                    if (null != keyWord) {
+                        articleKeyWord.setkId((int) kId);
+                    }
+                } else {
+                    params.clear();
+                    params.put("name", kIdStr);
+                    List<KeyWord> keyWords1 = list(KeyWord.class, " WHERE name = :name", params);
+                    if (keyWords1.size() > 0) {
+                        articleKeyWord.setkId(Integer.parseInt(keyWords1.get(0).getId() + ""));
+                    }
+                }
+                articleKeyWord.setOrderBy(i);
+                create(articleKeyWord);
+            }
+
+        }
+        log = new Log();
+        log.setAccount(account);
+        log.setAction("修改");
+        log.setName("文章管理");
+        log.setCreateDate(new Date());
+        log.setIp(IpUtil.getIp(request));
+        log.setContent("被修改文章ID：" + article.getId());
+        create(log);
+
+        objectNode1.put("success", true);
+        return objectNode1;
+    }
+
+
+    /**
      * 发布记录
      *
      * @return
@@ -791,7 +882,7 @@ public class ArticleService extends BaseService {
      */
     public ObjectNode createHeadLine(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-
+        log = new Log();
         String id = request.getParameter("id");
         String type = request.getParameter("type");
         String imageId = request.getParameter("imageId");
@@ -845,14 +936,24 @@ public class ArticleService extends BaseService {
                 long headId = create(headLine);
                 Article article = find(Article.class, Integer.parseInt(id));
                 if ("1".equals(type)) {
+                    log.setContent("新增文字头条，文章ID：" + id);
                     article.sethAId(Integer.parseInt(headId + ""));
                 } else {
+                    log.setContent("新增图片头条，文章ID：" + id);
                     article.sethPId(Integer.parseInt(headId + ""));
                 }
                 article.setUpdateDate(new Date());
                 update(article);
             }
         }
+
+        log.setIp(IpUtil.getIp(request));
+        log.setAccount(find(User.class, Integer.parseInt(userId)).getAccount());
+        log.setName("头条管理");
+        log.setAction("新增");
+        log.setCreateDate(new Date());
+        create(log);
+
         objectNode.put("success", true);
         return objectNode;
     }
@@ -928,8 +1029,14 @@ public class ArticleService extends BaseService {
      * @param ids
      * @return
      */
-    public ObjectNode headLineBtn(String method, long[] ids, int type) {
+    public ObjectNode headLineBtn(String method, long[] ids, int type, String account) {
         ObjectNode objectNode = objectMapper.createObjectNode();
+        log = new Log();
+        log.setIp(IpUtil.getIp(request));
+        log.setAccount(account);
+        log.setName("头条管理");
+        log.setAction("删除");
+        log.setCreateDate(new Date());
 
         for (int i = 0; i < ids.length; i++) {
             long id = ids[i];
@@ -940,14 +1047,17 @@ public class ArticleService extends BaseService {
             if ("delete".equals(method)) {
                 delete(HeadLine.class, headLine.getId());
                 if (type == 1) {
+                    log.setContent("删除文字头条，文章ID：" + article.getId());
                     article.sethAId(0);
                 } else if (type == 2) {
+                    log.setContent("删除图片头条，文章ID：" + article.getId());
                     article.sethPId(0);
                 }
 
                 update(article);
             }
         }
+        create(log);
         objectNode.put("success", true);
         return objectNode;
     }
@@ -1043,28 +1153,14 @@ public class ArticleService extends BaseService {
      * @return
      */
     private int getCategoryIdForStr(String category) {
-        switch (category) {
-            case "news":
-                return Constant.CATEGORY_ID_NEWS;
-            case "life":
-                return Constant.CATEGORY_ID_LIFE;
-            case "ziyunfoguo":
-                return Constant.CATEGORY_ID_ZIYUNFOGUO;
-            case "medical":
-                return Constant.CATEGORY_ID_MEDICAL;
-            case "knowledge":
-                return Constant.CATEGORY_ID_KNOWLEDGE;
-            case "depository":
-                return Constant.CATEGORY_ID_DEPOSITORY;
-            case "law":
-                return Constant.CATEGORY_ID_LAW;
-            case "waterzen":
-                return Constant.CATEGORY_ID_WATERZEN;
-            case "notice":
-                return Constant.CATEGORY_ID_NOTICE;
-            default:
-                return 0;
+        int id = 0;
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", category);
+        List<Category> categories = list(Category.class, " WHERE name = :name", params);
+        if (categories.size() > 0) {
+            id = (int) categories.get(0).getId();
         }
+        return id;
     }
 
     /**
@@ -1141,5 +1237,23 @@ public class ArticleService extends BaseService {
         }
 
         return result;
+    }
+
+    /**
+     * 处理文章拼接
+     *
+     * @param id
+     * @param contents
+     */
+    public void disposeSubArticle(long id, String[] contents) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("aId", id);
+
+        List<SubArticle> subArticles = list(SubArticle.class, "WHERE aId = :aId", params);
+        for (int j = 0; j < subArticles.size(); j++) {
+            SubArticle subArticle = subArticles.get(j);
+            delete(SubArticle.class, subArticle.getId());
+        }
+        createSubArticleForContents(id, contents);
     }
 }

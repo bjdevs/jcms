@@ -8,7 +8,6 @@ Ext.define('Admin.view.content.recycle.Recycle', {
         'Admin.view.content.recycle.RecycleMainGrid'
     ],
 
-
     controller: 'content-recycle',
 
     layout: 'border',
@@ -16,7 +15,6 @@ Ext.define('Admin.view.content.recycle.Recycle', {
 
     initComponent: function () {
         var me = this;
-
 
         Ext.apply(me, {
             items: [

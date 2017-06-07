@@ -1,8 +1,8 @@
-Ext.define('Admin.view.category.CategoryMainForm', {
+Ext.define('Admin.view.serial.SerialForm', {
     extend: 'Admin.view.common.window.BaseFormWindow',
-    xtype: 'category-mform',
+    xtype: 'serial-mform',
 
-    controller: 'category',
+    controller: 'serial',
 
     width: 520,
 
@@ -25,41 +25,43 @@ Ext.define('Admin.view.category.CategoryMainForm', {
 
             items: [
                 {
-                    fieldLabel: 'categoryId',
-                    hidden: true
-                },
-                {
-                    fieldLabel: 'parentId',
-                    name: 'parentId',
-                    hidden: true
-                },
-                {
-                    xtype: 'displayfield',
-                    name: 'parentPath',
-                    fieldLabel: '父路径',
+                    fieldLabel: 'id',
+                    name: 'id',
                     hidden: true
                 },
                 {
                     name: 'name',
-                    fieldLabel: '目录名称',
-                    allowBlank: false
-                },
-                {
-                    name: 'ename',
-                    fieldLabel: '路径英文',
+                    fieldLabel: '连载名称',
                     allowBlank: false
                 },
                 {
                     xtype: 'textarea',
-                    name: 'desc',
-                    beforeLabelTextTpl: '',
-                    fieldLabel: '目录描述'
+                    fieldLabel: '连载描述',
+                    name: 'depict',
+                    allowBlank: false
                 },
                 {
-                    xtype: 'textarea',
-                    name: 'counter',
-                    beforeLabelTextTpl: '',
-                    fieldLabel: '计数器'
+                    xtype: 'combobox',
+                    fieldLabel: '目录模版',
+                    name: 'tId',
+                    store: {
+                        proxy: {
+                            type: 'ajax',
+                            url: '/cn/article/templateListForId?type=2',
+                            reader: {
+                                type: 'json',
+                                rootProperty: 'rows'
+                            }
+                        }
+                    },
+                    displayField: 'name',
+                    valueField: 'id',
+                    queryMode: 'remote',
+                    editable: false, // 不允许编辑
+                    triggerAction: 'all',
+                    forceSelection: true,
+                    emptyText: '请选择',
+                    allowBlank: false
                 }
             ],
             buttons: [

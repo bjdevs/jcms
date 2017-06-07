@@ -1,6 +1,6 @@
 Ext.Loader.setConfig({
     enabled: true, // 是否启动动态依赖加载,默认开启
-    disableCaching: true // 启用脚本文件缓存
+    disableCaching: false // 启用脚本文件缓存
 });
 
 
@@ -42,11 +42,11 @@ Ext.application({
         'content.index.embed.Futian',
         'content.index.embed.Contact',
         'content.index.embed.Focus',
+        'content.index.embed.Fawu',
 
         // 发布管理
-        'Admin.view.publish.Publish',
-
-        'Admin.view.media.Media',
+        'publish.Publish',
+        'serial.Serial',
 
         // 栏目维护
         'category.Category',

@@ -9,6 +9,13 @@ Ext.define('Admin.view.publish.publishController', {
         },
         'publish-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
+        },
+        'publish-mgrid button[action=redirect]': {
+            click: 'onRedirectBtnClicked'
         }
+    },
+
+    onRedirectBtnClicked: function () {
+        window.open("../../article/index.html");
     }
 });

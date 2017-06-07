@@ -19,13 +19,26 @@ public class ListController extends BaseController {
     private ListService listService;
 
     @RequestMapping(value = "/c-{cId}-{page}.html", method = RequestMethod.GET)
-    public String articleList(@ModelAttribute("cId") int cId, @ModelAttribute("cId") int page) {
-
+    public String articleList(@ModelAttribute("cId") int cId, @ModelAttribute("page") int page) {
         Object[] result = listService.articleList(cId, page);
         request.setAttribute("list", result[1]);
         request.setAttribute("listUrl", "\"" + config.getListDomain() + String.format(config.getListParam() + "\"", cId));
         request.setAttribute("winTitle", result[2]);
 
+
+        request.setAttribute(Constant.STATIC_RESOURCE_URL_PREFIX, config.getStaticResourceURLPrefix());
+        request.setAttribute(Constant.LIST_PAGE_URL_PREFIX, config.getListDomain());
+
+        return getView((String) result[0]);
+    }
+
+    @RequestMapping(value = "/s-{sId}-{page}.html", method = RequestMethod.GET)
+    public String articleSerialList(@ModelAttribute("sId") int sId, @ModelAttribute("page") int page) {
+
+        Object[] result = listService.articleSerialList(sId, page);
+        request.setAttribute("list", result[1]);
+        request.setAttribute("listUrl", "\"" + config.getListDomain() + String.format(config.getListParam() + "\"", sId));
+        request.setAttribute("winTitle", result[2]);
 
         request.setAttribute(Constant.STATIC_RESOURCE_URL_PREFIX, config.getStaticResourceURLPrefix());
         request.setAttribute(Constant.LIST_PAGE_URL_PREFIX, config.getListDomain());

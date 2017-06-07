@@ -71,6 +71,7 @@
           p:projectName="${config.hmlzs.project.name}"
           p:preTag="${lucene.preTag}"
           p:postTag="${lucene.postTag}"
+          p:listSerialParam="${config.hmlzs.domain.list.serial.param}"
     >
     </bean>
 

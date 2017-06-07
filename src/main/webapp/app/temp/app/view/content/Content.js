@@ -14,9 +14,6 @@ Ext.define('Admin.view.content.Content', {
         'Admin.view.content.headline.HeadLineWindow',
         'Admin.view.content.headline.text.TextMainGrid',
         'Admin.view.content.headline.picture.PictureMainGrid',
-
-        //'Admin.view.content.headline.text.TextController',
-        //'Admin.view.content.headline.picture.PictureController',
         'Admin.view.content.headline.picture.PictureMainForm',
         'Admin.view.content.headline.text.TextMainForm',
         'Admin.view.content.ArticleUpdatePanel'

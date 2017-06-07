@@ -93,7 +93,6 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             navType = navType[navType.length - 1];
         Ext.Ajax.request({
             url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
-            // url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
         }).then(function (response, opts) {
                 var obj = Ext.decode(response.responseText);
                 panel.setHtml(obj);
@@ -177,10 +176,7 @@ Ext.define('Admin.view.content.index.nav.NavController', {
     },
     onSubmitBtnClicked: function (button) {
         var ctrl = this,
-            view = ctrl.getView(),
-
-            ownerView = view.up();// nav
-
+            view = ctrl.getView();// nav
 
         var form = view.down('form').getForm();
 

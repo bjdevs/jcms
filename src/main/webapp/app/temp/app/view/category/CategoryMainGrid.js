@@ -66,25 +66,13 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
                 {
                     text: '存放路径 <span class="admin-color-red">+</span>',
                     dataIndex: 'name',
-                    width: 150,
-                    /*editor: {
-                     xtype: 'textfield',
-                     allowBlank: false
-                     }*/
+                    width: 150
                 },
                 {text: '栏目模板', dataIndex: 'category_template', width: 150},
                 {text: '文章模板', dataIndex: 'article_template', width: 150},
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
                 {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
-                {text: '操作', dataIndex: 'id', renderer: me.renderer, flex: 1 /*width: 230*/}
-                /*  {
-                 xtype: 'actioncolumn',
-                 items: [
-                 '@preview', '@add', '@article', '@headline', '@picture'
-                 ],
-                 width: 150
-                 }*/
-
+                // {text: '操作', dataIndex: 'id', renderer: me.renderer, flex: 1 /*width: 230*/}
             ],
             tbar: [
                 {

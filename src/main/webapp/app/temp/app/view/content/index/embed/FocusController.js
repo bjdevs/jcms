@@ -29,8 +29,7 @@ Ext.define('Admin.view.content.index.embed.FocusController', {
 
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
-            view = ctrl.getView(), // text
-            viewModel = ctrl.getViewModel() || {};
+            view = ctrl.getView();
 
         var module = ctrl['module'],
             count = !selected ? 0 : selected.length;

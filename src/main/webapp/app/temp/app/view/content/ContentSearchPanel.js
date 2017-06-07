@@ -22,7 +22,7 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                             xtype: 'textfield',
                             fieldLabel: '文章标题',
                             emptyText: '',
-                            itemId: 'search-title' // todo edit {-id}
+                            itemId: 'search-title'
                         },
                         {
                             xtype: 'datefield',

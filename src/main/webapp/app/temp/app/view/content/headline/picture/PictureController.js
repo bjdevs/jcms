@@ -32,8 +32,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
-            view = ctrl.getView(), // text
-            viewModel = ctrl.getViewModel() || {};
+            view = ctrl.getView();
 
         var module = ctrl['module'],
             count = !selected ? 0 : selected.length;
@@ -70,9 +69,11 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var account = _am.currentUser.account;
+        
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/article/headLineBtn?' + button.action + '&type=2'
+            url: '/cn/article/headLineBtn?' + button.action + '&type=2&account=' + account
         });
     },
 
@@ -109,7 +110,6 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
             ownerView.add(win);
         }
-
         win.show();
     },
     onSubmitBtnClicked: function (button) {

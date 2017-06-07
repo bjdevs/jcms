@@ -18,12 +18,6 @@ Ext.define('Admin.view.content.index.embed.FutianForm', {
             },
             width: '100%',
             items: [
-                /*{
-                    xtype: 'textfield',
-                    name: 'updateDate',
-                    fieldLabel: '更新时间',
-                    value: '2017-05-17 11:05:01'
-                },*/
                 {
                     xtype: 'textarea',
                     name: 'depict',

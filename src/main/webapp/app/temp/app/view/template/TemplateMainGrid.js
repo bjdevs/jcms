@@ -73,7 +73,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     renderer: me.renderer,
                     width: 250
                 },
-                {text: '栏目', dataIndex: 'cId'},
+                // {text: '栏目', dataIndex: 'cId'},
                 {
                     text: '状态',
                     dataIndex: 'status',
