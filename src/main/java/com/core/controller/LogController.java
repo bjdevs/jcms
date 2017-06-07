@@ -1,6 +1,5 @@
 package com.core.controller;
 
-import com.core.service.AdService;
 import com.core.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ public class LogController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/logList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void adTypeShow(HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public void adTypeShow(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.getWriter().print(logService.getList(request));
     }
 }

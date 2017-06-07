@@ -70,8 +70,8 @@ public class LoginController extends BaseController {
     }
 
     /**
-     *
      * 登录
+     *
      * @return
      */
     @ResponseBody
@@ -85,6 +85,7 @@ public class LoginController extends BaseController {
 
     /**
      * 退出
+     *
      * @param resp
      * @return
      */
