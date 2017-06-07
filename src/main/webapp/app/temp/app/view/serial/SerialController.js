@@ -3,7 +3,7 @@ Ext.define('Admin.view.serial.SerialController', {
 
     alias: 'controller.serial',
 
-    model: 'serial',
+    // model: 'serial',
 
     control: {
         'serial-mgrid': {
