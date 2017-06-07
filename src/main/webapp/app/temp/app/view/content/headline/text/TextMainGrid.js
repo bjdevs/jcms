@@ -129,11 +129,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     default:
                         return value;
                 }
-            /* case 'rank':
-             var up = '<button class="x-fa fa-arrow-up admin-label-button" action="set-rank-up" title="升级"></button>',
-             down = '<button class="x-fa fa-arrow-down admin-label-button" action="set-rank-down" title="降级"></button>';
-
-             return value + '&nbsp;&nbsp;' + up + down;*/
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;

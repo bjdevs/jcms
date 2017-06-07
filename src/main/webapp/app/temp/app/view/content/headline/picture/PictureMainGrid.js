@@ -128,11 +128,6 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     default:
                         return value;
                 }
-            /*  case 'rank':
-             var up = '<a class="x-fa fa-arrow-up"></a>',
-             down = '<a class="x-fa fa-arrow-down"></a>';
-
-             return value + '&nbsp;&nbsp;' + up + '&nbsp;' + down;*/
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;

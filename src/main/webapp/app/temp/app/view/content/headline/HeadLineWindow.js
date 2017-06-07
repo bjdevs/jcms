@@ -7,10 +7,8 @@ Ext.define('Admin.view.content.headline.HeadLineWindow', {
     border: false,
 
     initComponent: function () {
-
         var me = this,
             viewModel = me.getViewModel();
-
 
         var category = viewModel.get('category'),
             categoryName = viewModel.get('categoryName'),
@@ -34,8 +32,6 @@ Ext.define('Admin.view.content.headline.HeadLineWindow', {
                     data: category
                 }
             }
-
-
         });
 
         me.callParent();

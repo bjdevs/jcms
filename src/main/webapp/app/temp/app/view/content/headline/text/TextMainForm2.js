@@ -37,8 +37,6 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                             },
                             items: {
                                 xtype: 'fieldcontainer',
-                                //height: 400,
-                                //scrollable: true,
 
                                 layout: 'anchor',
 
@@ -95,10 +93,8 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                                 fieldLabel: '套红',
                                                 items: [
                                                     {
-                                                        //boxLabel: '套红',
                                                         name: 'redStatus',
-                                                        inputValue: '1'/*,
-                                                     boxLabelAlign: 'before'*/
+                                                        inputValue: '1'
                                                     }
                                                 ],
                                                 width: 100
@@ -175,8 +171,6 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                     }
                 ]
             }
-
-
         });
 
         me.callParent();

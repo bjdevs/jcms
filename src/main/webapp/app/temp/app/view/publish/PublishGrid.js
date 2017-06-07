@@ -66,13 +66,19 @@ Ext.define('Admin.view.publish.PublishGrid', {
                     iconCls: 'x-fa fa-paper-plane-o',
                     action: 'publish'
                 },
-
                 '-',
                 {
                     xtype: 'button',
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
+                },
+                '-',
+                {
+                    xtype: 'button',
+                    text: '查看首页',
+                    iconCls: 'x-fa fa-eye',
+                    action: 'redirect'
                 }
             ]
 

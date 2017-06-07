@@ -161,27 +161,28 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
+                    publishes: 'value',
 
                     items: {
                         xtype: 'combobox',
-
                         name: 'sId',
                         store: {
                             proxy: {
                                 type: 'ajax',
-                                url: 'data/serals.json',
+                                url: '/cn/serial/serialQuery?status=5',
                                 reader: {
                                     type: 'json',
                                     rootProperty: 'rows'
                                 }
                             }
                         },
-                        displayField: 'title',
+                        displayField: 'name',
                         valueField: 'id',
                         queryMode: 'remote',
+                        editable: false, // 不可编辑
                         minChars: 1,
                         triggerAction: 'all',
-                        typeAhead: true,
+                        // typeAhead: true, // 不启用组合编辑
                         forceSelection: true,
                         emptyText: '请选择系列',
                         // allowBlank: false, // 允许空白
@@ -189,11 +190,6 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     }
                 },
                 {
-                    // xtype: 'textarea',
-                    // itemId: 'content-area',
-                    // name: 'content'+me.id,
-                    // id: 'content',
-                    // beforeLabelTextTpl: '',
                     width: '100%',
                     height: 480,
                     border: 0,
@@ -229,14 +225,6 @@ Ext.define('Admin.view.content.ContentMainForm', {
 
             ],
             buttons: [
-                /*{
-                 text: '预览',
-                 iconCls: 'x-fa fa-eye',
-                 action: 'preview',
-                 disabled: true,
-                 formBind: true,
-                 handler: 'onPreviewBtnClicked'
-                 },*/
                 {
                     text: '提交',
                     iconCls: 'x-fa fa-floppy-o',

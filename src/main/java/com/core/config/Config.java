@@ -12,6 +12,8 @@ public class Config {
     private String listDomain;
     private String listParam;
 
+    private String listSerialParam;
+
     // 静态资源链接前缀
     private String staticResourceURLPrefix;
 
@@ -139,5 +141,13 @@ public class Config {
 
     public void setPostTag(String postTag) {
         this.postTag = postTag;
+    }
+
+    public String getListSerialParam() {
+        return listSerialParam;
+    }
+
+    public void setListSerialParam(String listSerialParam) {
+        this.listSerialParam = listSerialParam;
     }
 }

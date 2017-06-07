@@ -58,6 +58,8 @@ public class LogService extends BaseService {
         int pageNum = Integer.valueOf(
                 !StringUtils.isBlank(request.getParameter("page")) ? request.getParameter("page") : 1+"");
 
+        sql += " ORDER BY createDate DESC";
+
         Page<Log> page = this.getPage(Log.class, sql, params, pageSize, pageNum);
         List<Log> list = page.getResultList();
         ArrayNode arrayNode = objectMapper.createArrayNode();

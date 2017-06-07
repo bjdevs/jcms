@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 
 /**
  * Created by yk on 2017/5/3.
@@ -33,7 +34,6 @@ public class ArticleController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/articleList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String article(@RequestParam("category") String category, int start, int limit, String id, String title, String startdate, String enddate) {
-
         return articleService.list(category, start, limit, id, title, startdate, enddate).toString();
     }
 
@@ -51,8 +51,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/headLineBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type) {
-        return articleService.headLineBtn(method, ids, type).toString();
+    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type, String account) {
+        return articleService.headLineBtn(method, ids, type, account).toString();
     }
 
     @ResponseBody
@@ -128,9 +128,21 @@ public class ArticleController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/templateListForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String templateListForId(@RequestParam("type") int type) {
+        return articleService.templateListForId(type).toString();
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/articleForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String articleForId(long id) {
         return articleService.getArticleForId(id).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/articleEmbedForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String articleEmbedForId(long id) {
+        return articleService.articleEmbedForId(id).toString();
     }
 
     @ResponseBody
@@ -138,6 +150,13 @@ public class ArticleController extends BaseController {
     public String updateArticleForId(long id, String content) {
         return articleService.updateArticleForId(id, content).toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateEmbedForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updateEmbedForId(long id, String content) {
+        return articleService.updateEmbedForId(id, content).toString();
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/updateFutian", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -188,8 +207,15 @@ public class ArticleController extends BaseController {
     }
 
     @RequestMapping(value = "/preview", method = RequestMethod.GET)
-    public String preview(long id) {
-        request.setAttribute("target", id + ".html");
+    public String preview(String id) {
+        String date = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        request.setAttribute("target", date + "/" + id + ".html");
         return getView("preview");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateArticle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updateArticle() {
+        return articleService.updateArticle().toString();
     }
 }

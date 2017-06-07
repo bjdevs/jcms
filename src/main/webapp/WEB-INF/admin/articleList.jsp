@@ -34,8 +34,7 @@
 
         <div class="header">
             <div class="wrapper">
-                <h1><a href="http://www.hmlzs.cn"><img src="http://www.hmlzs.me:8080/article/static/lzs/images/logo.png"
-                                                       alt="黄梅老祖寺"/></a></h1>
+                <h1><a href="http://www.hmlzs.cn"><img src="http://www.hmlzs.me:8080/article/static/lzs/images/logo.png" alt="黄梅老祖寺"/></a></h1>
 
                 <form action="${listURLPrefix}/search" method="get" id="search-frm" class="search">
                     <div>
@@ -48,75 +47,72 @@
                 </form>
                 <div class="qrcode"></div>
             </div>
-        </div>
-        <div class="navbar">
-            <div class="wrapper" id="navbar">
-                <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/nav.html"></script>
-            </div>
-        </div>
-        <div class="content">
-            <div class="notice">
-                <span class="icon left"></span>
+        </div><div class="navbar">
+    <div class="wrapper" id="navbar">
+        <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/nav.html"></script>
+    </div>
+</div>
+<div class="content">
+    <div class="notice">
+        <span class="icon left"></span>
 
-                <p>
-                    <strong>活动通知</strong>
-                    <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/notice.html"></script>
-                </p>
-                <span class="icon right"></span>
-            </div>
-            <div class="breadcrumb">
-                当前位置：<a href="#">${list.category}</a>
-            </div>
+        <p>
+            <strong>活动通知</strong>
+            <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/notice.html"></script>
+        </p>
+        <span class="icon right"></span>
+    </div>
+    <div class="breadcrumb">
+        当前位置：<a href="#">${list.category}</a>
+    </div>
 
-            <div class="layer2 layer2-1 article-list">
-                <h2><span><em>${list.category}</em></span></h2>
-                <dl>
-                    <c:if test="${!list.listEmpty}">
-                        <c:forEach items="${list.data}" var="item">
-                            <dt><span><a href="${item.get("url")}"
-                                         target="_blank">${item.get("title")}</a></span><em>[${item.get(
-                                    "publishDate")}
-                                ]</em>
-                            </dt>
-                            <dd>
-                                    ${item.get("depict")}<a href="${item.get("url")}" target="_blank">[详细]</a>
-                            </dd>
-                        </c:forEach>
-                    </c:if>
-                    <c:if test="${list.listEmpty}">
-                        <dt><span style="color:red;text-align: center; background: none">(当前文章列表为空)</span></dt>
-                    </c:if>
-                </dl>
-                <div class="paginator">
-                </div>
-            </div>
-
-            <div class="rightside">
-                <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/fawu.html"></script>
-                <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/futian.html"></script>
-            </div>
-        </div>
-        <!-- /content -->
-
-        <!-- footer -->
-        <div class="footer">
-            &copy; 2006-<span id="year">0</span> 黄梅老祖寺 京ICP备15008795号-2
-        </div>
-
-        <!-- /container -->
-
-        <div class="gototop">
-            <a href="#"><span>回顶部</span><em></em></a>
+    <div class="layer2 layer2-1 article-list">
+        <h2><span><em>${list.category}</em></span></h2>
+        <dl>
+            <c:if test="${!list.listEmpty}">
+                <c:forEach items="${list.data}" var="item">
+                    <dt><span><a href="${item.get("url")}" target="_blank">${item.get("title")}</a></span><em>[${item.get(
+                        "publishDate")}
+                        ]</em>
+                    </dt>
+                    <dd>
+                        ${item.get("depict")}<a href="${item.get("url")}" target="_blank">[详细]</a>
+                    </dd>
+                </c:forEach>
+            </c:if>
+            <c:if test="${list.listEmpty}">
+                <dt><span style="color:red;text-align: center; background: none">(当前文章列表为空)</span></dt>
+            </c:if>
+        </dl>
+        <div class="paginator">
         </div>
     </div>
+
+    <div class="rightside">
+        <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/fawu.html"></script>
+        <script type="text/javascript" src="http://www.hmlzs.me:8080/article/base/futian.html"></script>
+    </div>
+</div>
+<!-- /content -->
+
+<!-- footer -->
+<div class="footer">
+    &copy; 2006-<span id="year">0</span> 黄梅老祖寺 京ICP备15008795号-2
+</div>
+
+<!-- /container -->
+
+<div class="gototop">
+    <a href="#"><span>回顶部</span><em></em></a>
+</div>
+</div>
 </div>
 <!-- /main -->
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/header.js></script>
 
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/jquery/jquery-1.8.3.min.js></script>
 
-<script type="text/javascript"
-        src=http://www.hmlzs.me:8080/article/static/lzs/js/jquery/plugin/jquery.cycle.all.js></script>
+<script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/jquery/plugin/jquery.cycle.all.js></script>
 
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/audiojs/audio.min.js></script>
 
@@ -127,12 +123,13 @@
 <script type="text/javascript" src="http://www.hmlzs.me:8080/article/static/lzs/js/map.js"></script>
 
 
+
 <!-- page analytics -->
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/analytics.js></script>
 
 <script type="text/javascript">
-    $('.qrcode:eq(0)').qrcode({width: 64, height: 64, text: window.location.href})
-    $('#code').qrcode({width: 80, height: 80, text: window.location.href})
+    $('.qrcode:eq(0)').qrcode({width: 64,height: 64,text: window.location.href})
+    $('#code').qrcode({width: 80,height: 80,text: window.location.href})
     $('.qrcode > canvas').css({'margin-top': 10});
 </script>
 
@@ -203,9 +200,9 @@
 
     // nav current category
     var liIndex = ${list.categoryId} -1;
-    if ($('#navbar > ul > li').length > liIndex) {
+    if($('#navbar > ul > li').length > liIndex){
         $('#navbar > ul > li:eq("' + liIndex + '")').addClass("current").siblings().removeClass("current");
-    } else {
+    }else{
         $('#navbar > ul > li').removeClass("current");
     }
     var pageCnt = ${list.totalPage};

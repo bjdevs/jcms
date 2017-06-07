@@ -55,10 +55,10 @@ public class Constant {
     public static final int CATEGORY_ID_KNOWLEDGE = 6;
     // 藏经阁
     public static final int CATEGORY_ID_DEPOSITORY = 7;
-    // 紫云法务
-    public static final int CATEGORY_ID_LAW = 8;
     // 水墨禅韵
-    public static final int CATEGORY_ID_WATERZEN = 9;
+    public static final int CATEGORY_ID_WATERZEN = 8;
+    // 紫云法务
+    public static final int CATEGORY_ID_LAW = 9;
 
     // 广种福田
     public static final int CATEGORY_ID_FUTIAN = 10;
@@ -67,8 +67,11 @@ public class Constant {
     // 活动通知
     public static final int CATEGORY_ID_NOTICE = 12;
 
+    // 默认分类
+    public static final int CATEGORY_ID_DEFAULT = 13;
+
     // 首屏焦点图
-    public static final int CATEGORY_ID_FOCUS = 13;
+    public static final int CATEGORY_ID_FOCUS = 0;
 
     /**
      * 适用

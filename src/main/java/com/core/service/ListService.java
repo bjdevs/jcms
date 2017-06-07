@@ -1,11 +1,9 @@
 package com.core.service;
 
-import com.core.domain.Article;
-import com.core.domain.Category;
-import com.core.domain.HeadLine;
-import com.core.domain.Media;
+import com.core.domain.*;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
+import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +18,12 @@ import java.util.Map;
 @Service
 public class ListService extends BaseService {
 
+    /**
+     * 文章
+     * @param cId
+     * @param page
+     * @return
+     */
     public Object[] articleList(int cId, int page) {
         Object[] objects = new Object[3];
 
@@ -37,6 +41,44 @@ public class ListService extends BaseService {
         return objects;
     }
 
+    /**
+     * 连载
+     * @param sId
+     * @param page
+     * @return
+     */
+    public Object[] articleSerialList(int sId, int page){
+        Object[] objects = new Object[3];
+
+        Serial serial = find(Serial.class, sId);
+        Map<String, Object> params = new HashMap<>();
+        params.put("sId", sId);
+        params.put("status", Constant.ARTICLE_ID_NINE);
+        List<Article> articles = list(Article.class, "WHERE sId = :sId AND status = :status ORDER BY createDate DESC", params);
+        List<Map> articleLists = new ArrayList<Map>();
+
+        for (int i = 0; i < articles.size(); i++) {
+            Article article = articles.get(i);
+            Map<String, Object> item = new HashMap<String, Object>();
+
+            item.put("title", article.getTitle());
+            item.put("depict", article.getDepict());
+            item.put("url", article.getUrl());
+            item.put("publishDate", new SimpleDateFormat("yyyy-MM-dd").format(article.getPublishDate()));
+            articleLists.add(item);
+        }
+        params.clear();
+        params.put("data", articleLists);
+        params.put("category", serial.getName());
+        params.put("listEmpty", articles.size() == 0);
+
+        objects[0] = "articleList";
+        objects[1] = params;
+        objects[2] = serial.getName() + Constant.WINDOW_TITLE_SUFFIX;
+
+        return objects;
+    }
+
 
     /**
      * 文章列表
@@ -47,18 +89,17 @@ public class ListService extends BaseService {
      * @return
      */
     public Map<String, Object> articleTextList(int pageSize, int pageNum, int categoryId) {
-
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("cId", categoryId);
         param.put("status", Constant.ARTICLE_ID_NINE);
 
         Page<Article> page = getPage(Article.class, " WHERE cId = :cId AND status = :status ORDER BY publishDate DESC", param, pageSize, pageNum);
-
         List<Article> articles = page.getResultList();
         List<Map> articleList = new ArrayList<Map>();
 
         for (int i = 0; i < articles.size(); i++) {
             Article article = articles.get(i);
+
             Map<String, Object> item = new HashMap<String, Object>();
 
             item.put("url", article.getUrl());
@@ -89,10 +130,9 @@ public class ListService extends BaseService {
      * @return
      */
     public Map<String, Object> photoList(int pageSize, int pageNum, int categoryId) {
-
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("cId", categoryId);
-        param.put("status", Constant.CATEGORY_ID_WATERZEN);
+        param.put("status", Constant.ARTICLE_ID_NINE);
 
         Page<Article> page = getPage(Article.class, " WHERE cId = :cId AND status = :status AND hPId > 0 ORDER BY orderBy DESC, publishDate DESC", param, pageSize, pageNum);
 

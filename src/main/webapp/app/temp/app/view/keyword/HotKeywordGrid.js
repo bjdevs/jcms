@@ -74,7 +74,6 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
                         return '启用';
                 }
             case 'title':
-                //return '<a href=""/>'; // todo edit
                 return value;
             default:
                 return value;

@@ -70,9 +70,11 @@ Ext.define('Admin.view.content.headline.text.TextController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var account = _am.currentUser.account;
+        
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/article/headLineBtn?' + button.action + '&type=1'
+            url: '/cn/article/headLineBtn?' + button.action + '&type=1&account=' + account
         });
     },
 
