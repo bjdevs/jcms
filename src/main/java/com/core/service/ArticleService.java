@@ -885,19 +885,22 @@ public class ArticleService extends BaseService {
         log = new Log();
         String id = request.getParameter("id");
         String type = request.getParameter("type");
-        String imageId = request.getParameter("imageId");
+        String imageUpload = request.getParameter("imageUpload");
         String userId = request.getParameter("userId");
         int mId = 0;
         if (type.equals("2")) {
-            if (StringUtils.isBlank(imageId)) {
+            if (StringUtils.isBlank(imageUpload)) {
                 objectNode.put("success", false);
                 return objectNode;
             }
-            mId = Integer.parseInt(imageId);
+            Map<String, Object> params = new HashMap<>();
+            params.put("url", imageUpload);
+            List<Media> medias = list(Media.class, " WHERE url = :url", params);
+
+            mId = medias.size() > 0 ? Integer.parseInt(medias.get(0).getId() + "") : 0;
         }
         String topTitle = request.getParameter("topTitle");
         String redStatus = request.getParameter("redStatus");
-//        String[] categorys = request.getParameterValues("category");
         String categoryName = request.getParameter("categoryName");
 
         if (StringUtils.isBlank(categoryName)) {

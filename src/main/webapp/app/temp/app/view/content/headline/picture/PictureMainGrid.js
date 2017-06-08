@@ -3,7 +3,8 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
     xtype: 'content-headline-picture-mgrid',
 
     requires: [
-        'Admin.view.content.headline.picture.PictureController'
+        'Admin.view.content.headline.picture.PictureController',
+        'Admin.view.content.headline.picture.PicMediaForm'
     ],
 
     controller: 'content-headline-picture',

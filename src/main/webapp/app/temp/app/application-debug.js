@@ -1,6 +1,6 @@
 Ext.Loader.setConfig({
     enabled: true, // 是否启动动态依赖加载,默认开启
-    disableCaching: false // 启用脚本文件缓存
+    disableCaching: true // 启用脚本文件缓存
 });
 
 
