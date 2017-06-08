@@ -30,6 +30,25 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         }
     },
 
+    onAddImgPictureHeadLineBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+
+        var win = ctrl.lookupReference('pic-mform');
+
+        if (!win) {
+            win = Ext.create({
+                reference: 'pic-mform',
+                xtype: 'pic-mform'
+            });
+
+            view.add(win);
+        }
+
+        win.setTitle('新增');
+        win.show();
+    },
+
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
             view = ctrl.getView();
@@ -141,5 +160,43 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
             });
         });
+    },
+    onSubmitPicBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+
+        var form = view.down('form').getForm();
+        if (form.isValid()) {
+            form.submit({
+                url: "/cn/admin/mediaCreate",
+                method: "POST",
+                submitEmptyText: false,
+                waitMsg: '上传中，稍等片刻...',
+                success: function (_form, action) {
+                    var result = action.result.result;
+                    switch (result) {
+                        case 'success' :
+                            Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
+                                view.hide();
+                                var url = action.result.url;
+                                console.log(url);
+                                var mform = button.up().up().up().up().up().down('content-headline-picture-mform');
+                                var img = mform.query('[name=image]');
+                                var imgPath = mform.query('[name=imageUpload]');
+                                imgPath[0].setValue(url);
+                                img[0].getEl().dom.src = url;
+                            }).setIcon(Ext.Msg.INFO);
+                            break;
+                        case 'failed' :
+                            Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                        default :
+                            break;
+                    }
+                },
+                failure: function (_form, action) {
+                    Ext.Msg.alert("错误", "服务器端异常，请联系管理员").setIcon(Ext.Msg.ERROR);
+                }
+            });
+        }
     }
 });

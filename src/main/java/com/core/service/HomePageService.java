@@ -111,6 +111,9 @@ public class HomePageService extends BaseService {
             // 紫云法务
             staticFawu();
 
+            // banner
+            staticAd(userId);
+
             create("/index.html", "base/index.vm", toolManagerContext, null);
 
             publishLog.setFinishDate(new Date());
@@ -234,8 +237,9 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 广告位
      */
-    public void staticAd() {
-        long id = createPublishLog(1, "广告位");
+    public ObjectNode staticAd(int userId) {
+        ObjectNode objectNode1 = objectMapper.createObjectNode();
+        long id = createPublishLog(userId, "广告位");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             List<Ad> resultAdList = searchAd();
@@ -244,13 +248,15 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("ad", resultAdList);
 
             create("/base/banner.html", "base/banner.vm", toolManagerContext, null);
-
+            objectNode1.put("success", true);
         } catch (Exception e) {
             publishLog.setStatus(0);
+            objectNode1.put("success", false);
+            objectNode1.put("msg", e.getMessage());
         }
         publishLog.setFinishDate(new Date());
         update(publishLog);
-
+        return objectNode1;
     }
 
     /**
@@ -457,9 +463,9 @@ public class HomePageService extends BaseService {
                     }
                     news[3] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
-                        news[4] = null != media ? media.getPic_240x160() : null;
+                        news[4] = null != media ? media.getPic_240x160() : "#";
                     } else {
-                        news[4] = null != media ? media.getPic_144x96() : null;
+                        news[4] = null != media ? media.getPic_144x96() : "#";
                     }
 
                 }
