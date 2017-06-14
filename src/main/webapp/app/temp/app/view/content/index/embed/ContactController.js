@@ -15,6 +15,25 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
         }
     },
 
+    onClickedRelease: function () {
+        // 联系我们
+        Ext.Ajax.request({
+            method: 'POST',
+            url: '/cn/article/create/embed',
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data);
+                if(data.success){
+                    Ext.ux.Msg.info('发布成功', function () {
+                    });
+                }else{
+                    Ext.ux.Msg.info('发布失败', function () {
+                    });
+                }
+            }
+        });
+    },
+
     onClickedEdit: function (button) {
         var grid = button.up().up().down('grid');
 

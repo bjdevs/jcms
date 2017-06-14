@@ -26,6 +26,10 @@ Ext.define('Admin.view.content.ContentController', {
         'content-mgrid button[action=add]': {
             click: 'onAddBtnClicked'
         },
+        'content-mgrid button[action=update]': {
+            click: 'onUpdateBtnClicked'
+            // click: 'onAddBtnClicked'
+        },
         'content-mgrid button[action=audit]': {
             click: 'onBtnClicked'
         },
@@ -56,6 +60,46 @@ Ext.define('Admin.view.content.ContentController', {
     }
     ,
 
+    onUpdateBtnClicked: function (button) {
+        var grid = button.up().up(),
+            tabPanel = button.up().up().up().up().up().down('contentPanel'),
+            selected = grid.getSelection()[0];
+
+        var tab = tabPanel.add({
+            id: 'article-' + selected.id,
+            title: selected.data.title,
+            noRoute: true,
+            xtype: 'main-panel-article',
+            // html: selected.data.content
+
+        });
+
+        var objects;
+        Ext.Ajax.request({
+            url: '/cn/article/getArticleKeyWord',
+            method: 'POST',
+            async: false,
+            params: {
+                aId: selected.id
+            },
+            success: function (response) {
+                var data = response.responseText;
+                var json = JSON.parse(data);
+                objects = json.rows;
+                var ob = new Array();
+                var ob1 = new Array();
+                for (var i = 0; i < objects.length; i++) {
+                    ob1 = [objects[i].name];
+                    ob[i] = ob1;
+                }
+                objects = ob;
+            }
+        });
+        selected.set("kId", objects);
+        tab.getViewModel().data.article = selected;
+        tabPanel.setActiveTab(tab);
+    },
+
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
             view = ctrl.getView(), // news
@@ -64,19 +108,84 @@ Ext.define('Admin.view.content.ContentController', {
         var newsGrid = view.down('content' + ctrl.getSearchGridSuffix()),
             count = !selected ? 0 : selected.length;
 
-        if (count == 0) Ext.log('No selection');
+        var auditBtn = true;
+        var reworkBtn = true;
+        var releaseBtn = false;
 
-        newsGrid.down('button[action=audit]').setDisabled(count < 1);
-        newsGrid.down('button[action=rework]').setDisabled(count < 1);
+        if (count == 0) {
+            Ext.log('No selection');
+            auditBtn = true;
+            reworkBtn = true;
+            releaseBtn = false;
+        } else {
+            /*Ext.each(selected, function (item, index, allItems) {
+             var status = item.data.status;
+             console.log(status);
+             if (status == 0 || status == 5) {
+             auditBtn = false;
+             } else{
+             auditBtn = true;
+             }
+             console.log(auditBtn);
+             });*/
+
+            // auditBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 0 || status == 5) {
+                    auditBtn = false;
+                } else {
+                    auditBtn = true;
+                    break;
+                }
+            }
+
+            // reworkBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 1 || status == 9) {
+                    reworkBtn = false;
+                } else {
+                    reworkBtn = true;
+                    break;
+                }
+            }
+
+            // releaseBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 1) {
+                    releaseBtn = false;
+                } else {
+                    releaseBtn = true;
+                    break;
+                }
+            }
+
+        }
+
+        // 审核：对象是返工和初稿，忽略已发的文章；
+        newsGrid.down('button[action=audit]').setDisabled(auditBtn);
+
+        // 返工：对象是已签和已发，忽略初稿和返工；
+        newsGrid.down('button[action=rework]').setDisabled(reworkBtn);
+
         newsGrid.down('button[action=move]').setDisabled(count < 1);
         newsGrid.down('button[action=delete]').setDisabled(count < 1);
-        newsGrid.down('button[action=release]').setDisabled(count < 1);
+
+        // 发布：对象是已签，忽略初稿、返工、已发。
+        newsGrid.down('button[action=release]').setDisabled(releaseBtn);
         newsGrid.down('button[action=preview]').setDisabled(count != 1);
+        newsGrid.down('button[action=update]').setDisabled(count != 1);
     },
 
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
             view = ctrl.getView();
+
+        var selected = grid.getSelection();
+        var status = selected.length > 0 ? selected[0].data.status : 0;
+        var aId = selected.length > 0 ? selected[0].data.id : 0;
 
         var target = e.target;
         if (!target) return;
@@ -86,18 +195,28 @@ Ext.define('Admin.view.content.ContentController', {
             category = view.id.split('-'),
             category = category[category.length - 1];
 
+        var date = new Date();
+
         switch (action) {
             case 'set-text-headline':
-
-                var winReference = 'content-headline-text-mform-' + category,
+                if (status != 9) {
+                    Ext.ux.Msg.error('请先发布文章，再执行该操作', function () {
+                    });
+                    return;
+                }
+                var winReference = 'content-headline-text-mform-' + category + "-" + aId + date.getTime(),
 
                     win = ctrl.lookupReference(winReference);
 
                 if (!win) {
                     win = Ext.create({
                         xtype: 'content-headline-text-mform',
-
-                        reference: winReference
+                        reference: winReference,
+                        viewModel: {
+                            data: {
+                                aId: aId
+                            }
+                        }
                     });
                     view.add(win);
                 }
@@ -110,15 +229,23 @@ Ext.define('Admin.view.content.ContentController', {
 
                 break;
             case 'set-picture-headline':
-
-                var winReference = 'content-headline-picture-mform-' + category,
+                if (status != 9) {
+                    Ext.ux.Msg.error('请先发布文章，再执行该操作', function () {
+                    });
+                    return;
+                }
+                var winReference = 'content-headline-picture-mform-' + category + "-" + aId + date.getTime(),
                     win = ctrl.lookupReference(winReference);
 
 
                 if (!win) {
                     win = Ext.create({
                         xtype: 'content-headline-picture-mform',
-
+                        viewModel: {
+                            data: {
+                                aId: aId
+                            }
+                        },
                         reference: winReference
                     });
 
@@ -148,6 +275,16 @@ Ext.define('Admin.view.content.ContentController', {
 
             win = ctrl.lookupReference(winReference);
 
+
+        var selected = null;
+        if (button.action == "update") {
+            selected = view.down('grid').getSelection();
+            if (selected.length == 0) return;
+            selected = selected[0];
+
+        }
+        var article = selected;
+
         if (!win) {
             win = Ext.create({
                 xtype: 'content-mform',
@@ -157,14 +294,54 @@ Ext.define('Admin.view.content.ContentController', {
 
             view.add(win);
         }
+        if (button.action == "add") {
+            win.setTitle('【' + view.getTitle() + '】新增文章');
+        } else {
+            var objects;
+            Ext.Ajax.request({
+                url: '/cn/article/getArticleKeyWord',
+                method: 'POST',
+                async: false,
+                params: {
+                    aId: article.id
+                },
+                success: function (response) {
+                    var data = response.responseText;
+                    var json = JSON.parse(data);
+                    objects = json.rows;
+                    var ob = new Array();
+                    var ob1 = new Array();
+                    for (var i = 0; i < objects.length; i++) {
+                        ob1 = [objects[i].name];
+                        ob[i] = ob1;
+                    }
+                    objects = ob;
+                }
+            });
+            var form = view.down('form');
+            article.set("kId", objects);
+            form.getForm().loadRecord(article);
+            win.setTitle('【' + view.getTitle() + '】修改文章');
+        }
 
-        win.setTitle('【' + view.getTitle() + '】新增文章');
         win.show();
+        if (article != null) editor.html(article.data.content);
+        else editor.html("");
     },
 
     onBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
+
+        var status = grid.getSelection()[0].data.status;
+        if (button.text == "发布") {
+            if (status == 0 || status == 5) {
+                Ext.ux.Msg.error('请先审核，再执行该操作', function () {
+                });
+                return;
+            }
+
+        }
 
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
@@ -241,6 +418,12 @@ Ext.define('Admin.view.content.ContentController', {
             view = ctrl.getView();
         var form = view.down('form').getForm();
 
+        var id = form.getValues().id;
+        var msg = "新增";
+        if (id) {
+            msg = "修改";
+        }
+
         if (form.isValid()) {
             form.submit({
                 url: '/cn/article/createArticle',
@@ -249,7 +432,8 @@ Ext.define('Admin.view.content.ContentController', {
                     content: editor.isEmpty() ? "" : editor.html(),
                     category: view.id,
                     userId: _am.currentUser.id,
-                    authorStr: _am.currentUser.name
+                    authorStr: _am.currentUser.name,
+                    articleId: id
                 },
                 waitMsg: '正在提交中，请等待片刻...',
                 submitEmptyText: false,
@@ -263,7 +447,7 @@ Ext.define('Admin.view.content.ContentController', {
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.INFO,
                             align: 'center',
-                            message: '文章创建成功',
+                            message: '文章' + msg + '成功',
                             fn: function (buttonId) {
                                 view.hide();
                                 editor.html("");
@@ -340,8 +524,6 @@ Ext.define('Admin.view.content.ContentController', {
                     submitEmptyText: false,
                     success: function (response, opts) {
                         var result = JSON.parse(response.responseText);
-                        console.log(result);
-                        console.log(response);
                         if (result) {
                             Ext.MessageBox.show({
                                 title: '操作提示',
@@ -385,21 +567,24 @@ Ext.define('Admin.view.content.ContentController', {
                 id: id
             },
             success: function (response) {
-                console.log(response);
                 var data = response.responseText;
-                console.log(data);
                 if (data.indexOf('true') > -1) {
                     var preview = JSON.parse(data);
                     var url = preview.preview;
                     window.open("http://" + url);
                 } else {
-                    Ext.ux.Msg.info('发布失败，请稍候再试...', function () {
+                    Ext.ux.Msg.info('预览失败，请稍候再试...', function () {
                         grid.getStore().reload();
                         grid.getSelectionModel().deselectAll();
                     });
                 }
             }
         });
+    },
+
+    onCloseBtnClicked: function (button) {
+        var mform = button.up().up().up();
+        mform.close();
     }
 
 });

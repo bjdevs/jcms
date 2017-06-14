@@ -80,6 +80,7 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         this.onRefresh(panel);
     },
     onRefreshBtnClicked: function () {
+        //  刷新显示有问题
         var view = this.getView();
         this.onRefresh(view);
     },
@@ -92,7 +93,6 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             navType = navType[navType.length - 1];
         Ext.Ajax.request({
             url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
-            // url: navType == 'main' ? 'data/mainnav.json' : 'data/subnav.json'
         }).then(function (response, opts) {
                 var obj = Ext.decode(response.responseText);
                 panel.setHtml(obj);
@@ -165,21 +165,40 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         form.findField('content').setValue(content);
     },
 
+    /**
+     * 审核导航
+     * @param button
+     */
     onBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
 
-        // todo edit
-        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+        Ext.Ajax.request({
+            url: '/cn/article/auditArticleForId',
+            method: 'POST',
+            params: {
+                id: 1
+            },
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data).success;
+                console.log(data);
+                if (data == true){
+                    Ext.ux.Msg.info('审核成功', function () {
+                    });
+                }else if(data == "error"){
+                    Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
+                    });
+                }else{
+                    Ext.ux.Msg.info('审核失败，请稍后刷新重试', function () {
+                    });
+                }
+            }
         });
     },
     onSubmitBtnClicked: function (button) {
         var ctrl = this,
-            view = ctrl.getView(),
-
-            ownerView = view.up();// nav
-
+            view = ctrl.getView();// nav
 
         var form = view.down('form').getForm();
 
@@ -189,8 +208,8 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             Ext.ux.Msg.info('保存成功', function () {
 
                 view.hide();
-
-                ctrl.onRefresh(ownerView);
+                // 保存之后刷新显示有问题
+                // ctrl.onRefresh(ownerView);
             });
         });
     }

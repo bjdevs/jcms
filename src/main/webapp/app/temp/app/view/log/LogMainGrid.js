@@ -10,7 +10,7 @@ Ext.define('Admin.view.log.LogMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: './logList',
+                    url: '/cn/admin/logList',
                     reader: {
                         type: 'json',
                         rootProperty: 'data',
@@ -26,8 +26,8 @@ Ext.define('Admin.view.log.LogMainGrid', {
                 { text: 'ID', dataIndex: 'id', width: 80 },
                 { text: '模块', dataIndex: 'name', width: 150 },
                 { text: '动作', dataIndex: 'action', width: 100 },
-                { text: '内容', dataIndex: 'content', width: 700 },
-                { text: 'IP', dataIndex: 'ip', width: 180 },
+                { text: '内容', dataIndex: 'content', /*width: 700*/flex: 1 },
+                { text: 'IP', dataIndex: 'ip', width: 130 },
                 { text: '操作人', dataIndex: 'account', width: 80},
                 { text: '操作时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'Y-m-d H:i:s', width: 150 }
             ],

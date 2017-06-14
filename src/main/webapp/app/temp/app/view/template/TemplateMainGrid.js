@@ -19,7 +19,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
             viewModel = me.getViewModel();
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/templateList',
@@ -57,7 +57,6 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     dataIndex: 'type',
                     editor: {
                         xtype: 'combo',
-                        // todo ? 不明白为什么这样调用,下拉列表出不来
                         //store: viewModel.getStore('templateType'),
                         store: [
                             [1, '文章模板'],
@@ -73,7 +72,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     renderer: me.renderer,
                     width: 250
                 },
-                {text: '栏目', dataIndex: 'cId'},
+                // {text: '栏目', dataIndex: 'cId'},
                 {
                     text: '状态',
                     dataIndex: 'status',

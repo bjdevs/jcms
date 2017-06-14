@@ -55,14 +55,10 @@ public class Constant {
     public static final int CATEGORY_ID_KNOWLEDGE = 6;
     // 藏经阁
     public static final int CATEGORY_ID_DEPOSITORY = 7;
-    // 紫云法务
-    public static final int CATEGORY_ID_LAW = 8;
     // 水墨禅韵
-    public static final int CATEGORY_ID_WATERZEN = 9;
-
-    // 首屏焦点图
-    public static final int CATEGORY_ID_FOCUS = 255;
-    /*相减...*/
+    public static final int CATEGORY_ID_WATERZEN = 8;
+    // 紫云法务
+    public static final int CATEGORY_ID_LAW = 9;
 
     // 广种福田
     public static final int CATEGORY_ID_FUTIAN = 10;
@@ -70,6 +66,12 @@ public class Constant {
     public static final int CATEGORY_ID_CONTACT = 11;
     // 活动通知
     public static final int CATEGORY_ID_NOTICE = 12;
+
+    // 默认分类
+    public static final int CATEGORY_ID_DEFAULT = 13;
+
+    // 首屏焦点图
+    public static final int CATEGORY_ID_FOCUS = 0;
 
     /**
      * 适用
@@ -82,6 +84,11 @@ public class Constant {
     public static final byte GENERAL_ID_TWO = 2;
     // 适用：媒体类型-文档 ...
     public static final byte GENERAL_ID_THREE = 3;
+
+    public static final String ARTICLE_LIST_PAGE_NAME = "articleList";
+    public static final String PHOTO_LIST_PAGE_NAME = "photoList";
+    public static final String STATIC_RESOURCE_URL_PREFIX = "resURLPrefix";
+    public static final String LIST_PAGE_URL_PREFIX = "listURLPrefix";
 
     /**
      * 适用

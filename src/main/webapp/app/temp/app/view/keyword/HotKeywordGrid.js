@@ -14,7 +14,7 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
 
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/keyWordList',
@@ -74,7 +74,6 @@ Ext.define('Admin.view.keyword.HotKeywordGrid', {
                         return '启用';
                 }
             case 'title':
-                //return '<a href=""/>'; // todo edit
                 return value;
             default:
                 return value;

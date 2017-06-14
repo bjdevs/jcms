@@ -12,9 +12,8 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
         var me = this,
             viewModel = me.getViewModel();
 
-
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/headLine',
@@ -30,8 +29,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 autoLoad: true
             }),
             columns: [
-                // todo edit {dataIndex}
-
                 {text: 'ID', dataIndex: 'id', width: 80},
                 {
                     text: '次序 <span class="admin-color-red">+</span>',
@@ -44,7 +41,8 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     },
                     width: 80
                 },
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                {
+                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -57,7 +55,8 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                         allowBlank: false
                     }
                 },
-                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                {
+                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -122,16 +121,11 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                         metaData.tdStyle = 'color:#0066FF';
                         return '未发';
                     case 9:
-                        metaData.tdStyle = 'color:blank';
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
                     default:
                         return value;
                 }
-            /* case 'rank':
-             var up = '<button class="x-fa fa-arrow-up admin-label-button" action="set-rank-up" title="升级"></button>',
-             down = '<button class="x-fa fa-arrow-down admin-label-button" action="set-rank-down" title="降级"></button>';
-
-             return value + '&nbsp;&nbsp;' + up + down;*/
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;

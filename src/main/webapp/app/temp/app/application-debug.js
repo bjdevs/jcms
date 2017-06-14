@@ -11,7 +11,9 @@ Ext.application({
 
     requires: [
         'Ext.app.*',
-        'Ext.chart.*'
+        'Ext.chart.*',
+        'Admin.store.API',
+        'Admin.proxy.API'
     ],
 
     controllers: [
@@ -39,11 +41,12 @@ Ext.application({
         'content.recycle.Recycle',
         'content.index.embed.Futian',
         'content.index.embed.Contact',
+        'content.index.embed.Focus',
+        'content.index.embed.Fawu',
 
         // 发布管理
-        'Admin.view.publish.Publish',
-
-        'Admin.view.media.Media',
+        'publish.Publish',
+        'serial.Serial',
 
         // 栏目维护
         'category.Category',

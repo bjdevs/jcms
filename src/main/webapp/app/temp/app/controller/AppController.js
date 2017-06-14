@@ -214,12 +214,15 @@ Ext.define('Admin.controller.AppController', {
         } else {
             var items = tabpanel.items,
                 itemsLength = items.length,
-                routeId = items.getAt(itemsLength - 2).routeId;
+                tab = items.getAt(itemsLength - 2),
+                routeId = tab.routeId;
+            if (tab.noRoute === true) return;
 
             this.redirectTo(routeId);
         }
     },
     positionedchange: function (tabBar, newTab) {
+        if (newTab.noRoute === true) return;
         this.redirectTo(newTab.routeId || '');
     }
 

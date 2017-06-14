@@ -62,10 +62,6 @@ Ext.define('Admin.view.category.CategoryController', {
 
                 break;
             case 'add':
-
-                //alert('【' + id + '】' + target.getAttribute('title'));
-
-
                 var win = ctrl.lookupReference('category-mform');
 
                 if (!win) {
@@ -80,8 +76,6 @@ Ext.define('Admin.view.category.CategoryController', {
                 win.setTitle('新增子栏目');
 
                 win.show();
-
-
 
                 var form = win.down('form').getForm();
                 form.findField('parentId').setValue(id);
@@ -104,8 +98,6 @@ Ext.define('Admin.view.category.CategoryController', {
 
                 break;
         }
-
-
     },
 
     onAddBtnClicked: function (button) {
@@ -137,7 +129,7 @@ Ext.define('Admin.view.category.CategoryController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/categoryBtn?' + button.action
         });
     },
 

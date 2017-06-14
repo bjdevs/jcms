@@ -12,28 +12,46 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
     control: {
 
-        'content-headline-picture-mgrid': {
+        'content-headline-picture-mgrid,content-headline-pic-mgrid-2': {
             selectionchange: 'onSelectionChange'
         },
 
-        'content-headline-picture-mgrid button[action=save]': {
+        'content-headline-picture-mgrid button[action=save],content-headline-pic-mgrid-2 button[action=save]': {
             click: 'onSaveBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=delete]': {
+        'content-headline-picture-mgrid button[action=delete],content-headline-pic-mgrid-2 button[action=delete]': {
             click: 'onBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=refresh]': {
+        'content-headline-picture-mgrid button[action=refresh],content-headline-pic-mgrid-2 button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=content-headline-picture]': {
+        'content-headline-picture-mgrid button[action=content-headline-picture],content-headline-pic-mgrid-2 button[action=content-headline-picture]': {
             click: 'onPictureHeadLineBtnClicked'
         }
     },
 
+    onAddImgPictureHeadLineBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+
+        var win = ctrl.lookupReference('pic-mform');
+
+        if (!win) {
+            win = Ext.create({
+                reference: 'pic-mform',
+                xtype: 'pic-mform'
+            });
+
+            view.add(win);
+        }
+
+        win.setTitle('新增');
+        win.show();
+    },
+
     onSelectionChange: function (model, selected, eOpts) {
         var ctrl = this,
-            view = ctrl.getView(), // text
-            viewModel = ctrl.getViewModel() || {};
+            view = ctrl.getView();
 
         var module = ctrl['module'],
             count = !selected ? 0 : selected.length;
@@ -49,7 +67,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             grid = button.up('grid');
 
         var selected = grid.getSelection();
-        if (selected.length == 0){
+        if (selected.length == 0) {
             return;
         }
         var id = selected[0].data.id;
@@ -61,8 +79,8 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
             url: '/cn/article/updateHeadLine?' + button.action +
-            '&id='+id+'&status='+status+'&redStatus='+redStatus+
-            '&cateOrderBy='+cateOrderBy+'&name='+name
+            '&id=' + id + '&status=' + status + '&redStatus=' + redStatus +
+            '&cateOrderBy=' + cateOrderBy + '&name=' + name
         });
     },
 
@@ -70,9 +88,11 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var account = _am.currentUser.account;
+        
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: '/cn/article/headLineBtn?' + button.action + '&type=2'
+            url: '/cn/article/headLineBtn?' + button.action + '&type=2&account=' + account
         });
     },
 
@@ -84,7 +104,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             ownerCtrl = ownerView.getController(), // content
 
             category = ownerView.id.split('-'),
-            category = category[category.length-1],
+            category = category[category.length - 1],
 
             winReference = 'content-headline-picture-win-' + category;
 
@@ -109,7 +129,6 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
             ownerView.add(win);
         }
-
         win.show();
     },
     onSubmitBtnClicked: function (button) {
@@ -123,9 +142,10 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
         var id = view.query('[name=id]')[0].value;
 
+        var userId = _am.currentUser.id;
+
         ctrl.formSubmit(form, {
-            url: '/cn/article/createHeadLine?id='+id+'&type=2' // todo edit
-            // url: 'data/ajax.json?id='+id+'&type=1' // todo edit
+            url: '/cn/article/createHeadLine?id=' + id + '&type=2&userId=' + userId
         }, function (form, action) {
             Ext.ux.Msg.info('保存成功', function () {
 
@@ -140,5 +160,51 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
             });
         });
+    },
+    onSubmitPicBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+
+        var form = view.down('form').getForm();
+        if (form.isValid()) {
+            form.submit({
+                url: "/cn/admin/mediaCreate",
+                method: "POST",
+                submitEmptyText: false,
+                waitMsg: '上传中，稍等片刻...',
+                success: function (_form, action) {
+                    var result = action.result.result;
+                    switch (result) {
+                        case 'success' :
+                            Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
+                                view.hide();
+                                var url = action.result.url;
+                                var mform = button.up().up().up().up().up().down('content-headline-picture-mform');
+                                var img = mform.query('[name=image]');
+                                var imgPath = mform.query('[name=imageUpload]');
+                                imgPath[0].setValue(url);
+                                img[0].getEl().dom.src = url;
+                            }).setIcon(Ext.Msg.INFO);
+                            break;
+                        case 'failed' :
+                            Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                        default :
+                            break;
+                    }
+                },
+                failure: function (_form, action) {
+                    Ext.Msg.alert("错误", "服务器端异常，请联系管理员").setIcon(Ext.Msg.ERROR);
+                }
+            });
+        }
+    },
+    /**
+     * common - 表单重置
+     * @param button
+     */
+    onResetBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+        view.query('[name=categoryName]')[0].reset();
     }
 });

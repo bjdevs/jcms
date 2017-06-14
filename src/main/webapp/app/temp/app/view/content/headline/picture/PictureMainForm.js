@@ -3,19 +3,20 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
     xtype: 'content-headline-picture-mform',
 
     requires: [
-        'Admin.view.content.headline.picture.PictureController'
+        'Admin.view.content.headline.picture.PictureController',
+        'Admin.view.content.headline.picture.PicHeadlineMainGrid'
     ],
 
     controller: 'content-headline-picture',
 
     maximized: true,// 默认最大化窗口
     maximizable: false, // 不支持放大 or 缩小
-    // width: 1000,
-    // height: 800,
     layout: 'border',
 
     initComponent: function () {
-        var me = this;
+        var me = this,
+            viewModel = me.getViewModel();
+        var aId = viewModel.get("aId");
 
         Ext.apply(me, {
             items: [{
@@ -76,73 +77,45 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                 ]
                             },
                             {
+                                layout: {
+                                    type: 'hbox',
+                                    align: 'stretchmax'
+                                },
                                 items: [
-                                    /*{
-                                     xtype: 'filefield',
-                                     fieldLabel: '标题图片',
-                                     buttonText: '',
-                                     buttonConfig: {
-                                     iconCls: 'x-fa fa-file-image-o'
-                                     }
-                                     },*/
                                     {
-                                        xtype: 'combobox',
-                                        reference: 'media',
-                                        publishes: 'value',
-                                        fieldLabel: '选择图片',
-                                        name: 'imageId',
-                                        displayField: 'title',
-                                        emptyText: '请选择图片',
+                                        xtype: 'textfield',
+                                        fieldLabel: '上传图片',
+                                        emptyText: '请选择上传图片',
+                                        name: 'imageUpload',
                                         allowBlank: false,
-                                        editable: false,
-                                        valueField: 'id',
-                                        anchor: '-15',
-                                        store: {
-                                            storeId: 'media',
-                                            proxy: {
-                                                type: 'ajax',
-                                                url: '/cn/article/mediaImgList',
-                                                reader: {
-                                                    type: 'json',
-                                                    rootProperty: 'rows'
-                                                }
-                                            },
-                                            autoLoad: true
-                                        },
-                                        queryMode: 'local',
-                                        listConfig: {
-                                            itemTpl: [
-                                                '<div data-qtip="{title}: {url}">{title} ({url})</div>'
-                                            ]
-                                        },
-                                        listeners: {
-                                            'select': function (filed) {
-                                                var imgUrl = filed.lastSelectedRecords[0].data.url;
-                                                var img = filed.up().query('[name=image]');
-                                                img[0].getEl().dom.src = imgUrl;
-                                            }
-                                        }
                                     },
                                     {
-                                        xtype: 'container',
-                                        height: 150,
-                                        items: {
-                                            // xtype: 'image',
-                                            name: 'image',
-                                            autoEl: {
-                                                tag: 'image',    //指定为img标签
-                                                src: 'resources/images/placeholder.jpg'    //指定url路径
-                                            },
-                                            // src: 'resources/images/placeholder.jpg',
-                                            height: 150,
-                                            width: 300
-                                        },
-                                        style: {
-                                            left: '80px'
+                                        xtype: 'button',
+                                        text: '选择图片',
+                                        width: 100,
+                                        iconCls: 'fa fa-upload',
+                                        handler: 'onAddImgPictureHeadLineBtnClicked',
+                                        listeners: {
                                         }
-
                                     }
                                 ]
+
+                            },
+                            {
+                                xtype: 'container',
+                                height: 150,
+                                items: {
+                                    name: 'image',
+                                    autoEl: {
+                                        tag: 'image',    //指定为img标签
+                                        src: '../../resources/images/placeholder.jpg'    //指定url路径
+                                    },
+                                    height: 150,
+                                    width: 300
+                                },
+                                style: {
+                                    left: '80px'
+                                }
                             },
                             {
                                 items: [
@@ -165,10 +138,11 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                 items: [
                                     {
                                         xtype: 'itemselector',
-                                        name: 'category',
+                                        name: 'categoryName',
                                         height: 160,
+                                        allowBlank: false,
                                         scrollable: 'y',
-                                        imagePath: '../ux/images/',
+                                        imagePath: '../resources/images/placeholder.jpg',
                                         buttons: [
                                             'add', 'remove'
                                         ],
@@ -192,9 +166,9 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                     }
                                 ]
                             }
-
                         ],
                         tbar: [
+                            '->',
                             {
                                 text: '重置',
                                 iconCls: 'x-fa fa-undo',
@@ -213,12 +187,18 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                         ]
                     }
                 ]
-            }/*,
+            },
                 {
                     region: 'south',
-                    height: 250,
-                    items: new Admin.view.workbench.WorkbenchMainGrid()
-                }*/
+                    height: '35%',
+                    xtype: 'content-headline-pic-mgrid-2',
+                    viewModel: {
+                        data: {
+                            aId: aId
+                        }
+                    }
+                    // items: new Admin.view.content.headline.text.TextHeadlineMainGrid()
+                }
             ]
         });
 

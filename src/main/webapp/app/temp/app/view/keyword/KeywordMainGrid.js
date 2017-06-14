@@ -8,9 +8,8 @@ Ext.define('Admin.view.keyword.KeywordMainGrid', {
     initComponent: function () {
         var me = this;
 
-
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/keyWordList',
@@ -25,8 +24,6 @@ Ext.define('Admin.view.keyword.KeywordMainGrid', {
                 autoLoad: true
             }),
             columns: [
-                // todo edit {dataIndex}
-
                 {text: 'ID', dataIndex: 'id', width: 60},
                 {
                     text: '名称 <span class="admin-color-red">+</span>',

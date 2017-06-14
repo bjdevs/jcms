@@ -7,6 +7,12 @@ Ext.define('Admin.view.content.ContentMainForm', {
     maximized: true,// 默认最大化窗口
     maximizable: false, // 不允许放大 or 缩小
 
+    viewModel: {
+        data: {
+            article: null
+        }
+    },
+
     initComponent: function () {
         var me = this;
         var contentId = 'content-area-' + me.id + new Date().getTime();
@@ -28,6 +34,8 @@ Ext.define('Admin.view.content.ContentMainForm', {
             items: [
                 {
                     fieldLabel: 'newsId',
+                    name: 'id',
+                    bind: '{article.id}',
                     hidden: true
                 },
                 {
@@ -37,9 +45,10 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
-
+                    // bind: '{article.title}',
                     items: {
                         name: 'title',
+
                         allowBlank: false,
                         width: '50%'
                     }
@@ -107,6 +116,8 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
+                    name: 'kId',
+                    // value: [],
 
                     items: [
                         {
@@ -150,27 +161,28 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     layout: 'hbox',
                     combineErrors: true,
                     defaultType: 'textfield',
+                    publishes: 'value',
 
                     items: {
                         xtype: 'combobox',
-
                         name: 'sId',
                         store: {
                             proxy: {
                                 type: 'ajax',
-                                url: 'data/serals.json',
+                                url: '/cn/serial/serialQuery?status=5',
                                 reader: {
                                     type: 'json',
                                     rootProperty: 'rows'
                                 }
                             }
                         },
-                        displayField: 'title',
+                        displayField: 'name',
                         valueField: 'id',
                         queryMode: 'remote',
+                        editable: false, // 不可编辑
                         minChars: 1,
                         triggerAction: 'all',
-                        typeAhead: true,
+                        // typeAhead: true, // 不启用组合编辑
                         forceSelection: true,
                         emptyText: '请选择系列',
                         // allowBlank: false, // 允许空白
@@ -178,14 +190,10 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     }
                 },
                 {
-                    // xtype: 'textarea',
-                    // itemId: 'content-area',
-                    // name: 'content'+me.id,
-                    // id: 'content',
-                    // beforeLabelTextTpl: '',
                     width: '100%',
                     height: 480,
                     border: 0,
+                    name: 'content',
                     // anchor: '100% 100%',
                     xtype: 'panel',
                     html: '<textarea id=' + contentId + ' style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
@@ -208,7 +216,7 @@ Ext.define('Admin.view.content.ContentMainForm', {
                                 formatUploadUrl: false,
                                 extraFileUploadParams: {
                                     type: 1,
-                                    rule:0
+                                    rule: 0
                                 }
                             });
                         }
@@ -216,15 +224,15 @@ Ext.define('Admin.view.content.ContentMainForm', {
                 }
 
             ],
-            buttons: [
-                /*{
-                 text: '预览',
-                 iconCls: 'x-fa fa-eye',
-                 action: 'preview',
-                 disabled: true,
-                 formBind: true,
-                 handler: 'onPreviewBtnClicked'
-                 },*/
+            tbar: [
+                '->',
+                {
+                    text: '关闭',
+                    iconCls: 'x-fa fa-times',
+                    name: 'content-btn-close',
+                    action: 'close',
+                    handler: 'onCloseBtnClicked'
+                },
                 {
                     text: '提交',
                     iconCls: 'x-fa fa-floppy-o',

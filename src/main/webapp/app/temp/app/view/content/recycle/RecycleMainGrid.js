@@ -8,7 +8,7 @@ Ext.define('Admin.view.content.recycle.RecycleMainGrid', {
             category = category[category.length - 1];
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/articleList',
@@ -107,7 +107,6 @@ Ext.define('Admin.view.content.recycle.RecycleMainGrid', {
                         return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
                 }
             case 'title':
-                //return '<a href=""/>'; // todo edit
                 return value;
             default:
                 return value;

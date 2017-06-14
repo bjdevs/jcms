@@ -29,7 +29,7 @@ Ext.define('Admin.view.content.index.embed.Futian', {
                 {
                     xtype: 'button',
                     text: '保存',
-                    iconCls: 'x-fa fa-pencil-square-o',
+                    iconCls: 'x-fa fa-floppy-o',
                     action: 'edit'
                 },
                 {
@@ -44,6 +44,14 @@ Ext.define('Admin.view.content.index.embed.Futian', {
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
+                },
+                '->',
+                {
+                    xtype: 'label',
+                    html: '在需要修改的数据上面单击并输入新的数据点击保存即可。',
+                    style: {
+                        'color': 'crimson'
+                    }
                 }
             ]
         });

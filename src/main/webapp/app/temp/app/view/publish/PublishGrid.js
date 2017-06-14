@@ -6,10 +6,12 @@ Ext.define('Admin.view.publish.PublishGrid', {
         var me = this;
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/publishList',
+                    // pagination: false,
+                    remoteSort: true,
                     reader: {
                         type: 'json',
                         rootProperty: 'rows'
@@ -64,13 +66,19 @@ Ext.define('Admin.view.publish.PublishGrid', {
                     iconCls: 'x-fa fa-paper-plane-o',
                     action: 'publish'
                 },
-
                 '-',
                 {
                     xtype: 'button',
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
+                },
+                '-',
+                {
+                    xtype: 'button',
+                    text: '查看首页',
+                    iconCls: 'x-fa fa-eye',
+                    action: 'redirect'
                 }
             ]
 

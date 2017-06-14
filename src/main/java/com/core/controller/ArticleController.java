@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 
 /**
  * Created by yk on 2017/5/3.
@@ -32,33 +33,44 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/articleList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String article(@RequestParam("category") String category, int page, int start, int limit, String id, String title, String startdate, String enddate) {
-
-        return articleService.list(category, page, start, limit, id, title, startdate, enddate).toString();
+    public String article(@RequestParam("category") String category, int start, int limit, String id, String title, String startdate, String enddate) {
+        return articleService.list(category, start, limit, id, title, startdate, enddate).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/headLine", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type) {
-        return articleService.headLineList(category, type).toString();
+    public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type, int page, int start, int limit) {
+        return articleService.headLineList(category, type, start, limit).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/headLineForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String headLineForId(@RequestParam("aId") long aId, String type) {
+        return articleService.headLineForId(aId, type).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/updateHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name) {
-        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name).toString();
+    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name, String data) {
+        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name, data).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/headLineBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type) {
-        return articleService.headLineBtn(method, ids, type).toString();
+    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type, String account) {
+        return articleService.headLineBtn(method, ids, type, account).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/getKeyWord", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String KeyWords() {
         return generalArticleService.getKeyWord().toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getArticleKeyWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String getArticleKeyWord(int aId) {
+        return generalArticleService.getArticleKeyWord(aId).toString();
     }
 
 
@@ -85,28 +97,32 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/keyWordList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String keyWordList(@RequestParam("type") String type) {
-        return articleService.keyWordList(type).toString();
+    public String keyWordList(@RequestParam("type") String type, int start, int limit) {
+        return articleService.keyWordList(type, start, limit).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/keyWordSave", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateKeyWord(@RequestParam("method") String method, String data, String[] ids) {
-
-        return articleService.updateKeyWord(method, data, ids).toString();
+    public String updateKeyWord(String data, String[] ids) {
+        return articleService.updateKeyWord(data, ids).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/createKeyWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String createKeyWord(HttpServletRequest request) {
-
         return articleService.createKeyWord(request).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/categoryList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String categoryList() {
-        return articleService.categoryList().toString();
+    public String categoryList(int start, int limit) {
+        return articleService.categoryList(start, limit).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/categoryBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String categoryBtn(@RequestParam("method") String method, String data) {
+        return articleService.categoryBtn(method, data).toString();
     }
 
     @ResponseBody
@@ -117,8 +133,14 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/templateList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String templateList() {
-        return articleService.templateList().toString();
+    public String templateList(int start, int limit) {
+        return articleService.templateList(start, limit).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/templateListForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String templateListForId(@RequestParam("type") int type) {
+        return articleService.templateListForId(type).toString();
     }
 
     @ResponseBody
@@ -128,9 +150,21 @@ public class ArticleController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/articleEmbedForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String articleEmbedForId(long id) {
+        return articleService.articleEmbedForId(id).toString();
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/updateArticleForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String updateArticleForId(long id, String content) {
         return articleService.updateArticleForId(id, content).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateEmbedForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updateEmbedForId(long id, String content) {
+        return articleService.updateEmbedForId(id, content).toString();
     }
 
     @ResponseBody
@@ -153,8 +187,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/publishList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String publishList() {
-        return articleService.publishList().toString();
+    public String publishList(int page, int limit) {
+        return articleService.publishList(page, limit).toString();
     }
 
     @ResponseBody
@@ -165,8 +199,8 @@ public class ArticleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/mediaImgList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String mediaList(String category) {
-        return articleService.mediaList(category).toString();
+    public String mediaList() {
+        return articleService.mediaList().toString();
     }
 
     @ResponseBody
@@ -182,8 +216,21 @@ public class ArticleController extends BaseController {
     }
 
     @RequestMapping(value = "/preview", method = RequestMethod.GET)
-    public String preview(long id) {
-        request.setAttribute("target", id + ".html");
+    public String preview(String id) {
+        String date = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        request.setAttribute("target", date + "/" + id + ".html");
         return getView("preview");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateArticle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updateArticle() {
+        return articleService.updateArticle().toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/auditArticleForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String auditArticleForId(long id){
+        return articleService.auditArticleForId(id).toString();
     }
 }

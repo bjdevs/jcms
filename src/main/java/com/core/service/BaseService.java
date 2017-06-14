@@ -157,11 +157,31 @@ public class BaseService {
      * @param content
      * @return
      */
+    final String KEY_WORD = "<hr style=\"page-break-after:always;\" class=\"ke-pagebreak\" />";
+    final String KEY_WORD2 = "-{30}以下第\\d{1,}页?-{30}";
     public String[] builderContentArray(String content) {
 
-        /*
-        * 未实现 文章分页功能
-        * */
+        String targetStr = content;
+
+        // 文章分页功能
+        // 分页符 -> 分页标记
+        int num = 1;
+        while (targetStr.indexOf(KEY_WORD) > 0) {
+            targetStr = targetStr.replaceFirst(KEY_WORD, "<span style=\"background-color:#FFE500;\">------------------------------以下第" + num + "页------------------------------</span>");
+            num++;
+        }
+
+        StringBuffer stringBuffer = new StringBuffer();
+        String[] strs = targetStr.split(KEY_WORD2);
+        for (int i = 0; i < strs.length; i++) {
+            if (i > 0) {
+                stringBuffer.append("<span style=\"background-color:#FFE500;\">------------------------------以下第" + (i+1) + "页------------------------------</span>");
+            }
+            stringBuffer.append(checkPLable(strs[i]));
+        }
+        targetStr = stringBuffer.toString();
+        stringBuffer.setLength(0);
+        content = targetStr;
 
         int size = content.length() / Constant.ARTICLE_CONTENT_LENGTH;
         size = content.length() % Constant.ARTICLE_CONTENT_LENGTH == 0 ? size : size + 1;
@@ -174,5 +194,32 @@ public class BaseService {
             contentArray[i] = content.substring(i * Constant.ARTICLE_CONTENT_LENGTH, index);
         }
         return contentArray;
+    }
+
+    /**
+     * 检查P标签是否闭合
+     * @param str
+     * @return
+     */
+    public static String checkPLable(String str) {
+        StringBuffer stringBuffer = new StringBuffer();
+        boolean isAdd = false;
+        // 检查开头
+        if (str.indexOf("<p>") > str.indexOf("</p>")) {
+            stringBuffer.append("<p>").append(str);
+            str = stringBuffer.toString();
+            isAdd = true;
+        }
+        // 检查结尾
+        if (str.lastIndexOf("<p>") > str.lastIndexOf("</p>")) {
+            if (!isAdd) {
+                stringBuffer.append(str).append("</p>");
+            }  else {
+                stringBuffer.append("</p>");
+            }
+            str = stringBuffer.toString();
+        }
+        stringBuffer.setLength(0);
+        return str;
     }
 }

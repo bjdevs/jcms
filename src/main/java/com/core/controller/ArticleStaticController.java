@@ -6,6 +6,7 @@ import com.core.service.HomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -24,7 +25,6 @@ public class ArticleStaticController extends BaseController {
     @ResponseBody
     @RequestMapping("/index")
     public String createIndex(int userId) {
-        System.out.println(userId);
         return homePageService.staticIndex(userId).toString();
     }
 
@@ -35,38 +35,32 @@ public class ArticleStaticController extends BaseController {
         return homePageService.staticNav().toString();
     }
 
-    @AsRight(id = 7, depict = "首页广种福田、联系我们静态化")
-    @RequestMapping("/futian")
-    public String createFutian() {
-        homePageService.staticFutian();
-        return getViewRedirect("/article/index.html");
+    @AsRight(id = 3, depict = "首页广种福田、联系我们静态化")
+    @ResponseBody
+    @RequestMapping("/embed")
+    public String createEmbed() {
+        return homePageService.staticFutian().toString();
     }
 
-    @AsRight(id = 8, depict = "首页紫云法务静态化")
+    @AsRight(id = 4, depict = "首页紫云法务静态化")
     @RequestMapping("/fawu")
     public String createFawu() {
         homePageService.staticFawu();
         return getViewRedirect("/article/index.html");
     }
 
-    @AsRight(id = 9, depict = "首页广告位静态化")
+    @AsRight(id = 5, depict = "首页广告位静态化")
+    @ResponseBody
     @RequestMapping("/ad")
-    public String createAd() {
-        homePageService.staticAd();
-        return getViewRedirect("/article/index.html");
+    public String createAd(@RequestParam("userId") int userId) {
+        return homePageService.staticAd(userId).toString();
     }
 
-    @AsRight(id = 10, depict = "首页活动通知静态化")
-    @RequestMapping("/notice")
-    public String createNotice() {
-        homePageService.staticNotice();
-        return getViewRedirect("/article/index.html");
+    @AsRight(id = 6, depict = "文章栏目列表")
+    @ResponseBody
+    @RequestMapping("/articleList")
+    public String articleList() {
+        return homePageService.staticArticleList().toString();
     }
-
-    /*@ResponseBody
-    @RequestMapping("/articlePublish")
-    public String articlePublish(long id){
-        return homePageService.articlePublish(id).toString();
-    }*/
 
 }

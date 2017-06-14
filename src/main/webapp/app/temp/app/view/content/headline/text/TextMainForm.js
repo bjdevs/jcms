@@ -3,7 +3,8 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
     xtype: 'content-headline-text-mform',
 
     requires: [
-        'Admin.view.content.headline.text.TextController'
+        'Admin.view.content.headline.text.TextController',
+        'Admin.view.content.headline.text.TextHeadlineMainGrid'
     ],
 
 
@@ -16,7 +17,9 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
     layout: 'border',
 
     initComponent: function () {
-        var me = this;
+        var me = this,
+            viewModel = me.getViewModel();
+        var aId = viewModel.get("aId");
 
         Ext.apply(me, {
             items: [{
@@ -115,9 +118,10 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                 items: [
                                     {
                                         xtype: 'itemselector',
-                                        name: 'category',
+                                        name: 'categoryName',
                                         height: 220,
                                         scrollable: 'y',
+                                        allowBlank: false,
                                         imagePath: '../ux/images/',
                                         buttons: [
                                             'add', 'remove'
@@ -145,6 +149,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
 
                         ],
                         tbar: [
+                            '->',
                             {
                                 text: '重置',
                                 iconCls: 'x-fa fa-undo',
@@ -164,11 +169,17 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                     }
                 ]
             },
-                /*{
+                {
                     region: 'south',
-                    height: 300,
-                    items: new Admin.view.workbench.WorkbenchMainGrid()
-                }*/
+                    height: '35%',
+                    xtype: 'content-headline-text-mgrid-2',
+                    viewModel: {
+                        data: {
+                            aId: aId
+                        }
+                    }
+                    // items: new Admin.view.content.headline.text.TextHeadlineMainGrid()
+                }
             ]
         });
 

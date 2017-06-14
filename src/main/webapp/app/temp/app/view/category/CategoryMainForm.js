@@ -49,52 +49,6 @@ Ext.define('Admin.view.category.CategoryMainForm', {
                     fieldLabel: '路径英文',
                     allowBlank: false
                 },
-                /*{
-                    xtype: 'combobox',
-                    fieldLabel: '目录模板',
-                    name: '',
-                    store: {
-                        proxy: {
-                            type: 'ajax',
-                            url: 'data/categorys.json',
-                            reader: {
-                                type: 'json',
-                                rootProperty: 'rows'
-                            }
-                        }
-                    },
-                    displayField: 'name',
-                    valueField: 'id',
-                    queryMode: 'remote',
-                    editable: false, // 不允许编辑
-                    triggerAction: 'all',
-                    forceSelection: true,
-                    emptyText: '请选择',
-                    allowBlank: false
-                },
-                {
-                    xtype: 'combobox',
-                    fieldLabel: '文章模板',
-                    name: '',
-                    store: {
-                        proxy: {
-                            type: 'ajax',
-                            url: 'data/categorys.json',
-                            reader: {
-                                type: 'json',
-                                rootProperty: 'rows'
-                            }
-                        }
-                    },
-                    displayField: 'name',
-                    valueField: 'id',
-                    queryMode: 'remote',
-                    editable: false, // 不允许编辑
-                    triggerAction: 'all',
-                    forceSelection: true,
-                    emptyText: '请选择',
-                    allowBlank: false
-                },*/
                 {
                     xtype: 'textarea',
                     name: 'desc',

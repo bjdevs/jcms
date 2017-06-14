@@ -7,7 +7,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
 
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 remoteFilter: true,
                 proxy: {
                     type: 'ajax',
@@ -86,7 +86,6 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                     },
                     listeners: {
                         beforerender: function (panel, eOpts) {
-
                             Ext.Ajax.request({
                                 url: '/cn/article/getFileInfo'
                             }).then(function (response, opts) {
@@ -125,11 +124,11 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                         metaData.tdStyle = 'color:#FF6633';
                         return '返工';
                     case 9:
-                        metaData.tdStyle = 'color:blank';
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
-                    case 10:
+                    default:
                         metaData.tdStyle = 'color:red';
-                        return '已删';
+                        return value;
                 }
             case 'title':
                 //return '<a href=""/>'; // todo edit

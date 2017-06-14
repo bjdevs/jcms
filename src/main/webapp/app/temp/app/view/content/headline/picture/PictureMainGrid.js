@@ -3,7 +3,9 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
     xtype: 'content-headline-picture-mgrid',
 
     requires: [
-        'Admin.view.content.headline.picture.PictureController'
+        'Admin.view.content.headline.picture.PictureController',
+        'Admin.view.content.headline.picture.PicMediaForm',
+        'Admin.view.content.headline.picture.PicHeadlineMainGrid'
     ],
 
     controller: 'content-headline-picture',
@@ -14,7 +16,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
 
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/headLine',
@@ -44,7 +46,8 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     },
                     width: 80
                 },
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                {
+                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -57,7 +60,8 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                         allowBlank: false
                     }
                 },
-                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                {
+                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -99,7 +103,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     userCls: 'admin-label-button',
                     action: 'content-headline-text'
                 }
-            ],plugins: [{
+            ], plugins: [{
                 ptype: 'cellediting',
                 clicksToEdit: 1
             }]
@@ -121,16 +125,11 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                         metaData.tdStyle = 'color:#0066FF';
                         return '未发';
                     case 9:
-                        metaData.tdStyle = 'color:blank';
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
                     default:
                         return value;
                 }
-          /*  case 'rank':
-                var up = '<a class="x-fa fa-arrow-up"></a>',
-                    down = '<a class="x-fa fa-arrow-down"></a>';
-
-                return value + '&nbsp;&nbsp;' + up + '&nbsp;' + down;*/
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;
