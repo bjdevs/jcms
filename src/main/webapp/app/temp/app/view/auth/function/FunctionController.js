@@ -24,6 +24,9 @@ Ext.define('Admin.view.auth.function.FunctionController', {
         },
         'auth-function-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
+        },
+        'auth-function-mgrid button[action=delete]': {
+            click: 'onDeleteBtnClicked'
         }
     },
 
@@ -37,7 +40,8 @@ Ext.define('Admin.view.auth.function.FunctionController', {
 
         if(count == 0) Ext.log('No selection');
 
-        functionGrid.down('button[action=save]').setDisabled(count !== 1);
+        functionGrid.down('button[action=save]').setDisabled(count < 1);
+        functionGrid.down('button[action=delete]').setDisabled(count !== 1);
     },
 
     onAddBtnClicked: function(button) {
@@ -64,7 +68,7 @@ Ext.define('Admin.view.auth.function.FunctionController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: _ADMIN.root + '/auth-function/update.do'
+            url: '/cn/admin/authFunctionUpdate'
         });
     },
 
@@ -76,9 +80,27 @@ Ext.define('Admin.view.auth.function.FunctionController', {
         var form = view.down('form').getForm();
 
         ctrl.formSubmit(form, {
-            url: _ADMIN.root + '/auth-function/create.do'
+            url: '/cn/admin/authFunctionUpdate'
         }, function(form, action) {
-            Ext.ux.Msg.info('保存成功', function() {
+            var result = action.result.result;
+            switch (result) {
+                case 'success' :
+                    Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
+                        view.hide();
+                        var grid = view.up().down('auth-function-mgrid'),
+                            store = grid.getStore();
+
+                        store.getProxy().setExtraParam('page', 1);
+                        store.reload();
+                        grid.getSelectionModel().deselectAll();
+                    }).setIcon(Ext.Msg.INFO);
+                    break;
+                case 'failed' :
+                    Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                default :
+                    break;
+            }
+            /*Ext.ux.Msg.info('保存成功', function() {
 
                 view.hide();
 
@@ -90,9 +112,17 @@ Ext.define('Admin.view.auth.function.FunctionController', {
 
                 grid.getSelectionModel().deselectAll();
 
-            });
+            });*/
+        });
+    },
+
+    onDeleteBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
+
+        // todo edit
+        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
+            url: '/cn/admin/authFunctionDelete'
         });
     }
-
-
 });

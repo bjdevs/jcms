@@ -243,6 +243,8 @@ Ext.define('Admin.view.account.AccountController', {
                             break;
                         case 'failed' :
                             Ext.Msg.alert("警告", "更新失败：" + action.result.message).setIcon(Ext.Msg.WARNING);
+                        case 'noRight' :
+                            Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
                             break;
                         default :
                             break;

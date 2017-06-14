@@ -57,7 +57,6 @@ Ext.define('Admin.view.auth.acl.AclController', {
         }
 
         var form = win.down('form').getForm();
-        form.findField('department').setHidden(true);
         form.findField('name').setHidden(true);
         win.down('#form-userInfo').setHidden(false);
 
@@ -81,7 +80,6 @@ Ext.define('Admin.view.auth.acl.AclController', {
         }
 
         var form = win.down('form').getForm();
-        form.findField('department').setHidden(false);
         form.findField('name').setHidden(false);
         win.down('#form-userInfo').setHidden(true);
 
@@ -127,7 +125,8 @@ Ext.define('Admin.view.auth.acl.AclController', {
 
             var userInfoStore = formPanel.down('#form-grid-userInfo').getStore();
             userInfoStore.each(function(record) {
-                userInfo_ids.push(record.get('value'));
+                //userInfo_ids.push(record.get('value'));
+                userInfo_ids.push(record.get('id'));
             });
 
             if(userInfo_ids.length == 0) {
@@ -143,9 +142,9 @@ Ext.define('Admin.view.auth.acl.AclController', {
 
 
         ctrl.formSubmit(form, {
-            url: _ADMIN.root + '/auth-acl/' + submitUrl,
+            url: '/cn/admin/authorityUpdate',
             params: {
-                userInfo_ids: userInfo_ids.join(',')
+                user_ids: userInfo_ids.join(',')
             }
         }, function(form, action) {
             Ext.ux.Msg.info('保存成功', function() {

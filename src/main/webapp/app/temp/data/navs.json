@@ -216,7 +216,7 @@
         },
         {
           "viewType": "account-mgrid",
-          "text": "用户管理",
+          "text": "账号管理",
           "leaf": true
         }
       ]

@@ -79,7 +79,6 @@ public class LoginController extends BaseController {
     public String login(HttpServletResponse resp) {
         SecuritySupport support = supportFactory.getSecuritySupport();
         ObjectNode objectNode = support.login(resp);
-        objectNode.put("success", true);
         return objectNode.toString();
     }
 

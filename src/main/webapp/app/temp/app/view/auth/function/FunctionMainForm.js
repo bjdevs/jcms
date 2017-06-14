@@ -27,7 +27,9 @@ Ext.define('Admin.view.auth.function.FunctionMainForm', {
             items: [
                 {
                     fieldLabel: 'ID',
-                    name: 'id'
+                    name: 'id',
+                    xtype: 'numberfield',
+                    allowBlank: false
                 },
                 {
                     name: 'name',

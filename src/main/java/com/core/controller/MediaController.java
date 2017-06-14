@@ -1,6 +1,8 @@
 package com.core.controller;
 
 import com.core.domain.Media;
+import com.core.security.annotation.AsRight;
+import com.core.security.annotation.RightCheck;
 import com.core.service.MediaService;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by sun on 2017/5/2.
  */
+@RightCheck(depict = "媒体管理")
 @Controller
 @RequestMapping("/admin")
 public class MediaController extends BaseController {
@@ -32,30 +35,35 @@ public class MediaController extends BaseController {
         response.getWriter().print(mediaService.getList(request));
     }
 
+    @AsRight(id = 120)
     @ResponseBody
     @RequestMapping(value = "/mediaCreate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaUpdateAH(MultipartHttpServletRequest msr) throws Exception {
         return mediaService.createMedia(msr);
     }
 
+    @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaUpdateAH(HttpServletRequest request) throws Exception {
         return mediaService.updateMedia(request).toString();
     }
 
+    @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaDeleteAH(HttpServletRequest request) throws Exception {
         return mediaService.multifunctionMediaAH(request, 2).toString();
     }
 
+    @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaEnabledAH(HttpServletRequest request) throws Exception {
         return mediaService.multifunctionMediaAH(request, 1).toString();
     }
 
+    @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaAbandonAH(HttpServletRequest request) throws Exception {

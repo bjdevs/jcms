@@ -1,5 +1,7 @@
 package com.core.controller;
 
+import com.core.security.annotation.AsRight;
+import com.core.security.annotation.RightCheck;
 import com.core.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by sun
  */
+@RightCheck(depict = "广告管理")
 @Controller
 @RequestMapping("/admin")
 public class AdController extends BaseController {
@@ -25,30 +28,35 @@ public class AdController extends BaseController {
         response.getWriter().print(adService.getList(request));
     }
 
+    @AsRight(id = 110)
     @ResponseBody
     @RequestMapping(value = "/adCreate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adCreateAH(HttpServletRequest request) throws Exception {
         return adService.createAd(request);
     }
 
+    @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adEnabledAH(HttpServletRequest request) throws Exception {
         return adService.multifunctionAdAH(request,1).toString();
     }
 
+    @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adAbandonAH(HttpServletRequest request) throws Exception {
         return adService.multifunctionAdAH(request,0).toString();
     }
 
+    @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adDeleteAH(HttpServletRequest request) throws Exception {
         return adService.multifunctionAdAH(request,2).toString();
     }
 
+    @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adUpdateAH(HttpServletRequest request) throws Exception {

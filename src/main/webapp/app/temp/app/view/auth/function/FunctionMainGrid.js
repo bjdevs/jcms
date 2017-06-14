@@ -18,10 +18,14 @@ Ext.define('Admin.view.auth.function.FunctionMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/auth-function/list.do',
+                    url: '/cn/admin/authFunctionList',
                     reader: {
                         type: 'json',
-                        rootProperty: 'rows'
+                        rootProperty: 'data',
+                        totalProperty: 'totalData'
+                    },
+                    extraParams: {
+                        pageSize: pageSize
                     }
                 },
                 autoLoad: true,
@@ -57,6 +61,13 @@ Ext.define('Admin.view.auth.function.FunctionMainGrid', {
                     disabled: true,
                     action: 'save'
                 },
+                /*{
+                    xtype: 'button',
+                    text: '删除',
+                    iconCls: 'x-fa fa-trash-o',
+                    disabled: true,
+                    action: 'delete'
+                },*/
                 '-',
                 {
                     xtype: 'button',

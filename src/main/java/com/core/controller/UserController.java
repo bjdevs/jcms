@@ -2,6 +2,7 @@ package com.core.controller;
 
 import com.core.domain.User;
 import com.core.security.SecuritySupport;
+import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by sun
  */
+@RightCheck(depict = "账号管理")
 @Controller
 @RequestMapping("/admin")
 public class UserController extends BaseController {
@@ -26,16 +28,18 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/userUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String userUpdateAH(User user) throws Exception {
+    public String userUpdate(User user) throws Exception {
         return userService.updateInfo(user).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/userChangePassWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String userChangePassWordAH(User user) throws Exception {
+    public String userChangePassWord(User user) throws Exception {
         return userService.changePassWord(user).toString();
     }
 
+    // 账号管理 -> 新增
+    @AsRight(id = 100)
     @ResponseBody
     @RequestMapping(value = "/userAdd", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userAddAH(User user) throws Exception {
@@ -49,17 +53,29 @@ public class UserController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/accountListNoPageNumber", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void userTypeShowNoPageNumber(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.getWriter().print(userService.getListNoPageNumber(request));
+    }
+
+    // 账号管理 -> 保存
+    @AsRight(id = 101)
+    @ResponseBody
     @RequestMapping(value = "/accountUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userUpdateAH(HttpServletRequest request) throws Exception {
         return userService.updateAccount(request).toString();
     }
 
+    // 账号管理 -> 启用
+    @AsRight(id = 101)
     @ResponseBody
     @RequestMapping(value = "/accountEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userEnabledAH(HttpServletRequest request) throws Exception {
         return userService.multifunctionAccountAH(request, 1).toString();
     }
 
+    // 账号管理 -> 禁用
+    @AsRight(id = 101)
     @ResponseBody
     @RequestMapping(value = "/accountAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userAbandonAH(HttpServletRequest request) throws Exception {

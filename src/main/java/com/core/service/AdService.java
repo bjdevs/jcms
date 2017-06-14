@@ -184,8 +184,6 @@ public class AdService extends BaseService {
             JsonNode root = mapper.readTree(data);
             for (JsonNode jsonNode : root) {
                 ad = new Ad();
-                // 考虑转成它
-                //mapper.readValue()
                 ad.setId(jsonNode.get("id").asLong());
                 ad.setName(jsonNode.get("name").asText());
                 ad.setUrl(jsonNode.get("url").asText());

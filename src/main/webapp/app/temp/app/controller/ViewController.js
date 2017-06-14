@@ -128,11 +128,15 @@ Ext.define('Admin.controller.ViewController', {
                     msg = obj['msg'];
 
                 if (success) {
-                    Ext.ux.Msg.info(text + '成功', function () {
-                        // 不需要重置pageNo
-                        grid.getStore().reload();
-                        grid.getSelectionModel().deselectAll();
-                    });
+                    if (obj['result'] == 'noRight') {
+                        Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
+                    } else {
+                        Ext.ux.Msg.info(text + '成功', function () {
+                            // 不需要重置pageNo
+                            grid.getStore().reload();
+                            grid.getSelectionModel().deselectAll();
+                        });
+                    }
                 } else {
                     Ext.ux.Msg.ajaxFailure(response, opts);
                 }
@@ -201,11 +205,15 @@ Ext.define('Admin.controller.ViewController', {
                     msg = obj['msg'];
 
                 if (success) {
-                    Ext.ux.Msg.info(text + '成功', function () {
-                        // 不需要重置pageNo
-                        grid.getStore().reload();
-                        grid.getSelectionModel().deselectAll();
-                    });
+                    if (obj['result'] == 'noRight') {
+                        Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
+                    } else {
+                        Ext.ux.Msg.info(text + '成功', function () {
+                            // 不需要重置pageNo
+                            grid.getStore().reload();
+                            grid.getSelectionModel().deselectAll();
+                        });
+                    }
                 } else {
                     Ext.ux.Msg.ajaxFailure(response, opts);
                 }

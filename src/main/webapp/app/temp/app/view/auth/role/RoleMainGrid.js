@@ -17,10 +17,14 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/auth-role/list.do',
+                    url: '/cn/admin/authRoleList',
                     reader: {
                         type: 'json',
-                        rootProperty: 'rows'
+                        rootProperty: 'data',
+                        totalProperty: 'totalData'
+                    },
+                    extraParams: {
+                        pageSize: pageSize
                     }
                 },
                 autoLoad: true,
@@ -32,10 +36,9 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '名称', dataIndex: 'name' },
-                { text: '级别', dataIndex: 'rank' },
-                { text: '描述', dataIndex: 'description', renderer: me.renderer, width: 200 },
-                { text: '功能', dataIndex: 'function_names', renderer: me.renderer, flex: 1 }
+                { text: '名称', dataIndex: 'name',width: 80},
+                { text: '功能', dataIndex: 'function_names', width: 800},
+                { text: '描述', dataIndex: 'depict', width: 150 }
             ],
             tbar: [
                 {
@@ -51,6 +54,13 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
                     disabled: true,
                     action: 'edit'
                 },
+                /*{
+                    xtype: 'button',
+                    text: '删除',
+                    iconCls: 'x-fa fa-trash-o',
+                    disabled: true,
+                    action: 'delete'
+                },*/
                 '-',
                 {
                     xtype: 'button',
