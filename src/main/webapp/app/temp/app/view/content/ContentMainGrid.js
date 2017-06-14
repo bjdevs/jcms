@@ -108,7 +108,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 {
                     xtype: 'button',
                     text: '修改',
-                    iconCls: 'x-fa fa-recycle',
+                    iconCls: 'x-fa fa-pencil-square-o',
                     disabled: true,
                     action: 'update'
                 },
@@ -175,19 +175,21 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                         return '已发';
                     default:
                         metaData.tdStyle = 'color:red';
-                        return value;
+                        return "未知";
                 }
             case 'hAId':
                 if (value == 0) {
-                    return '<button class="x-fa fa-flag admin-label-button admin-color-purple" action="set-text-headline"></button>';
+                    // return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
+                    return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="set-text-headline"></button>';
                 } else {
-                    return '<button class="x-fa fa-flag admin-label-button admin-color-gray" action="cancel-text-headline"></button>';
+                    return '<button class="x-fa fa-flag admin-label-button admin-color-blue" action="set-text-headline"></button>';
                 }
             case 'hPId':
                 if (value == 0) {
-                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-purple" action="set-picture-headline"></button>';
+                    // return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
+                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="set-picture-headline"></button>';
                 } else {
-                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-gray" action="cancel-picture-headline"></button>';
+                    return '<button class="x-fa fa-picture-o admin-label-button admin-color-blue" action="set-picture-headline"></button>';
                 }
             default:
                 return value;

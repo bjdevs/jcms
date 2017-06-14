@@ -16,6 +16,7 @@ Ext.define('Admin.view.content.index.embed.FutianForm', {
             defaults: {
                 anchor: '100% 100%'
             },
+            style: 'border: 0px',
             width: '100%',
             items: [
                 {

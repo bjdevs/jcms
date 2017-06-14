@@ -1,4 +1,4 @@
-/* set default-icon-libs */
+/* set default-icon-libs 1.0 abc */
 .x-fa:before {
     font-family: FontAwesome !important;
 }
@@ -20,6 +20,10 @@ body.x-border-layout-ct, div.x-border-layout-ct {
 /* color */
 .admin-color-red {
     color: red;
+}
+
+.admin-color-blue {
+    color: #157FCC;
 }
 
 .admin-color-purple {

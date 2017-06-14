@@ -10,7 +10,6 @@ public class Template {
     private long id;
     private String name;
     private String fileName;
-    private int cId;
     private int type;
     private int status;
     private Date createDate;
@@ -38,14 +37,6 @@ public class Template {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public int getcId() {
-        return cId;
-    }
-
-    public void setcId(int cId) {
-        this.cId = cId;
     }
 
     public int getType() {
@@ -86,7 +77,6 @@ public class Template {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", fileName='" + fileName + '\'' +
-                ", cId=" + cId +
                 ", type='" + type + '\'' +
                 ", status=" + status +
                 ", createDate=" + createDate +

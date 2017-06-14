@@ -57,7 +57,6 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     dataIndex: 'type',
                     editor: {
                         xtype: 'combo',
-                        // todo ? 不明白为什么这样调用,下拉列表出不来
                         //store: viewModel.getStore('templateType'),
                         store: [
                             [1, '文章模板'],

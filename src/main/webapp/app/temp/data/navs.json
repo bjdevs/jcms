@@ -108,14 +108,14 @@
           "leaf": true
         },
         {
-          "viewType": "content-defaults",
-          "text": "默认分类",
+          "viewType": "content-waterzen",
+          "text": "水墨禅韵",
           "split": true,
           "leaf": true
         },
         {
-          "viewType": "content-waterzen",
-          "text": "水墨禅韵",
+          "viewType": "content-defaults",
+          "text": "默认分类",
           "split": true,
           "leaf": true
         },

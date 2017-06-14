@@ -123,6 +123,14 @@ Ext.define('Admin.view.serial.SerialGrid', {
                     xtype: 'button',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
+                },
+                '->',
+                {
+                    xtype: 'label',
+                    html: '如果已有连载文章，则不进行删除。',
+                    style: {
+                        'color': 'crimson'
+                    }
                 }
             ]
         });

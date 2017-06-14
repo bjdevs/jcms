@@ -3,19 +3,20 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
     xtype: 'content-headline-picture-mform',
 
     requires: [
-        'Admin.view.content.headline.picture.PictureController'
+        'Admin.view.content.headline.picture.PictureController',
+        'Admin.view.content.headline.picture.PicHeadlineMainGrid'
     ],
 
     controller: 'content-headline-picture',
 
     maximized: true,// 默认最大化窗口
     maximizable: false, // 不支持放大 or 缩小
-    // width: 1000,
-    // height: 800,
     layout: 'border',
 
     initComponent: function () {
-        var me = this;
+        var me = this,
+            viewModel = me.getViewModel();
+        var aId = viewModel.get("aId");
 
         Ext.apply(me, {
             items: [{
@@ -76,7 +77,6 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                 ]
                             },
                             {
-
                                 layout: {
                                     type: 'hbox',
                                     align: 'stretchmax'
@@ -96,7 +96,6 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                         iconCls: 'fa fa-upload',
                                         handler: 'onAddImgPictureHeadLineBtnClicked',
                                         listeners: {
-                                            
                                         }
                                     }
                                 ]
@@ -109,7 +108,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                     name: 'image',
                                     autoEl: {
                                         tag: 'image',    //指定为img标签
-                                        src: 'resources/images/placeholder.jpg'    //指定url路径
+                                        src: '../../resources/images/placeholder.jpg'    //指定url路径
                                     },
                                     height: 150,
                                     width: 300
@@ -143,7 +142,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                         height: 160,
                                         allowBlank: false,
                                         scrollable: 'y',
-                                        imagePath: '../ux/images/',
+                                        imagePath: '../resources/images/placeholder.jpg',
                                         buttons: [
                                             'add', 'remove'
                                         ],
@@ -169,6 +168,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                             }
                         ],
                         tbar: [
+                            '->',
                             {
                                 text: '重置',
                                 iconCls: 'x-fa fa-undo',
@@ -187,7 +187,18 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                         ]
                     }
                 ]
-            }
+            },
+                {
+                    region: 'south',
+                    height: '35%',
+                    xtype: 'content-headline-pic-mgrid-2',
+                    viewModel: {
+                        data: {
+                            aId: aId
+                        }
+                    }
+                    // items: new Admin.view.content.headline.text.TextHeadlineMainGrid()
+                }
             ]
         });
 

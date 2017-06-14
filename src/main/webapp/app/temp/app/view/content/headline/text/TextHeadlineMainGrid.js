@@ -1,28 +1,25 @@
-Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
+Ext.define('Admin.view.content.headline.text.TextHeadlineMainGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
-    xtype: 'content-headline-picture-mgrid',
+    xtype: 'content-headline-text-mgrid-2',
 
     requires: [
-        'Admin.view.content.headline.picture.PictureController',
-        'Admin.view.content.headline.picture.PicMediaForm',
-        'Admin.view.content.headline.picture.PicHeadlineMainGrid'
+        'Admin.view.content.headline.text.TextController'
     ],
 
-    controller: 'content-headline-picture',
+    controller: 'content-headline-text',
 
     initComponent: function () {
         var me = this,
             viewModel = me.getViewModel();
 
-
         Ext.apply(me, {
             store: Ext.create('Admin.store.API', {
                 proxy: {
                     type: 'ajax',
-                    url: '/cn/article/headLine',
+                    url: '/cn/article/headLineForId',
                     extraParams: {
-                        category: viewModel.get('category') || '',
-                        type: 'pic'
+                        aId: viewModel.get('aId'),
+                        type: 'text'
                     },
                     reader: {
                         type: 'json',
@@ -96,14 +93,15 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
                 },
-                '->',
+                /*'->',
                 {
                     xtype: 'button',
-                    text: '栏目图片列表',
+                    text: '栏目文章列表',
                     userCls: 'admin-label-button',
-                    action: 'content-headline-text'
-                }
-            ], plugins: [{
+                    action: 'content-headline-picture'
+                }*/
+            ],
+            plugins: [{
                 ptype: 'cellediting',
                 clicksToEdit: 1
             }]
@@ -133,6 +131,13 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;
+            case 'headlinePic':
+                switch (value) {
+                    case 2:
+                        return '<span class="x-fa fa-picture"></span>';
+                    case 0:
+                        return '<span class="x-fa fa-picture-o"></span>';
+                }
             default:
                 return value;
         }

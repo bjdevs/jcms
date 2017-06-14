@@ -12,20 +12,20 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
 
     control: {
 
-        'content-headline-picture-mgrid': {
+        'content-headline-picture-mgrid,content-headline-pic-mgrid-2': {
             selectionchange: 'onSelectionChange'
         },
 
-        'content-headline-picture-mgrid button[action=save]': {
+        'content-headline-picture-mgrid button[action=save],content-headline-pic-mgrid-2 button[action=save]': {
             click: 'onSaveBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=delete]': {
+        'content-headline-picture-mgrid button[action=delete],content-headline-pic-mgrid-2 button[action=delete]': {
             click: 'onBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=refresh]': {
+        'content-headline-picture-mgrid button[action=refresh],content-headline-pic-mgrid-2 button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         },
-        'content-headline-picture-mgrid button[action=content-headline-picture]': {
+        'content-headline-picture-mgrid button[action=content-headline-picture],content-headline-pic-mgrid-2 button[action=content-headline-picture]': {
             click: 'onPictureHeadLineBtnClicked'
         }
     },
@@ -179,7 +179,6 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                             Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
                                 view.hide();
                                 var url = action.result.url;
-                                console.log(url);
                                 var mform = button.up().up().up().up().up().down('content-headline-picture-mform');
                                 var img = mform.query('[name=image]');
                                 var imgPath = mform.query('[name=imageUpload]');
@@ -198,5 +197,14 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                 }
             });
         }
+    },
+    /**
+     * common - 表单重置
+     * @param button
+     */
+    onResetBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+        view.query('[name=categoryName]')[0].reset();
     }
 });

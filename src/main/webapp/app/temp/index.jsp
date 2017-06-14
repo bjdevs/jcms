@@ -19,6 +19,7 @@
 
     <!-- 自定义 -->
     <!-- admin.css -->
+    <%--<link href="resources/css/admin.css" rel="stylesheet">--%>
     <link href="resources/css/admin-debug.css" rel="stylesheet">
 
     <!-- extjs.core -->

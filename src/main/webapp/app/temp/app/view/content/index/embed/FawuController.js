@@ -25,6 +25,11 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var cancelBtn = form.down('[action=cancel]');
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
+        var releaseBtn = form.down('[action=release]');
+
+        var helper1 = form.down('[name=show-helper1]');
+        var helper2 = form.down('[name=show-helper2]');
+
         var type = location.hash.split('-'),
             type = type[type.length - 1];
         switch (type) {
@@ -72,6 +77,10 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         cancelBtn.setHidden(true);
         saveBtn.setHidden(true);
         updateBtn.setHidden(false);
+
+        helper1.setHidden(false);
+        helper2.setHidden(true);
+        releaseBtn.setDisabled(false);
     },
 
     onUpdateBtnClicked: function (button) {
@@ -82,6 +91,9 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
         var releaseBtn = form.down('[action=release]');
+
+        var helper1 = form.down('[name=show-helper1]');
+        var helper2 = form.down('[name=show-helper2]');
 
         Ext.each(showContent, function (item, index, allItems) {
             item.setHidden(true);
@@ -95,6 +107,8 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         saveBtn.setHidden(false);
         updateBtn.setHidden(true);
         releaseBtn.setDisabled(true);
+        helper1.setHidden(true);
+        helper2.setHidden(false);
     },
 
     onCancelBtnClicked: function (button) {
@@ -105,6 +119,9 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
         var releaseBtn = form.down('[action=release]');
+
+        var helper1 = form.down('[name=show-helper1]');
+        var helper2 = form.down('[name=show-helper2]');
 
         Ext.each(showContent, function (item, index, allItems) {
             item.setHidden(false);
@@ -118,6 +135,8 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         saveBtn.setHidden(true);
         updateBtn.setHidden(false);
         releaseBtn.setDisabled(false);
+        helper1.setHidden(false);
+        helper2.setHidden(true);
     },
 
     onReleaseBtnClicked: function (button) {

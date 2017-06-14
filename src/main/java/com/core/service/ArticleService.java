@@ -6,6 +6,7 @@ import com.core.util.Constant;
 import com.core.util.IpUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +50,10 @@ public class ArticleService extends BaseService {
         if ("recycle".equals(cName)) {
             sql.append("status >= :status");
         } else if ("all".equals(cName)) {
-            param.put("status", Constant.ARTICLE_ID_NINE);
-            sql.append("status = :status AND id > 4");
+            // 都显示
+//            param.put("status", Constant.ARTICLE_ID_NINE);
+//            sql.append("status = :status AND id > 4");
+            sql.append("id > 4");
         } else {
             cId = getCategoryId(cName, false);
             if (cId == 0) {
@@ -64,8 +68,7 @@ public class ArticleService extends BaseService {
             sql.append(" AND id = :id");
         }
         if (!StringUtils.isBlank(title)) {
-            param.put("title", title);
-            sql.append(" AND title = :title");
+            sql.append(" AND title like '%" + title + "%'");
         }
         if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)) {
             startDate = startDate.substring(0, startDate.indexOf("T"));
@@ -151,6 +154,33 @@ public class ArticleService extends BaseService {
     }
 
     /**
+     * 查询aId所有头条
+     *
+     * @param aId
+     * @return
+     */
+    public ObjectNode headLineForId(long aId, String type) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        int different = "text".equals(type) ? 1 : 2;
+        Map<String, Object> params = new HashMap<>();
+        params.put("aId", aId);
+        params.put("different", different);
+        List<HeadLine> headLines = list(HeadLine.class, " WHERE aId = :aId AND different = :different ORDER BY cateOrderBy ASC, createDate DESC, updateDate DESC", params);
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        ObjectNode objectNodeOne;
+        HeadLine headLine;
+        for (int i = 0; i < headLines.size(); i++) {
+            headLine = headLines.get(i);
+            objectNodeOne = objectMapper.valueToTree(headLine);
+            objectNodeOne.put("category", getCategory(headLine.getcId()));
+            objectNodeOne.put("creator", getCreator(headLine.getuId()));
+            arrayNode.add(objectNodeOne);
+        }
+        objectNode.put("rows", arrayNode);
+        return objectNode;
+    }
+
+    /**
      * 新增文章
      *
      * @param request
@@ -201,6 +231,7 @@ public class ArticleService extends BaseService {
         article.setcId(categoryId);
         article.setStatus(Constant.ARTICLE_ID_ZERO);
         article.setCreateDate(new Date());
+        article.setUpdateDate(new Date());
 
         long articleId = 0;
         if (!StringUtils.isBlank(articleIdStr)) {
@@ -317,6 +348,14 @@ public class ArticleService extends BaseService {
                     article.setStatus(num);
                     article.setUpdateDate(new Date());
                     update(article);
+                    if (num == Constant.ARTICLE_ID_FIVE) {
+                        List<HeadLine> headLines = list(HeadLine.class, String.format(" WHERE aId = %s ", article.getId()));
+                        for (int k = 0; k < headLines.size(); k++) {
+                            HeadLine headLine = headLines.get(k);
+                            headLine.setStatus(0);
+                            update(headLine);
+                        }
+                    }
                 }
             }
             if ("release".equals(type)) {
@@ -480,11 +519,61 @@ public class ArticleService extends BaseService {
             objectNode1 = objectMapper.valueToTree(category);
             objectNode1.put("path", "/" + category.geteName() + "/");
             objectNode1.put("category_template", getTemplateTypeForId(category.gettId()));
-            objectNode1.put("article_template", getTemplateNameForId(category.gettAId()));
+//            objectNode1.put("article_template", getTemplateNameForId(category.gettAId()));
             arrayNode.add(objectNode1);
         }
         objectNode.put("rows", arrayNode);
         objectNode.put("total", count);
+        return objectNode;
+    }
+
+    /**
+     * 目录模版保存处理
+     *
+     * @param method
+     * @param data
+     * @return
+     */
+    public ObjectNode categoryBtn(String method, String data) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        ArrayNode arrayNode;
+        if ("save".equals(method) && !StringUtils.isBlank(data)) {
+            try {
+                arrayNode = objectMapper.readValue(data, ArrayNode.class);
+                for (int i = 0; i < arrayNode.size(); i++) {
+                    // 包含 "path":"/焦点图/","category_template":"栏目模板"
+                    JsonNode jsonNode = arrayNode.get(i);
+                    Category category = new Category();
+                    category.setId(Long.parseLong(jsonNode.get("id").toString()));
+                    String name = jsonNode.get("name").toString();
+                    String eName = jsonNode.get("eName").toString();
+                    if (name.contains("\"")) {
+                        name = name.replaceAll("\"", "").trim();
+                    }
+                    if (eName.contains("\"")) {
+                        eName = eName.replaceAll("\"", "").trim();
+                    }
+                    category.setName(name);
+                    category.seteName(eName);
+                    category.setParentId(Integer.parseInt(jsonNode.get("parentId").toString()));
+                    category.settId(Integer.parseInt(jsonNode.get("tId").toString()));
+                    category.settAId(Integer.parseInt(jsonNode.get("tAId").toString()));
+                    category.setStatus(Integer.parseInt(jsonNode.get("status").toString()));
+                    String date = jsonNode.get("createDate").toString();
+                    if (date.contains("\"")) {
+                        date = date.replaceAll("\"", "").trim();
+                    }
+                    category.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
+                    category.setUpdateDate(new Date());
+                    update(category);
+                }
+                objectNode.put("success", true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                objectNode.put("success", false);
+            }
+        }
+
         return objectNode;
     }
 
@@ -496,7 +585,7 @@ public class ArticleService extends BaseService {
     public ObjectNode categoryENameList() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         ArrayNode arrayNode = objectMapper.createArrayNode();
-        List<Category> categories = list(Category.class, " WHERE status > 0");
+        List<Category> categories = list(Category.class, " WHERE status > 0 ORDER BY status ASC");
         ObjectNode objectNode1;
         for (int i = 0; i < categories.size(); i++) {
             Category category = categories.get(i);
@@ -653,6 +742,7 @@ public class ArticleService extends BaseService {
             Article article = find(Article.class, id);
             article.setContent(contents[0]);
             article.setUpdateDate(new Date());
+            article.setStatus(5);
             update(article);
             // 调用文章处理
             disposeSubArticle(id, contents);
@@ -851,6 +941,33 @@ public class ArticleService extends BaseService {
         return objectNode1;
     }
 
+    /**
+     * 审核文章
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode auditArticleForId(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        Article article = find(Article.class, id);
+        try {
+            if (null != article) {
+                if (article.getStatus() == Constant.ARTICLE_ID_FIVE) {
+                    article.setStatus(Constant.ARTICLE_ID_ONE);
+                    article.setUpdateDate(new Date());
+                    update(article);
+                    objectNode.put("success", true);
+                } else {
+                    objectNode.put("success", "error");
+                }
+            }
+        } catch (Exception e) {
+            objectNode.put("success", false);
+        }
+
+        return objectNode;
+    }
+
 
     /**
      * 发布记录
@@ -932,7 +1049,7 @@ public class ArticleService extends BaseService {
                 headLine.setCreateDate(new Date());
                 headLine.setRedStatus(null != redStatus ? Integer.parseInt(redStatus) : 0);
                 headLine.setcId(cId);
-                headLine.setStatus(0);
+                headLine.setStatus(9);
                 headLine.setCateOrderBy(0);
                 headLine.setmId(mId);
                 headLine.setDifferent(Integer.parseInt(type));
@@ -1007,10 +1124,10 @@ public class ArticleService extends BaseService {
      * @param redStatus
      * @return
      */
-    public ObjectNode updateHeadLine(long id, int status, String redStatus, int cateOrderBy, String name) {
+    public ObjectNode updateHeadLine(long id, int status, String redStatus, int cateOrderBy, String name, String data) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        HeadLine headLine = find(HeadLine.class, id);
+        /*HeadLine headLine = find(HeadLine.class, id);
 
         int red = redStatus.equals("true") ? 1 : 0;
         if (isNumeric(redStatus)) red = Integer.parseInt(redStatus);
@@ -1019,7 +1136,40 @@ public class ArticleService extends BaseService {
         headLine.setCateOrderBy(cateOrderBy);
         headLine.setName(name);
         headLine.setUpdateDate(new Date());
-        update(headLine);
+        update(headLine);*/
+
+        try {
+            ArrayNode arrayNode = objectMapper.readValue(data, ArrayNode.class);
+            for (int i = 0; i < arrayNode.size(); i++) {
+                JsonNode jsonNode = arrayNode.get(i);
+                long hid = Long.parseLong(jsonNode.get("id").toString());
+                HeadLine headLine = find(HeadLine.class, hid);
+                String hName = jsonNode.get("name").toString();
+                if (hName.contains("\"")) {
+                    hName = hName.replace("\"", "").trim();
+                }
+                headLine.setName(hName);
+                headLine.setCateOrderBy(Integer.parseInt(jsonNode.get("cateOrderBy").toString()));
+                headLine.setStatus(Integer.parseInt(jsonNode.get("status").toString()));
+                headLine.setUpdateDate(new Date());
+                int redStatusFind = 0;
+                String red = jsonNode.get("redStatus").toString();
+                boolean temp = isNumeric(red);
+                if (!temp) {
+                    redStatusFind = red.equals("true") ? 1 : 0;
+                } else {
+                    redStatusFind = Integer.parseInt(red);
+                }
+                headLine.setRedStatus(redStatusFind);
+                update(headLine);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            objectNode.put("success", false);
+            objectNode.put("msg", e.getMessage());
+        }
+
+
         objectNode.put("success", true);
 
         return objectNode;
@@ -1049,12 +1199,22 @@ public class ArticleService extends BaseService {
 
             if ("delete".equals(method)) {
                 delete(HeadLine.class, headLine.getId());
+                Map<String, Object> params = new HashMap<>();
+                params.put("aId", articleId);
                 if (type == 1) {
                     log.setContent("删除文字头条，文章ID：" + article.getId());
-                    article.sethAId(0);
+                    params.put("different", 1);
+                    List<HeadLine> lines = list(HeadLine.class, " WHERE aId = :aId AND different = :different", params);
+                    if (lines.size() == 0) {
+                        article.sethAId(0);
+                    }
                 } else if (type == 2) {
                     log.setContent("删除图片头条，文章ID：" + article.getId());
-                    article.sethPId(0);
+                    params.put("different", 2);
+                    List<HeadLine> lines = list(HeadLine.class, " WHERE aId = :aId AND different = :different", params);
+                    if (lines.size() == 0) {
+                        article.sethPId(0);
+                    }
                 }
 
                 update(article);
@@ -1195,7 +1355,8 @@ public class ArticleService extends BaseService {
             case "restore":
                 // 还原
                 int restoreNum = article.getStatus() >= 10 ? article.getStatus() : 0;
-                return restoreNum - Constant.ARTICLE_ID_TEN;
+//                return restoreNum - Constant.ARTICLE_ID_TEN;
+                return (restoreNum - Constant.ARTICLE_ID_TEN) > 0 ? Constant.ARTICLE_ID_FIVE : restoreNum - Constant.ARTICLE_ID_TEN;
             default:
                 return 0;
         }

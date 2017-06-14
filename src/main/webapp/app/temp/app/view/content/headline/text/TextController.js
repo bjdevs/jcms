@@ -12,17 +12,17 @@ Ext.define('Admin.view.content.headline.text.TextController', {
 
     control: {
 
-        'content-headline-text-mgrid': {
+        'content-headline-text-mgrid,content-headline-text-mgrid-2': {
             selectionchange: 'onSelectionChange'
         },
 
-        'content-headline-text-mgrid button[action=save]': {
+        'content-headline-text-mgrid button[action=save],content-headline-text-mgrid-2 button[action=save]': {
             click: 'onSaveBtnClicked'
         },
-        'content-headline-text-mgrid button[action=delete]': {
+        'content-headline-text-mgrid button[action=delete],content-headline-text-mgrid-2 button[action=delete]': {
             click: 'onBtnClicked'
         },
-        'content-headline-text-mgrid button[action=refresh]': {
+        'content-headline-text-mgrid button[action=refresh],content-headline-text-mgrid-2 button[action=refresh]': {
             click: 'onRefreshBtnClicked'
         },
         'content-headline-text-mgrid button[action=content-headline-picture]': {
@@ -144,6 +144,15 @@ Ext.define('Admin.view.content.headline.text.TextController', {
 
             });
         });
+    },
+    /**
+     * common - 表单重置
+     * @param button
+     */
+    onResetBtnClicked: function (button) {
+        var ctrl = this,
+            view = ctrl.getView();
+        view.query('[name=categoryName]')[0].reset();
     }
 
 });

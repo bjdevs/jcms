@@ -224,7 +224,15 @@ Ext.define('Admin.view.content.ContentMainForm', {
                 }
 
             ],
-            buttons: [
+            tbar: [
+                '->',
+                {
+                    text: '关闭',
+                    iconCls: 'x-fa fa-times',
+                    name: 'content-btn-close',
+                    action: 'close',
+                    handler: 'onCloseBtnClicked'
+                },
                 {
                     text: '提交',
                     iconCls: 'x-fa fa-floppy-o',

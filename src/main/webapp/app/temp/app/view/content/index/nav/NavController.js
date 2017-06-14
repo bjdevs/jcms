@@ -81,8 +81,8 @@ Ext.define('Admin.view.content.index.nav.NavController', {
     },
     onRefreshBtnClicked: function () {
         //  刷新显示有问题
-        // var view = this.getView();
-        // this.onRefresh(view);
+        var view = this.getView();
+        this.onRefresh(view);
     },
 
     onRefresh: function (panel) {
@@ -165,13 +165,35 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         form.findField('content').setValue(content);
     },
 
+    /**
+     * 审核导航
+     * @param button
+     */
     onBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
 
-        // todo edit
-        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+        Ext.Ajax.request({
+            url: '/cn/article/auditArticleForId',
+            method: 'POST',
+            params: {
+                id: 1
+            },
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data).success;
+                console.log(data);
+                if (data == true){
+                    Ext.ux.Msg.info('审核成功', function () {
+                    });
+                }else if(data == "error"){
+                    Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
+                    });
+                }else{
+                    Ext.ux.Msg.info('审核失败，请稍后刷新重试', function () {
+                    });
+                }
+            }
         });
     },
     onSubmitBtnClicked: function (button) {

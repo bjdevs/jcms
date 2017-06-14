@@ -92,7 +92,7 @@ Ext.define('Admin.view.content.index.embed.Fawu', {
                 {
                     xtype: 'button',
                     text: '修改',
-                    iconCls: 'x-fa fa-recycle',
+                    iconCls: 'x-fa fa-pencil-square-o',
                     action: 'update'
                 },
                 {
@@ -100,6 +100,24 @@ Ext.define('Admin.view.content.index.embed.Fawu', {
                     text: '发布',
                     iconCls: 'x-fa fa-paper-plane-o',
                     action: 'release'
+                },
+                '->',
+                {
+                    xtype: 'label',
+                    name: 'show-helper1',
+                    html: '点击修改按钮使面板变为可编辑状态，输入新数据点击保存即可。',
+                    style: {
+                        'color': 'crimson'
+                    }
+                },
+                {
+                    xtype: 'label',
+                    name: 'show-helper2',
+                    hidden: true,
+                    html: '输入新数据点击保存即可完成修改。',
+                    style: {
+                        'color': 'crimson'
+                    }
                 }
             ]
         });
