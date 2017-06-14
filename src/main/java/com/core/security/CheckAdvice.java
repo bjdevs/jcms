@@ -56,6 +56,7 @@ public class CheckAdvice implements Ordered {
             SecuritySupport securitySupport = supportFactory.getSecuritySupport();
             User user = securitySupport.getUserInfo();
 
+            Class<?> aClass = joinPoint.getTarget().getClass();
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             Method method = signature.getMethod();
 
@@ -70,14 +71,37 @@ public class CheckAdvice implements Ordered {
                     return "redirect:login";
                 }
             } else {
-                // index.jsp (or other code) will use this.
                 request.setAttribute("user", user);
-                return joinPoint.proceed();
+                // 判断权限
+                // 判断是否为超级管理员
+                if (securitySupport.isAdmin(user)) {
+                    // 超级管理员
+                    return joinPoint.proceed();
+                } else {
+                    if (aClass.isAnnotationPresent(RightCheck.class) && method.isAnnotationPresent(AsRight.class)) {
+                        if (securitySupport.hasRight(user.getId(), method)) {
+                            return joinPoint.proceed();
+                        } else {
+                            // 没有权限
+                            if (method.isAnnotationPresent(ResponseBody.class)) {
+                                ObjectNode objectNode = objectMapper.createObjectNode();
+                                objectNode.put("success", true);
+                                objectNode.put("result", "noRight");
+                                return objectNode.toString();
+                            } else {
+                                /*request.setAttribute(Constant.STATIC_RESOURCE_URL_PREFIX, config.getStaticResourceURLPrefix());
+                                request.setAttribute(Constant.LIST_PAGE_URL_PREFIX, config.getListDomain());*/
+                                return "admin/noRight";
+                            }
+                        }
+                    } else {
+                        return joinPoint.proceed();
+                    }
+                }
             }
         } catch (Throwable throwable) {
             logger.error(throwable);
             throw throwable;
         }
     }
-
 }

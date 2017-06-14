@@ -33,9 +33,10 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                 {
                     name: 'name',
                     fieldLabel: '名称',
-                    allowBlank: false
+                    allowBlank: false,
+                    blankText: '名称不能为空'
                 },
-                {
+                /*{
                     xtype: 'numberfield',
                     name: 'rank',
                     fieldLabel: '级别',
@@ -43,14 +44,7 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                     allowDecimals: false,
                     minValue: 0,
                     value: 0
-                },
-                {
-                    xtype: 'textarea',
-                    name: 'description',
-                    beforeLabelTextTpl: '',
-                    fieldLabel: '描述',
-                    maxLength: 255
-                },
+                },*/
                 {
                     xtype: 'fieldcontainer',
                     fieldLabel: '功能',
@@ -61,7 +55,7 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                         name: 'function_ids',
                         itemId: 'function_ids',
                         width: '100%',
-                        height: 300,
+                        height: 200,
                         scrollable: 'y',
                         imagePath: '../ux/images/',
                         buttons: [
@@ -73,21 +67,42 @@ Ext.define('Admin.view.auth.role.RoleMainForm', {
                         store: {
                             proxy: {
                                 type: 'ajax',
-                                url: _ADMIN.root + '/auth-function/list.do',
+                                url: '/cn/admin/authFunctionList',
                                 reader: {
                                     type: 'json',
-                                    rootProperty: 'rows'
+                                    rootProperty: 'data'
                                 }
                             },
                             autoLoad: true
                         },
+                        /*value:{
+                            proxy: {
+                                type: 'ajax',
+                                url: '/cn/admin/authFunctionList',
+                                reader: {
+                                    type: 'json',
+                                    rootProperty: 'data'
+                                }
+                            },
+                            autoLoad: true
+                        },*/
+                        //value:[{"id":103,"name":"天津"},{"id":104,"name":"大连"},{"id":105,"name":"昆明"}],
                         displayField: 'name',
                         valueField: 'id',
                         allowBlank: false,
+                        blankText: '请选择要添加的权限',
                         msgTarget: 'side'
+                        //fromTitle: '可用的',
+                        //toTitle: '已选的'
                     }
+                },
+                {
+                    xtype: 'textarea',
+                    name: 'depict',
+                    beforeLabelTextTpl: '',
+                    fieldLabel: '描述',
+                    maxLength: 255
                 }
-
             ],
             buttons: [
                 {

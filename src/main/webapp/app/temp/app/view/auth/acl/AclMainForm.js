@@ -32,50 +32,9 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                 },
                 {
                     xtype: 'displayfield',
-                    fieldLabel: '部门',
-                    name: 'department',
-                    hidden: true
-                },
-                {
-                    xtype: 'displayfield',
                     fieldLabel: '姓名',
                     name: 'name',
                     hidden: true
-                },
-                {
-                    xtype: 'fieldcontainer',
-                    fieldLabel: '角色',
-                    layout: 'fit',
-                    items: {
-                        xtype: 'itemselector',
-                        name: 'role_ids',
-                        itemId: 'role_ids',
-                        width: '100%',
-                        height: 200,
-                        scrollable: 'y',
-                        imagePath: '../ux/images/',
-                        buttons: [
-                            'add', 'remove'
-                        ],
-                        buttonsText: [
-                            '增加', '删除'
-                        ],
-                        store: {
-                            proxy: {
-                                type: 'ajax',
-                                url: _ADMIN.root + '/auth-role/list.do',
-                                reader: {
-                                    type: 'json',
-                                    rootProperty: 'rows'
-                                }
-                            },
-                            autoLoad: true
-                        },
-                        displayField: 'name',
-                        valueField: 'id',
-                        allowBlank: false,
-                        msgTarget: 'side'
-                    }
                 },
                 {
                     xtype: 'fieldcontainer',
@@ -102,8 +61,8 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                             fields: ['text', 'value']
                         },
                         columns: [
-                            { dataIndex: 'value', text: 'ID', hidden: true },
-                            { dataIndex: 'text', text: '名称', flex: 1 }
+                            { dataIndex: 'id', text: 'ID', hidden: true },
+                            { dataIndex: 'account', text: '名称', flex: 1 }
                         ],
                         tbar: [
                             {
@@ -112,17 +71,17 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                                 store: {
                                     proxy: {
                                         type: 'ajax',
-                                        url: _ADMIN.root + '/user/autocomplete_json.do',
+                                        url: '/cn/admin/accountListNoPageNumber',
                                         reader: {
                                             type: 'json',
-                                            rootProperty: 'rows'
+                                            rootProperty: 'data'
                                         }
                                     },
-                                    fields: ['text', 'value']
+                                    fields: ['id', 'account']
                                 },
                                 queryParam: 'q',
-                                displayField: 'text',
-                                valueField: 'value',
+                                displayField: 'account',
+                                valueField: 'id',
                                 triggerAction: 'all',
                                 typeAhead: true,
                                 typeAheadDelay: 350,
@@ -133,7 +92,7 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                                 minChars: 1,
                                 //pageSize: 10,
 
-                                emptyText: '请选择',
+                                emptyText: '请输入用户名',
                                 matchFieldWidth: false, // 取消下拉选择器与表单宽度一致的规定
                                 listConfig: { // 下拉选择器的配置
                                     width: 200
@@ -169,9 +128,42 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                                 handler: 'onDeleteUserInfoBtnByFormClicked'
                             }]
                     }
+                },
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: '角色',
+                    layout: 'fit',
+                    items: {
+                        xtype: 'itemselector',
+                        name: 'role_ids',
+                        itemId: 'role_ids',
+                        width: '100%',
+                        height: 200,
+                        scrollable: 'y',
+                        imagePath: '../ux/images/',
+                        buttons: [
+                            'add', 'remove'
+                        ],
+                        buttonsText: [
+                            '增加', '删除'
+                        ],
+                        store: {
+                            proxy: {
+                                type: 'ajax',
+                                url: '/cn/admin/authRoleList',
+                                reader: {
+                                    type: 'json',
+                                    rootProperty: 'data'
+                                }
+                            },
+                            autoLoad: true
+                        },
+                        displayField: 'name',
+                        valueField: 'id',
+                        allowBlank: false,
+                        msgTarget: 'side'
+                    }
                 }
-
-
             ],
             buttons: [
                 {

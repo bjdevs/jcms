@@ -40,6 +40,12 @@ public class UserService extends BaseService {
         params.put("id", 1);
         String sql = " WHERE id > :id";
 
+        String q = request.getParameter("q");
+        if (!StringUtils.isBlank(q)) {
+            params.put("account", "%" + q + "%");
+            sql += " AND account LIKE :account";
+        }
+
         Page<User> page = this.getPage(User.class, sql, params, pageSize, pageNum);
         List<User> list = page.getResultList();
         ArrayNode arrayNode = objectMapper.createArrayNode();
@@ -51,6 +57,39 @@ public class UserService extends BaseService {
 
         objectNode.put("result", "success");
         objectNode.put("totalData", page.getTotalData());
+        objectNode.put("data", arrayNode);
+        objectNode.put("success", true);
+        return objectNode;
+    }
+
+    /**
+     * 用户列表 没有翻页
+     * @param request
+     * @return
+     */
+    public ObjectNode getListNoPageNumber(HttpServletRequest request) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        // 列表页过滤管理员账号
+        params.put("id", 1);
+        String sql = " WHERE id > :id";
+
+        String q = request.getParameter("q");
+        if (!StringUtils.isBlank(q)) {
+            params.put("account", "%" + q + "%");
+            sql += " AND account LIKE :account";
+        }
+
+        List<User> list = baseRepository.list(User.class, sql, params);
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+
+        for (User m : list) {
+            ObjectNode jsonNode = objectMapper.valueToTree(m);
+            arrayNode.add(jsonNode);
+        }
+
+        objectNode.put("result", "success");
         objectNode.put("data", arrayNode);
         objectNode.put("success", true);
         return objectNode;
@@ -239,10 +278,9 @@ public class UserService extends BaseService {
     public ObjectNode updateInfo(User user) {
         try {
             ObjectNode objectNode = objectMapper.createObjectNode();
-            User userInfo = (User) request.getAttribute("user");
             User _user = new User();
             if (user.getId() > 0) {
-                _user = find(User.class, userInfo.getId());
+                _user = find(User.class, user.getId());
             }
             _user.setName(user.getName());
             _user.setPhone(user.getPhone());

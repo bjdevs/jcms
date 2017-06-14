@@ -89,11 +89,4 @@ public class LogService extends BaseService {
         put(208, "已发");
         put(209, "已删");
     }};
-
-
-    private String getContent(String str) {
-        // 模块ID从100开始，动作ID从200开始
-
-        return "";
-    }
 }
