@@ -24,8 +24,8 @@ Ext.define('Admin.view.common.panel.BaseSearchPanel', {
         labelWidth: 60
     },
 
-    keyMap: {
+    /*keyMap: {
         'ENTER': 'onSearchPanelQuery',
         scope: 'controller'
-    }
+    }*/
 });

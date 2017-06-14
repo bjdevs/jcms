@@ -21,7 +21,7 @@
 
     <!-- 自定义 -->
     <!-- admin.css -->
-    <link href="/resources/css/admin-debug.css" rel="stylesheet">
+    <link href="/resources/css/admin.css" rel="stylesheet">
 
     <!-- extjs.core -->
     <script src="//cdn.bootcss.com/extjs/6.2.0/ext-all-debug.js"></script>

@@ -129,7 +129,7 @@ Ext.define('Admin.view.category.CategoryController', {
 
         // todo edit
         ctrl.sendAjaxFromData(button.action, button.text, grid, {
-            url: 'data/ajax.json?' + button.action
+            url: '/cn/article/categoryBtn?' + button.action
         });
     },
 

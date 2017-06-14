@@ -124,11 +124,11 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                         metaData.tdStyle = 'color:#FF6633';
                         return '返工';
                     case 9:
-                        metaData.tdStyle = 'color:blank';
+                        metaData.tdStyle = 'color:#7DB336';
                         return '已发';
-                    case 10:
+                    default:
                         metaData.tdStyle = 'color:red';
-                        return '已删';
+                        return value;
                 }
             case 'title':
                 //return '<a href=""/>'; // todo edit

@@ -303,6 +303,13 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
             tbar: [
                 '->',
                 {
+                    text: '关闭',
+                    iconCls: 'x-fa fa-times',
+                    name: 'content-btn-close',
+                    action: 'close',
+                    handler: 'onCloseBtnClicked'
+                },
+                {
                     xtype: 'button',
                     text: '取消',
                     hidden: true,
@@ -319,7 +326,7 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                 {
                     xtype: 'button',
                     text: '修改',
-                    iconCls: 'x-fa fa-recycle',
+                    iconCls: 'x-fa fa-pencil-square-o',
                     action: 'update'
                 },
                 /*{

@@ -108,23 +108,73 @@ Ext.define('Admin.view.content.ContentController', {
         var newsGrid = view.down('content' + ctrl.getSearchGridSuffix()),
             count = !selected ? 0 : selected.length;
 
-        var tag = false;
-        if (selected.length > 1) {
-            Ext.each(selected, function (item, index, allItems) {
-                var status = item.data.status;
-                if (status != 1) {
-                    tag = true;
+        var auditBtn = true;
+        var reworkBtn = true;
+        var releaseBtn = false;
+
+        if (count == 0) {
+            Ext.log('No selection');
+            auditBtn = true;
+            reworkBtn = true;
+            releaseBtn = false;
+        } else {
+            /*Ext.each(selected, function (item, index, allItems) {
+             var status = item.data.status;
+             console.log(status);
+             if (status == 0 || status == 5) {
+             auditBtn = false;
+             } else{
+             auditBtn = true;
+             }
+             console.log(auditBtn);
+             });*/
+
+            // auditBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 0 || status == 5) {
+                    auditBtn = false;
+                } else {
+                    auditBtn = true;
+                    break;
                 }
-            });
+            }
+
+            // reworkBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 1 || status == 9) {
+                    reworkBtn = false;
+                } else {
+                    reworkBtn = true;
+                    break;
+                }
+            }
+
+            // releaseBtn
+            for (var i = 0; i < selected.length; i++) {
+                var status = selected[i].data.status;
+                if (status == 1) {
+                    releaseBtn = false;
+                } else {
+                    releaseBtn = true;
+                    break;
+                }
+            }
+
         }
 
-        if (count == 0) Ext.log('No selection');
+        // 审核：对象是返工和初稿，忽略已发的文章；
+        newsGrid.down('button[action=audit]').setDisabled(auditBtn);
 
-        newsGrid.down('button[action=audit]').setDisabled(count < 1);
-        newsGrid.down('button[action=rework]').setDisabled(count < 1);
+        // 返工：对象是已签和已发，忽略初稿和返工；
+        newsGrid.down('button[action=rework]').setDisabled(reworkBtn);
+
         newsGrid.down('button[action=move]').setDisabled(count < 1);
         newsGrid.down('button[action=delete]').setDisabled(count < 1);
-        newsGrid.down('button[action=release]').setDisabled(tag);
+
+        // 发布：对象是已签，忽略初稿、返工、已发。
+        newsGrid.down('button[action=release]').setDisabled(releaseBtn);
         newsGrid.down('button[action=preview]').setDisabled(count != 1);
         newsGrid.down('button[action=update]').setDisabled(count != 1);
     },
@@ -133,7 +183,9 @@ Ext.define('Admin.view.content.ContentController', {
         var ctrl = this,
             view = ctrl.getView();
 
-        var status = grid.getSelection()[0].data.status;
+        var selected = grid.getSelection();
+        var status = selected.length > 0 ? selected[0].data.status : 0;
+        var aId = selected.length > 0 ? selected[0].data.id : 0;
 
         var target = e.target;
         if (!target) return;
@@ -143,6 +195,8 @@ Ext.define('Admin.view.content.ContentController', {
             category = view.id.split('-'),
             category = category[category.length - 1];
 
+        var date = new Date();
+
         switch (action) {
             case 'set-text-headline':
                 if (status != 9) {
@@ -150,15 +204,19 @@ Ext.define('Admin.view.content.ContentController', {
                     });
                     return;
                 }
-                var winReference = 'content-headline-text-mform-' + category,
+                var winReference = 'content-headline-text-mform-' + category + "-" + aId + date.getTime(),
 
                     win = ctrl.lookupReference(winReference);
 
                 if (!win) {
                     win = Ext.create({
                         xtype: 'content-headline-text-mform',
-
-                        reference: winReference
+                        reference: winReference,
+                        viewModel: {
+                            data: {
+                                aId: aId
+                            }
+                        }
                     });
                     view.add(win);
                 }
@@ -176,14 +234,18 @@ Ext.define('Admin.view.content.ContentController', {
                     });
                     return;
                 }
-                var winReference = 'content-headline-picture-mform-' + category,
+                var winReference = 'content-headline-picture-mform-' + category + "-" + aId + date.getTime(),
                     win = ctrl.lookupReference(winReference);
 
 
                 if (!win) {
                     win = Ext.create({
                         xtype: 'content-headline-picture-mform',
-
+                        viewModel: {
+                            data: {
+                                aId: aId
+                            }
+                        },
                         reference: winReference
                     });
 
@@ -511,13 +573,18 @@ Ext.define('Admin.view.content.ContentController', {
                     var url = preview.preview;
                     window.open("http://" + url);
                 } else {
-                    Ext.ux.Msg.info('发布失败，请稍候再试...', function () {
+                    Ext.ux.Msg.info('预览失败，请稍候再试...', function () {
                         grid.getStore().reload();
                         grid.getSelectionModel().deselectAll();
                     });
                 }
             }
         });
+    },
+
+    onCloseBtnClicked: function (button) {
+        var mform = button.up().up().up();
+        mform.close();
     }
 
 });

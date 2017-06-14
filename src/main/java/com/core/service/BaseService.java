@@ -158,7 +158,7 @@ public class BaseService {
      * @return
      */
     final String KEY_WORD = "<hr style=\"page-break-after:always;\" class=\"ke-pagebreak\" />";
-    final String KEY_WORD2 = "-{30}page\\d{1,}?-{30}";
+    final String KEY_WORD2 = "-{30}以下第\\d{1,}页?-{30}";
     public String[] builderContentArray(String content) {
 
         String targetStr = content;
@@ -167,7 +167,7 @@ public class BaseService {
         // 分页符 -> 分页标记
         int num = 1;
         while (targetStr.indexOf(KEY_WORD) > 0) {
-            targetStr = targetStr.replaceFirst(KEY_WORD, "------------------------------page" + num + "------------------------------");
+            targetStr = targetStr.replaceFirst(KEY_WORD, "<span style=\"background-color:#FFE500;\">------------------------------以下第" + num + "页------------------------------</span>");
             num++;
         }
 
@@ -175,7 +175,7 @@ public class BaseService {
         String[] strs = targetStr.split(KEY_WORD2);
         for (int i = 0; i < strs.length; i++) {
             if (i > 0) {
-                stringBuffer.append("------------------------------page" + (i+1) + "------------------------------");
+                stringBuffer.append("<span style=\"background-color:#FFE500;\">------------------------------以下第" + (i+1) + "页------------------------------</span>");
             }
             stringBuffer.append(checkPLable(strs[i]));
         }

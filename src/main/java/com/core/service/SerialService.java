@@ -1,5 +1,6 @@
 package com.core.service;
 
+import com.core.domain.Article;
 import com.core.domain.Log;
 import com.core.domain.Serial;
 import com.core.domain.Template;
@@ -68,10 +69,13 @@ public class SerialService extends BaseService {
 
         ArrayNode arrayNode;
         try {
-
             if ("remove".equals(method)) {
                 for (int i = 0; i < ids.length; i++) {
-                    delete(Serial.class, ids[i]);
+                    // 如果已有连载，不允许删除
+                    List<Article> articles = list(Article.class, String.format(" WHERE sId = %s", ids[i]));
+                    if (articles.size() == 0){
+                        delete(Serial.class, ids[i]);
+                    }
                 }
                 log.setAction("删除");
                 log.setContent(Arrays.toString(ids));

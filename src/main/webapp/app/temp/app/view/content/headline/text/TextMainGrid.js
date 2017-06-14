@@ -12,7 +12,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
         var me = this,
             viewModel = me.getViewModel();
 
-
         Ext.apply(me, {
             store: Ext.create('Admin.store.API', {
                 proxy: {
@@ -30,8 +29,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 autoLoad: true
             }),
             columns: [
-                // todo edit {dataIndex}
-
                 {text: 'ID', dataIndex: 'id', width: 80},
                 {
                     text: '次序 <span class="admin-color-red">+</span>',

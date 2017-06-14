@@ -21,7 +21,7 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                         {
                             xtype: 'textfield',
                             fieldLabel: '文章标题',
-                            emptyText: '',
+                            emptyText: '支持模糊匹配',
                             itemId: 'search-title'
                         },
                         {
@@ -33,7 +33,7 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                             editable: false,
                             format: 'Y-m-d',
                             submitFormat: 'Y-m-d',
-                            emptyText: ''
+                            emptyText: '请选择创建时间'
                         },
                         {
                             xtype: 'datefield',
@@ -44,13 +44,14 @@ Ext.define('Admin.view.content.ContentSearchPanel', {
                             startDateField: 'search-startdate',
                             format: 'Y-m-d',
                             submitFormat: 'Y-m-d',
-                            emptyText: ''
+                            emptyText: '请选择创建时间'
                         },
                         {
                             xtype: 'button',
                             text: '查询',
                             iconCls: 'x-fa fa-search',
-                            action: 'search'
+                            action: 'search',
+                            handler: 'onSearchPanelQuery'
                         },
                         {
                             xtype: 'button',

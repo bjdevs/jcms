@@ -21,7 +21,7 @@ Ext.define('Admin.view.workbench.WorkbenchSearchPanel', {
                         {
                             xtype: 'textfield',
                             fieldLabel: '文章标题',
-                            emptyText: '',
+                            emptyText: '支持模糊匹配',
                             itemId: 'search-title' // todo edit {-id}
                         },
                         {
@@ -32,6 +32,7 @@ Ext.define('Admin.view.workbench.WorkbenchSearchPanel', {
                             endDateField: 'search-enddate',
                             editable: false,
                             format: 'Y-m-d',
+                            emptyText: '请选择创建时间',
                             submitFormat: 'Y-m-d'
                         },
                         {
@@ -42,6 +43,7 @@ Ext.define('Admin.view.workbench.WorkbenchSearchPanel', {
                             editable: false,
                             startDateField: 'search-startdate',
                             format: 'Y-m-d',
+                            emptyText: '请选择创建时间',
                             submitFormat: 'Y-m-d'
                         },
                         {

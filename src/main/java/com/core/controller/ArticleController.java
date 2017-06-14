@@ -44,9 +44,15 @@ public class ArticleController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/headLineForId", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String headLineForId(@RequestParam("aId") long aId, String type) {
+        return articleService.headLineForId(aId, type).toString();
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/updateHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name) {
-        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name).toString();
+    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name, String data) {
+        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name, data).toString();
     }
 
     @ResponseBody
@@ -98,14 +104,12 @@ public class ArticleController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/keyWordSave", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String updateKeyWord(String data, String[] ids) {
-
         return articleService.updateKeyWord(data, ids).toString();
     }
 
     @ResponseBody
     @RequestMapping(value = "/createKeyWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String createKeyWord(HttpServletRequest request) {
-
         return articleService.createKeyWord(request).toString();
     }
 
@@ -113,6 +117,12 @@ public class ArticleController extends BaseController {
     @RequestMapping(value = "/categoryList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String categoryList(int start, int limit) {
         return articleService.categoryList(start, limit).toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/categoryBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String categoryBtn(@RequestParam("method") String method, String data) {
+        return articleService.categoryBtn(method, data).toString();
     }
 
     @ResponseBody
@@ -156,7 +166,6 @@ public class ArticleController extends BaseController {
     public String updateEmbedForId(long id, String content) {
         return articleService.updateEmbedForId(id, content).toString();
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/updateFutian", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -217,5 +226,11 @@ public class ArticleController extends BaseController {
     @RequestMapping(value = "/updateArticle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String updateArticle() {
         return articleService.updateArticle().toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/auditArticleForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String auditArticleForId(long id){
+        return articleService.auditArticleForId(id).toString();
     }
 }

@@ -104,14 +104,23 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 }
                 var panel = button.up().up();
                 var grid = button.up().up().up().down('content-mgrid');
+                var contentPanel = button.up().up().up();
                 grid.getStore().reload();
                 grid.getSelectionModel().deselectAll();
                 var cancelBtn = panel.down('button[action=cancel]');
                 var saveBtn = panel.down('button[action=save]');
                 cancelBtn.setHidden(true);
                 saveBtn.setHidden(true);
+                contentPanel.remove(panel, true);
             }
         });
+    },
+
+    onCloseBtnClicked: function (button) {
+        var panel = button.up().up();
+        var contentPanel = button.up().up().up();
+        contentPanel.remove(panel, true);
+        console.log("close");
     }
 
 });

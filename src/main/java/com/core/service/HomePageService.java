@@ -270,13 +270,17 @@ public class HomePageService extends BaseService {
             List<String[]> list = new ArrayList<String[]>();
             ToolContext toolManagerContext = toolManager.createContext();
 
-            for (int i = 0; i < resultHeadLine.size(); i++) {
-                HeadLine headLine = resultHeadLine.get(i);
-                Article article = find(Article.class, headLine.getaId());
-                String[] items = new String[2];
-                items[0] = article.getUrl();
-                items[1] = headLine.getRedStatus() == 1 ? "<strong>" + headLine.getName() + config.getPostTag() : headLine.getName();
-                list.add(i, items);
+            if (null != resultHeadLine) {
+                for (int i = 0; i < resultHeadLine.size(); i++) {
+                    HeadLine headLine = resultHeadLine.get(i);
+                    Article article = null != headLine ? find(Article.class, headLine.getaId()) : null;
+                    if (null != article) {
+                        String[] items = new String[2];
+                        items[0] = article.getUrl();
+                        items[1] = headLine.getRedStatus() == 1 ? "<strong>" + headLine.getName() + config.getPostTag() : headLine.getName();
+                        list.add(i, items);
+                    }
+                }
             }
 
             toolManagerContext.put("notice", list);
@@ -626,6 +630,8 @@ public class HomePageService extends BaseService {
         }
         StringBuffer sb = new StringBuffer();
         Article article = find(Article.class, articleId);
+        article.setStatus(9);
+        update(article);
         sb.append(article.getContent());
 
         Map<String, Object> map = new HashedMap();
@@ -779,7 +785,6 @@ public class HomePageService extends BaseService {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("different", Constant.GENERAL_ID_ONE);
         paramMap.put("cId", Constant.CATEGORY_ID_NOTICE);
-//        List<Article> adList = list(Article.class, " WHERE status = :status AND cId = :cId ORDER BY orderBy ASC", paramMap);
         List<HeadLine> headLines = list(HeadLine.class, "WHERE STATUS=9 AND cId=:cId AND different=:different ORDER BY cateOrderBy ASC", paramMap);
         return headLines.size() > 0 ? headLines : null;
     }
@@ -996,10 +1001,11 @@ public class HomePageService extends BaseService {
 
     /**
      * 获取预览path
+     *
      * @param id
      * @return
      */
-    public String getPreviewResultPathSuffix(String id){
+    public String getPreviewResultPathSuffix(String id) {
         String path = config.getDomain();
         path = path.substring(0, path.lastIndexOf("/") + 1) + "cn/article/preview?id=" + id;
         return path;
@@ -1013,7 +1019,9 @@ public class HomePageService extends BaseService {
      * @return
      */
     public String getCategoryList(long id) {
-        return String.format(config.getListDomain() + config.getListParam(), id);
+        String path = config.getListParam();
+        path = path.replace("page", "1");
+        return String.format(config.getListDomain() + path, id);
     }
 
 }
