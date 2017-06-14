@@ -24,6 +24,9 @@ Ext.define('Admin.view.auth.role.RoleController', {
         },
         'auth-role-mgrid button[action=refresh]': {
             click: 'onRefreshBtnClicked'
+        },
+        'auth-role-mgrid button[action=delete]': {
+            click: 'onDeleteBtnClicked'
         }
     },
 
@@ -38,6 +41,7 @@ Ext.define('Admin.view.auth.role.RoleController', {
         if(count == 0) Ext.log('No selection');
 
         roleGrid.down('button[action=edit]').setDisabled(count !== 1);
+        roleGrid.down('button[action=delete]').setDisabled(count < 1);
     },
 
     onAddBtnClicked: function(button) {
@@ -98,7 +102,7 @@ Ext.define('Admin.view.auth.role.RoleController', {
 
 
         ctrl.formSubmit(form, {
-            url: _ADMIN.root + '/auth-role/' + submitUrl
+            url: '/cn/admin/authRoleUpdate'
         }, function(form, action) {
             Ext.ux.Msg.info('保存成功', function() {
 
@@ -114,7 +118,15 @@ Ext.define('Admin.view.auth.role.RoleController', {
 
             });
         });
+    },
+
+    onDeleteBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
+
+        // todo edit
+        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
+            url: '/cn/admin/authRoleFunctionDelete'
+        });
     }
-
-
 });

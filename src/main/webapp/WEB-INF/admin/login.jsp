@@ -52,9 +52,7 @@
                                 window.location.reload();
                                 break;
                             case 'failed' :
-                                Ext.Msg.alert("错误", "登录失败，账户名或账户密码输入错误").setIcon(Ext.Msg.WARNING);
-                            case 'info' :
-                                Ext.Msg.alert("错误", "登录失败，" + action.result.info).setIcon(Ext.Msg.WARNING);
+                                Ext.Msg.alert("登录失败", action.result.message).setIcon(Ext.Msg.WARNING);
                             default :
                                 break;
                         }

@@ -17,10 +17,14 @@ Ext.define('Admin.view.auth.acl.AclMainGrid', {
             store: Ext.create('Ext.data.Store', {
                 proxy: {
                     type: 'ajax',
-                    url: _ADMIN.root + '/auth-acl/list.do',
+                    url: '/cn/admin/authAuthorityList',
                     reader: {
                         type: 'json',
-                        rootProperty: 'rows'
+                        rootProperty: 'data',
+                        totalProperty: 'totalData'
+                    },
+                    extraParams: {
+                        pageSize: pageSize
                     }
                 },
                 autoLoad: true,
@@ -32,9 +36,7 @@ Ext.define('Admin.view.auth.acl.AclMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '用户名', dataIndex: 'account' },
-                { text: '姓名', dataIndex: 'name' },
-                { text: '部门', dataIndex: 'department', renderer: me.renderer, width: 200 },
+                { text: '账号', dataIndex: 'name' },
                 { text: '角色', dataIndex: 'role_names', renderer: me.renderer, flex: 1 }
             ],
             tbar: [

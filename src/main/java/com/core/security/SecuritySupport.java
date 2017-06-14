@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -39,6 +40,7 @@ public class SecuritySupport {
     public SecuritySupport() {}
 
     public ObjectNode login(HttpServletResponse response) {
+        String message = "";
         ObjectNode objectNode = objectMapper.createObjectNode();
         try {
             String account = request.getParameter("account");
@@ -50,11 +52,11 @@ public class SecuritySupport {
             boolean isCheck = true;
 
             if (StringUtils.isBlank(account)) {
-                msg.put("info", "账户不能为空");
+                message = "账户不能为空";
                 isCheck = false;
             }
             if (StringUtils.isBlank(password)) {
-                msg.put("info", "密码不能为空");
+                message = "密码不能为空";
                 isCheck = false;
             }
             // 通过
@@ -62,17 +64,25 @@ public class SecuritySupport {
                 Map<String, Object> param = new HashMap<String, Object>();
                 param.put("account", account);
                 param.put("password", EncryptUtil.md5(password));
-                param.put("status", Constant.GENERAL_ID_ONE);
+                //param.put("status", Constant.GENERAL_ID_ONE);
                 User user = findAccount(User.class, param);
                 if (user != null && user.getId() > 0) {
-                    createSession(response, user.getAccount(), user.getId());
-                    user.setLastLoginDate(new Date());
-                    securityRepository.update(user);
-                    result = "success";
-                    // 此处记录日志
+                    // 登录权限status 必须大于0
+                    if (user.getStatus() > Constant.GENERAL_ID_ZERO) {
+                        createSession(response, user.getAccount(), user.getId());
+                        user.setLastLoginDate(new Date());
+                        securityRepository.update(user);
+                        result = "success";
+                        // 此处记录日志
+                    } else {
+                        message = "账号："+user.getAccount()+"，没有登录权限";
+                    }
+                } else {
+                    message = "账户名或账户密码输入错误";
                 }
             }
             objectNode.put("result", result);
+            objectNode.put("message", message);
             objectNode.put("success", true);
             return objectNode;
         } catch (Exception e) {
@@ -275,7 +285,7 @@ public class SecuritySupport {
             param.put("password", password);
         }
         param.put("account", account);
-        param.put("status", Constant.GENERAL_ID_ONE);
+        //param.put("status", Constant.GENERAL_ID_ONE);
 
         User userInfo = findAccount(User.class, param);
         if (userInfo != null && userInfo.getId() != 0) {
@@ -304,4 +314,26 @@ public class SecuritySupport {
         }
         return session;
     }
+
+
+    /**
+     * 查询是否为管理员
+     * @param user
+     * @return true 是管理员 false 不是
+     */
+    public boolean isAdmin(User user) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("id", user.getId());
+        int num = securityRepository.count(User.class, " WHERE id = :id and status = 9", param);
+        if (num == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean hasRight(long userId, Method method) throws Exception {
+        return securityRepository.hasRight(userId, method);
+    }
+
 }

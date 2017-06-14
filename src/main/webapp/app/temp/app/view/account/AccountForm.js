@@ -83,6 +83,7 @@ Ext.define('Admin.view.account.AccountForm', {
                     xtype: 'textarea',
                     name: 'depict', // todo edit
                     fieldLabel: '描述',
+                    beforeLabelTextTpl: '',
                     maxLength: 50,
                     maxLengthText: "描述不能超过50个字符"
                 }

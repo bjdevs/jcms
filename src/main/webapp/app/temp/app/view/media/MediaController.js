@@ -238,6 +238,8 @@ Ext.define('Admin.view.media.MediaController', {
                             break;
                         case 'failed' :
                             Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                        case 'noRight' :
+                            Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
                         default :
                             break;
                     }
