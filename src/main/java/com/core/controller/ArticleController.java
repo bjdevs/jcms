@@ -1,5 +1,6 @@
 package com.core.controller;
 
+import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.ArticleService;
 import com.core.service.GeneralArticleService;
@@ -31,12 +32,34 @@ public class ArticleController extends BaseController {
     @Autowired
     private GeneralArticleService generalArticleService;
 
+    /**
+     * 文章列表
+     *
+     * @param category
+     * @param start
+     * @param limit
+     * @param id
+     * @param title
+     * @param startdate
+     * @param enddate
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/articleList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String article(@RequestParam("category") String category, int start, int limit, String id, String title, String startdate, String enddate) {
         return articleService.list(category, start, limit, id, title, startdate, enddate).toString();
     }
 
+    /**
+     * 头条列表
+     *
+     * @param category
+     * @param type
+     * @param page
+     * @param start
+     * @param limit
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/headLine", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String HeadLine(@RequestParam("category") String category, @RequestParam("type") String type, int page, int start, int limit) {
@@ -49,15 +72,37 @@ public class ArticleController extends BaseController {
         return articleService.headLineForId(aId, type).toString();
     }
 
+    /**
+     * 修改头条
+     *
+     * @param id
+     * @param status
+     * @param redStatus
+     * @param cateOrderBy
+     * @param name
+     * @param data
+     * @return
+     */
+    @AsRight(id = 131)
     @ResponseBody
     @RequestMapping(value = "/updateHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateHeadLine(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name, String data) {
+    public String updateHeadLineAH(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name, String data) {
         return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name, data).toString();
     }
 
+    /**
+     * 处理头条按钮
+     *
+     * @param method
+     * @param ids
+     * @param type
+     * @param account
+     * @return
+     */
+    @AsRight(id = 131)
     @ResponseBody
     @RequestMapping(value = "/headLineBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String headLineBtn(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type, String account) {
+    public String headLineBtnAH(@RequestParam("method") String method, @RequestParam("ids") long[] ids, int type, String account) {
         return articleService.headLineBtn(method, ids, type, account).toString();
     }
 
@@ -74,24 +119,47 @@ public class ArticleController extends BaseController {
     }
 
 
+    /**
+     * 新增文章
+     *
+     * @return
+     */
+    @AsRight(id = 130)
     @ResponseBody
     @RequestMapping(value = "/createArticle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String createArticle() {
+    public String createArticleAH() {
         return articleService.createArticle(request).toString();
     }
 
+    /**
+     * 修改文章状态
+     *
+     * @param method
+     * @param ids
+     * @param type
+     * @return
+     */
+    @AsRight(id = 130)
     @ResponseBody
     @RequestMapping(value = "/articleButton", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String articleButton(String method, String[] ids, String type) {
+    public String articleButtonAH(String method, String[] ids, String type) {
         if (!StringUtils.isBlank(type)) {
             method = type;
         }
         return articleService.updateArticleStatus(method, ids).toString();
     }
 
+    /**
+     * 修改文章分类
+     *
+     * @param category
+     * @param ids
+     * @return
+     */
+    @AsRight(id = 131)
     @ResponseBody
     @RequestMapping(value = "/articleChangeCategory", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String articleChangeCategory(@RequestParam("category") String category, String[] ids) {
+    public String articleChangeCategoryAH(@RequestParam("category") String category, String[] ids) {
         return articleService.updateArticleCategory(category, ids).toString();
     }
 
@@ -101,15 +169,31 @@ public class ArticleController extends BaseController {
         return articleService.keyWordList(type, start, limit).toString();
     }
 
+    /**
+     * 修改 标签
+     *
+     * @param data
+     * @param ids
+     * @return
+     */
+    @AsRight(id = 132)
     @ResponseBody
     @RequestMapping(value = "/keyWordSave", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateKeyWord(String data, String[] ids) {
+    public String updateKeyWordAH(String data, String[] ids) {
         return articleService.updateKeyWord(data, ids).toString();
     }
 
+
+    /**
+     * 新增keyword
+     *
+     * @param request
+     * @return
+     */
+    @AsRight(id = 133)
     @ResponseBody
     @RequestMapping(value = "/createKeyWord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String createKeyWord(HttpServletRequest request) {
+    public String createKeyWordAH(HttpServletRequest request) {
         return articleService.createKeyWord(request).toString();
     }
 
@@ -119,9 +203,17 @@ public class ArticleController extends BaseController {
         return articleService.categoryList(start, limit).toString();
     }
 
+    /**
+     * 目录模版保存处理
+     *
+     * @param method
+     * @param data
+     * @return
+     */
+    @AsRight(id = 134)
     @ResponseBody
     @RequestMapping(value = "/categoryBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String categoryBtn(@RequestParam("method") String method, String data) {
+    public String categoryBtnAH(@RequestParam("method") String method, String data) {
         return articleService.categoryBtn(method, data).toString();
     }
 
@@ -155,27 +247,57 @@ public class ArticleController extends BaseController {
         return articleService.articleEmbedForId(id).toString();
     }
 
+    /**
+     * 用于修改导航、...
+     *
+     * @param id
+     * @param content
+     * @return
+     */
+    @AsRight(id = 135)
     @ResponseBody
     @RequestMapping(value = "/updateArticleForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateArticleForId(long id, String content) {
+    public String updateArticleForIdAH(long id, String content) {
         return articleService.updateArticleForId(id, content).toString();
     }
 
+    /**
+     * 用于修改紫云法务
+     *
+     * @param id
+     * @param content
+     * @return
+     */
+    @AsRight(id = 136)
     @ResponseBody
     @RequestMapping(value = "/updateEmbedForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateEmbedForId(long id, String content) {
+    public String updateEmbedForIdAH(long id, String content) {
         return articleService.updateEmbedForId(id, content).toString();
     }
 
+    /**
+     * 修改广种福田
+     *
+     * @param request
+     * @return
+     */
+    @AsRight(id = 136)
     @ResponseBody
     @RequestMapping(value = "/updateFutian", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateFutian(HttpServletRequest request) {
+    public String updateFutianAH(HttpServletRequest request) {
         return articleService.updataFutian(request).toString();
     }
 
+    /**
+     * 修改 联系我们
+     *
+     * @param request
+     * @return
+     */
+    @AsRight(id = 136)
     @ResponseBody
     @RequestMapping(value = "/updateContact", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateContact(HttpServletRequest request) {
+    public String updateContactAH(HttpServletRequest request) {
         return articleService.updateContact(request).toString();
     }
 
@@ -191,9 +313,16 @@ public class ArticleController extends BaseController {
         return articleService.publishList(page, limit).toString();
     }
 
+    /**
+     * 创建头条
+     *
+     * @param request
+     * @return
+     */
+    @AsRight(id = 131)
     @ResponseBody
     @RequestMapping(value = "/createHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String createHeadLine(HttpServletRequest request) {
+    public String createHeadLineAH(HttpServletRequest request) {
         return articleService.createHeadLine(request).toString();
     }
 
@@ -203,12 +332,25 @@ public class ArticleController extends BaseController {
         return articleService.mediaList().toString();
     }
 
+    /**
+     * 重置导航
+     *
+     * @param type
+     * @return
+     */
+    @AsRight(id = 135)
     @ResponseBody
     @RequestMapping(value = "/resetNav", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String resetNav(String type) {
+    public String resetNavAH(String type) {
         return articleService.resetNav(type).toString();
     }
 
+    /**
+     * 预览文章
+     *
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/articlePreview", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String articlePreview(long id) {
@@ -222,15 +364,28 @@ public class ArticleController extends BaseController {
         return getView("preview");
     }
 
+    /**
+     * 修改文章
+     *
+     * @return
+     */
+    @AsRight(id = 130)
     @ResponseBody
     @RequestMapping(value = "/updateArticle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateArticle() {
+    public String updateArticleAH() {
         return articleService.updateArticle().toString();
     }
 
+    /**
+     * 审核文章
+     *
+     * @param id
+     * @return
+     */
+    @AsRight(id = 130)
     @ResponseBody
     @RequestMapping(value = "/auditArticleForId", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String auditArticleForId(long id){
+    public String auditArticleForIdAH(long id) {
         return articleService.auditArticleForId(id).toString();
     }
 }
