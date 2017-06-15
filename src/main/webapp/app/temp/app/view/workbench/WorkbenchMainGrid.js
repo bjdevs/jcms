@@ -12,7 +12,7 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                 proxy: {
                     type: 'ajax',
                     url: '/cn/article/articleList',
-                    extraParams:{
+                    extraParams: {
                         category: 'all'
                     },
                     reader: {
@@ -62,6 +62,13 @@ Ext.define('Admin.view.workbench.WorkbenchMainGrid', {
                     iconCls: 'x-fa fa-trash-o',
                     disabled: true,
                     action: 'delete'
+                },
+                {
+                    xtype: 'button',
+                    text: '修改',
+                    iconCls: 'x-fa fa-pencil-square-o',
+                    disabled: true,
+                    action: 'update'
                 },
                 {
                     xtype: 'button',

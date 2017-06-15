@@ -90,13 +90,6 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
-                },
-                '->',
-                {
-                    xtype: 'button',
-                    text: '栏目文章列表',
-                    userCls: 'admin-label-button',
-                    action: 'content-headline-picture'
                 }
             ],
             plugins: [{

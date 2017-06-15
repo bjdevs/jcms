@@ -95,13 +95,6 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     text: '刷新',
                     iconCls: 'x-fa fa-refresh',
                     action: 'refresh'
-                },
-                '->',
-                {
-                    xtype: 'button',
-                    text: '栏目图片列表',
-                    userCls: 'admin-label-button',
-                    action: 'content-headline-text'
                 }
             ], plugins: [{
                 ptype: 'cellediting',

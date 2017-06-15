@@ -68,9 +68,46 @@ Ext.define('Admin.view.content.index.nav.Nav', {
                         '->',
                         {
                             xtype: 'component',
-                            reference: 'status',
-                            tpl: '状态：<span style="color:{statusColor}">{statusText}</span> <!--| 更新人：{updateOne}--> | 更新时间：{updateDate}'
-
+                            // reference: 'status',
+                            tpl: '状态：{statusStr}&nbsp;&nbsp;修改日期：<strong>{updateDate}</strong>',
+                            style: {
+                                // 'color': 'crimson'
+                            },
+                            listeners: {
+                                beforerender: function (panel, eOpts) {
+                                    var type = location.hash;
+                                    type = type.split('-');
+                                    type = type[type.length - 1];
+                                    type = type == "main" ? 1 : 2;
+                                    Ext.Ajax.request({
+                                        url: '/cn/article/getEmbedInfo?id=' + type
+                                    }).then(function (response, opts) {
+                                            var obj = Ext.decode(response.responseText);
+                                            var status = obj.statusStr;
+                                            switch (status) {
+                                                case 0:
+                                                    obj.statusStr = "<strong style='color:#0066FF'>初稿</strong>";
+                                                    break;
+                                                case 1:
+                                                    obj.statusStr = "<strong style='color: black'>已签</strong>";
+                                                    break;
+                                                case 5:
+                                                    obj.statusStr = "<strong style='color:#FF6633'>返工</strong>";
+                                                    break;
+                                                case 9:
+                                                    obj.statusStr = "<strong style='color:#7DB336'>已发</strong>";
+                                                    break;
+                                                default:
+                                                    obj.statusStr = "<strong style='color:red'>未知</strong>";
+                                                    break;
+                                            }
+                                            panel.setHtml(obj);
+                                        },
+                                        function (response, opts) {
+                                            Ext.log('server-side failure with status code ' + response.status);
+                                        });
+                                }
+                            }
                         }
                     ]
                 }

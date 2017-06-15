@@ -77,6 +77,13 @@ Ext.define('Admin.view.content.index.embed.Fawu', {
             tbar: [
                 {
                     xtype: 'button',
+                    text: '审核',
+                    iconCls: 'x-fa fa-check-circle-o',
+                    // disabled: true,
+                    action: 'audit'
+                },
+                {
+                    xtype: 'button',
                     text: '取消',
                     hidden: true,
                     iconCls: 'x-fa fa-undo',
@@ -104,19 +111,56 @@ Ext.define('Admin.view.content.index.embed.Fawu', {
                 '->',
                 {
                     xtype: 'label',
-                    name: 'show-helper1',
-                    html: '点击修改按钮使面板变为可编辑状态，输入新数据点击保存即可。',
+                    tpl: '状态：{statusStr}&nbsp;&nbsp;修改日期：<strong>{updateDate}</strong>',
                     style: {
-                        'color': 'crimson'
-                    }
-                },
-                {
-                    xtype: 'label',
-                    name: 'show-helper2',
-                    hidden: true,
-                    html: '输入新数据点击保存即可完成修改。',
-                    style: {
-                        'color': 'crimson'
+                        // 'color': 'crimson'
+                    },
+                    listeners: {
+                        beforerender: function (panel, eOpts) {
+                            var type = location.hash;
+                            type = type.split('-');
+                            type = type[type.length - 1];
+                            var id = 0;
+                            // short
+                            switch (type) {
+                                case "short":
+                                    id = 5;
+                                    break;
+                                case "temple":
+                                    id = 6;
+                                    break;
+                                case "buddha":
+                                    id = 7;
+                                    break;
+                            }
+                            Ext.Ajax.request({
+                                url: '/cn/article/getEmbedInfo?id=' + id
+                            }).then(function (response, opts) {
+                                    var obj = Ext.decode(response.responseText);
+                                    var status = obj.statusStr;
+                                    switch (status) {
+                                        case 0:
+                                            obj.statusStr = "<strong style='color:#0066FF'>初稿</strong>";
+                                            break;
+                                        case 1:
+                                            obj.statusStr = "<strong style='color: black'>已签</strong>";
+                                            break;
+                                        case 5:
+                                            obj.statusStr = "<strong style='color:#FF6633'>返工</strong>";
+                                            break;
+                                        case 9:
+                                            obj.statusStr = "<strong style='color:#7DB336'>已发</strong>";
+                                            break;
+                                        default:
+                                            obj.statusStr = "<strong style='color:red'>未知</strong>";
+                                            break;
+                                    }
+                                    panel.setHtml(obj);
+                                },
+                                function (response, opts) {
+                                    Ext.log('server-side failure with status code ' + response.status);
+                                });
+                        }
                     }
                 }
             ]

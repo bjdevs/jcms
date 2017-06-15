@@ -4,6 +4,9 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
     alias: 'controller.content-index-embed-fawu',
 
     control: {
+        'content-index-embed-fawu button[action=audit]': {
+            click: 'onAuditBtnClicked'
+        },
         'content-index-embed-fawu button[action=update]': {
             click: 'onUpdateBtnClicked'
         },
@@ -18,6 +21,55 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         }
     },
 
+    onAuditBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
+        var type = location.hash;
+        type = type.split('-');
+        type = type[type.length - 1];
+        var id = 0;
+        // short
+        switch (type) {
+            case "short":
+                id = 5;
+                break;
+            case "temple":
+                id = 6;
+                break;
+            case "buddha":
+                id = 7;
+                break;
+        }
+        Ext.Ajax.request({
+            url: '/cn/article/auditArticleForId',
+            method: 'POST',
+            params: {
+                id: id
+            },
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data);
+                var success = data.success;
+                var result = data.result;
+                if (success == true) {
+                    if (result == "noRight") {
+                        Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
+                        });
+                    } else {
+                        Ext.ux.Msg.info('审核成功', function () {
+                        });
+                    }
+                } else if (success == "error") {
+                    Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
+                    });
+                } else {
+                    Ext.ux.Msg.info('审核失败，' + result, function () {
+                    });
+                }
+            }
+        });
+    },
+
     onSaveBtnClicked: function (button) {
         var form = button.up().up();
         var showContent = form.query('[itemId^=d-]');
@@ -26,9 +78,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
         var releaseBtn = form.down('[action=release]');
-
-        var helper1 = form.down('[name=show-helper1]');
-        var helper2 = form.down('[name=show-helper2]');
 
         var type = location.hash.split('-'),
             type = type[type.length - 1];
@@ -78,8 +127,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         saveBtn.setHidden(true);
         updateBtn.setHidden(false);
 
-        helper1.setHidden(false);
-        helper2.setHidden(true);
         releaseBtn.setDisabled(false);
     },
 
@@ -91,9 +138,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
         var releaseBtn = form.down('[action=release]');
-
-        var helper1 = form.down('[name=show-helper1]');
-        var helper2 = form.down('[name=show-helper2]');
 
         Ext.each(showContent, function (item, index, allItems) {
             item.setHidden(true);
@@ -107,8 +151,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         saveBtn.setHidden(false);
         updateBtn.setHidden(true);
         releaseBtn.setDisabled(true);
-        helper1.setHidden(true);
-        helper2.setHidden(false);
     },
 
     onCancelBtnClicked: function (button) {
@@ -119,9 +161,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var saveBtn = form.down('[action=save]');
         var updateBtn = form.down('[action=update]');
         var releaseBtn = form.down('[action=release]');
-
-        var helper1 = form.down('[name=show-helper1]');
-        var helper2 = form.down('[name=show-helper2]');
 
         Ext.each(showContent, function (item, index, allItems) {
             item.setHidden(false);
@@ -135,12 +174,9 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         saveBtn.setHidden(true);
         updateBtn.setHidden(false);
         releaseBtn.setDisabled(false);
-        helper1.setHidden(false);
-        helper2.setHidden(true);
     },
 
     onReleaseBtnClicked: function (button) {
-        console.log(button.action);
         var type = location.hash.split('-'),
             type = type[type.length - 1];
         switch (type) {
@@ -165,11 +201,22 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
             success: function (response) {
                 var data = response.responseText;
                 data = JSON.parse(data);
-                if (data.success) {
-                    Ext.ux.Msg.info('发布成功', function () {
+                var success = data.success;
+                var result = data.result;
+
+                if (success == true) {
+                    if (result == "noRight") {
+                        Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
+                        });
+                    } else {
+                        Ext.ux.Msg.info('发布成功', function () {
+                        });
+                    }
+                } else if (success == "error") {
+                    Ext.ux.Msg.info('发布失败，只有审核状态才可执行该操作', function () {
                     });
                 } else {
-                    Ext.ux.Msg.error('发布失败', function () {
+                    Ext.ux.Msg.info('发布失败，' + result, function () {
                     });
                 }
             }

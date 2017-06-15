@@ -388,4 +388,10 @@ public class ArticleController extends BaseController {
     public String auditArticleForIdAH(long id) {
         return articleService.auditArticleForId(id).toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getEmbedInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String getEmbedInfo(long id) {
+        return articleService.getEmbedInfo(id).toString();
+    }
 }

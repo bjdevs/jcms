@@ -7,6 +7,9 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
         'content-index-embed-contact button[action=edit]': {
             click: 'onClickedEdit'
         },
+        'content-index-embed-contact button[action=audit]': {
+            click: 'onAuditBtnClicked'
+        },
         'content-index-embed-contact button[action=release]': {
             click: 'onClickedRelease'
         },
@@ -15,19 +18,66 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
         }
     },
 
+    onAuditBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
+
+        Ext.Ajax.request({
+            url: '/cn/article/auditArticleForId',
+            method: 'POST',
+            params: {
+                id: 4
+            },
+            success: function (response) {
+                var data = response.responseText;
+                data = JSON.parse(data);
+                var success = data.success;
+                var result = data.result;
+                if (success == true) {
+                    if (result == "noRight") {
+                        Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
+                        });
+                    } else {
+                        Ext.ux.Msg.info('审核成功', function () {
+                        });
+                    }
+                } else if (success == "error") {
+                    Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
+                    });
+                } else {
+                    Ext.ux.Msg.info('审核失败，' + result, function () {
+                    });
+                }
+            }
+        });
+    },
+
     onClickedRelease: function () {
         // 联系我们
         Ext.Ajax.request({
             method: 'POST',
             url: '/cn/article/create/embed',
+            params: {
+                id: 4
+            },
             success: function (response) {
                 var data = response.responseText;
                 data = JSON.parse(data);
-                if(data.success){
-                    Ext.ux.Msg.info('发布成功', function () {
+                var success = data.success;
+                var result = data.result;
+                if (success == true) {
+                    if (result == "noRight") {
+                        Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
+                        });
+                    } else {
+                        Ext.ux.Msg.info('发布成功', function () {
+                        });
+                    }
+                } else if (success == "error") {
+                    Ext.ux.Msg.info('发布失败，只有已签状态才可执行该操作', function () {
                     });
-                }else{
-                    Ext.ux.Msg.info('发布失败', function () {
+                } else {
+                    Ext.ux.Msg.info('发布失败，' + result, function () {
                     });
                 }
             }

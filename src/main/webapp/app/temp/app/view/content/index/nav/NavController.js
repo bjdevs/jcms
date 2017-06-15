@@ -49,25 +49,37 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             },
             success: function (response) {
                 var data = JSON.parse(response.responseText);
-                if(data.success){
+                if (data.success) {
                     content.setValue(data.nav);
                 }
             }
         });
     },
 
-    onBtnClickedRelease:  function () {
+    onBtnClickedRelease: function () {
+        var type = location.hash;
+        type = type.split('-');
+        type = type[type.length - 1];
+        type = type == "main" ? 1 : 2;
+
         Ext.Ajax.request({
-            url : '/cn/article/create/nav',
+            url: '/cn/article/create/nav',
             method: 'POST',
+            params: {
+                id: type
+            },
             waitMsg: '正在发布，请稍候...',
             success: function (response) {
-                var data = JSON.parse(response.responseText);
-                if (data.success){
-                    Ext.ux.Msg.info('发布成功', function() {
+                var data = response.responseText;
+                data = JSON.parse(data).success;
+                if (data == true) {
+                    Ext.ux.Msg.info('发布成功', function () {
                     });
-                }else {
-                    Ext.ux.Msg.info('程序异常，请稍后再试...', function() {
+                } else if (data == "error") {
+                    Ext.ux.Msg.info('发布失败，只有已签状态才可执行该操作', function () {
+                    });
+                } else {
+                    Ext.ux.Msg.info('审核失败，' + result, function () {
                     });
                 }
             }
@@ -172,25 +184,27 @@ Ext.define('Admin.view.content.index.nav.NavController', {
     onBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
-
+        var type = location.hash;
+        type = type.split('-');
+        type = type[type.length - 1];
+        type = type == "main" ? 1 : 2;
         Ext.Ajax.request({
             url: '/cn/article/auditArticleForId',
             method: 'POST',
             params: {
-                id: 1
+                id: type
             },
             success: function (response) {
                 var data = response.responseText;
                 data = JSON.parse(data).success;
-                console.log(data);
-                if (data == true){
+                if (data == true) {
                     Ext.ux.Msg.info('审核成功', function () {
                     });
-                }else if(data == "error"){
+                } else if (data == "error") {
                     Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
                     });
-                }else{
-                    Ext.ux.Msg.info('审核失败，请稍后刷新重试', function () {
+                } else {
+                    Ext.ux.Msg.info('审核失败，' + result, function () {
                     });
                 }
             }
