@@ -54,7 +54,7 @@ Ext.define('Admin.view.account.AccountGrid', {
                 {
                     text: '邮箱 <span class="admin-color-red">+</span>',
                     dataIndex: 'mail',
-                    width: 200,
+                    flex: 1,
                     editor: {
                         vtype: 'email',
                         allowBlank: false,
@@ -65,7 +65,7 @@ Ext.define('Admin.view.account.AccountGrid', {
                 {
                     text: '状态',
                     dataIndex: 'status',
-                    width: 60,
+                    flex: 1,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case 1:

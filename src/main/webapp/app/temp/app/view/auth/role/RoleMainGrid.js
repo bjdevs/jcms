@@ -36,9 +36,9 @@ Ext.define('Admin.view.auth.role.RoleMainGrid', {
             }),
             columns: [
                 { text: 'ID', dataIndex: 'id', width: 80 },
-                { text: '名称', dataIndex: 'name',width: 80},
-                { text: '功能', dataIndex: 'function_names', width: 800},
-                { text: '描述', dataIndex: 'depict', width: 150 }
+                { text: '名称', dataIndex: 'name',width: 120},
+                { text: '功能', dataIndex: 'function_names', flex: 1},
+                { text: '描述', dataIndex: 'depict', width: 180 }
             ],
             tbar: [
                 {

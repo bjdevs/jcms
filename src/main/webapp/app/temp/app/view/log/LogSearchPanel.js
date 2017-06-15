@@ -16,11 +16,24 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             xtype: 'combo',
                             fieldLabel: '模块',
                             itemId: 'search-name',
-                            store: [
+                            /*store: [
                                 [100, '全部'],
                                 [101, "媒体管理"],
                                 [102, '广告管理']
-                            ],
+                            ],*/
+                            store: {
+                                proxy: {
+                                    type: 'ajax',
+                                    url: '/cn/admin/logSearchModule',
+                                    reader: {
+                                        type: 'json',
+                                        rootProperty: 'data'
+                                    }
+                                },
+                                fields: ['id', 'name']
+                            },
+                            displayField: 'name',
+                            valueField: 'id',
                             editable: false // 不允许编辑
                         },
                         {
@@ -28,19 +41,19 @@ Ext.define('Admin.view.log.LogSearchPanel', {
                             xtype: 'combo',
                             fieldLabel: '动作',
                             itemId: 'search-action',
-                            store: [
-                                [100, "全部"],
-                                [200, "新增"],
-                                [201, "修改"],
-                                [202, "删除"],
-                                [203, "启用"],
-                                [204, "废弃"],
-                                [205, "初稿"],
-                                [206, "已签"],
-                                [207, "返工"],
-                                [208, "已发"],
-                                [209, "已删"]
-                            ],
+                            store: {
+                                proxy: {
+                                    type: 'ajax',
+                                    url: '/cn/admin/logSearchAction',
+                                    reader: {
+                                        type: 'json',
+                                        rootProperty: 'data'
+                                    }
+                                },
+                                fields: ['id', 'name']
+                            },
+                            displayField: 'name',
+                            valueField: 'id',
                             editable: false // 不允许编辑
                         },
                         {
