@@ -406,7 +406,7 @@ public class AuthService extends BaseService {
                 }
                 // 执行保存的逻辑
                 result = "success";
-                //log("权限管理", "新增", "权限，" + auth.toString());
+                log("权限管理", "新增", "权限，" + auth.toString() + "," + getAuthRoleList(auth.getuId(),true));
             }
         } else {
             // 修改
@@ -430,6 +430,7 @@ public class AuthService extends BaseService {
             }
             // 执行保存的逻辑
             result = "success";
+            log("权限管理", "更新", "权限，" + auth.toString() + "," + getAuthRoleList(auth.getuId(),true));
         }
         objectNode.put("message", message);
         objectNode.put("result", result);

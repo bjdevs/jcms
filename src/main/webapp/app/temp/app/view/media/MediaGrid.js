@@ -36,7 +36,7 @@ Ext.define('Admin.view.media.MediaGrid', {
                 {
                     text: '类型',
                     dataIndex: 'type',
-                    width: 80,
+                    width: 60,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case MEDIA_TYPE_PICTURE:
@@ -50,12 +50,12 @@ Ext.define('Admin.view.media.MediaGrid', {
                         }
                     }
                 },
-                {text: '地址', dataIndex: 'url', width: 400},
+                {text: '地址', dataIndex: 'url', flex: 1},
                 {text: '预览', dataIndex: 'preview', width: 50},
                 {
                     text: '状态',
                     dataIndex: 'status',
-                    width: 100,
+                    width: 80,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case 1:
@@ -67,7 +67,7 @@ Ext.define('Admin.view.media.MediaGrid', {
                         }
                     }
                 },
-                {text: '创建人', dataIndex: 'user', width: 80},
+                {text: '创建人', dataIndex: 'user', width: 100},
                 {text: '创建时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
