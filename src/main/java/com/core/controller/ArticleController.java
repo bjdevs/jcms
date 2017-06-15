@@ -218,12 +218,6 @@ public class ArticleController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/categoryBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String categoryBtn(@RequestParam("method") String method, String data) {
-        return articleService.categoryBtn(method, data).toString();
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/categoryENameList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String categoryENameList() {
         return articleService.categoryENameList().toString();
