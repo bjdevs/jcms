@@ -6,14 +6,15 @@ import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
 import com.core.util.ProjectUtil;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by sun
@@ -34,14 +35,14 @@ public class LogService extends BaseService {
         // 模块名称
         String name = request.getParameter("name");
         if (!StringUtils.isBlank(name) && !"100".equals(name)) {
-            name = type.get(Integer.parseInt(name));
+            name = searchModule.get(Integer.parseInt(name));
             params.put("name", name);
             sql += " AND name = :name";
         }
         // 动作
         String action = request.getParameter("action");
-        if (!StringUtils.isBlank(action) && !"100".equals(action)) {
-            action = type.get(Integer.parseInt(action));
+        if (!StringUtils.isBlank(action) && !"200".equals(action)) {
+            action = searchAction.get(Integer.parseInt(action));
             params.put("action", action);
             sql += " AND action = :action";
         }
@@ -74,19 +75,48 @@ public class LogService extends BaseService {
         return objectNode;
     }
 
-    static Map<Integer, String> type = new HashMap<Integer, String>() {{
+    public ObjectNode getSearchModuleActionList(HttpServletRequest request, boolean on_off) throws IOException {
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        Iterator<Map.Entry<Integer, String>> iterator = null;
+        if (on_off) {// on
+            iterator = searchModule.entrySet().iterator();
+        } else {// off
+            iterator = searchAction.entrySet().iterator();
+        }
+        while(iterator.hasNext()) {
+            ObjectNode jsonNode = objectMapper.createObjectNode();
+            Map.Entry entry = iterator.next();
+            jsonNode.put("id", (Integer) entry.getKey());
+            jsonNode.put("name", (String) entry.getValue());
+            arrayNode.add(jsonNode);
+        }
+        objectNode.put("result", "success");
+        objectNode.put("data", arrayNode);
+        objectNode.put("success", true);
+        return objectNode;
+    }
+
+    // 基础数据
+    static Map<Integer, String> searchModule = new LinkedHashMap<Integer, String>() {{
         put(100, "全部");
-        put(101, "媒体管理");
-        put(102, "广告管理");
-        put(200, "新增");
-        put(201, "修改");
-        put(202, "删除");
-        put(203, "启用");
-        put(204, "废弃");
-        put(205, "初稿");
-        put(206, "已签");
-        put(207, "返工");
-        put(208, "已发");
-        put(209, "已删");
+        put(101, "用户管理");
+        put(101, "权限管理");
+        put(103, "媒体管理");
+        put(104, "广告管理");
+    }};
+
+    static Map<Integer, String> searchAction = new LinkedHashMap<Integer, String>() {{
+        put(200, "全部");
+        put(201, "新增");
+        put(202, "更新");
+        put(203, "删除");
+        put(204, "启用");
+        put(205, "废弃");
+        put(206, "初稿");
+        put(207, "已签");
+        put(208, "返工");
+        put(209, "已发");
+        put(210, "已删");
     }};
 }

@@ -21,7 +21,19 @@ public class LogController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/logList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void adTypeShow(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void logTypeShow(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.getWriter().print(logService.getList(request));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/logSearchModule", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void logSearchModule(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.getWriter().print(logService.getSearchModuleActionList(request, true));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/logSearchAction", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void loglogSearchAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.getWriter().print(logService.getSearchModuleActionList(request, false));
     }
 }

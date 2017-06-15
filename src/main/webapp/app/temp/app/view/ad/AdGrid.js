@@ -61,7 +61,7 @@ Ext.define('Admin.view.ad.AdGrid', {
                 {
                     text: '链接 <span class="admin-color-red">+</span>',
                     dataIndex: 'url',
-                    width: 400,
+                    flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -70,7 +70,7 @@ Ext.define('Admin.view.ad.AdGrid', {
                 {
                     text: '素材 <span class="admin-color-red">+</span>',
                     dataIndex: 'materialUrl',
-                    width: 400,
+                    flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
