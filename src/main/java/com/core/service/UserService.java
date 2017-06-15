@@ -298,7 +298,7 @@ public class UserService extends BaseService {
             }
             objectNode.put("result", "success");
             objectNode.put("success", true);
-            log("用户管理", "更新", user.toString());
+            log("用户管理", "更新", "自己更新账户资料->" + user.toString());
             return objectNode;
 
         } catch (Exception e) {
@@ -354,7 +354,7 @@ public class UserService extends BaseService {
             }
             objectNode.put("result", result);
             objectNode.put("success", true);
-            log("用户管理", "更新", "密码修改:"+user.toString());
+            log("用户管理", "更新", "自己更新密码->"+user.toString());
             return objectNode;
         } catch (Exception e) {
             logger.error(e);
