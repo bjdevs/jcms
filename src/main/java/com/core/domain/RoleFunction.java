@@ -6,7 +6,7 @@ package com.core.domain;
 import com.core.repository.annotation.*;
 
 @Table
-public class Role_Function {
+public class RoleFunction {
     private long id;
     private int rId;
     private int fId;

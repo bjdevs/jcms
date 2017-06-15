@@ -229,13 +229,13 @@ public class AuthService extends BaseService {
             String sql = "";
             sql = " WHERE rId = :rId";
             params.put("rId", role.getId());
-            List<Role_Function> roleFunctionList = baseRepository.list(Role_Function.class, sql, params);
-            for (Role_Function rf : roleFunctionList) {
-                baseRepository.delete(Role_Function.class, rf.getId());
+            List<RoleFunction> roleFunctionList = baseRepository.list(RoleFunction.class, sql, params);
+            for (RoleFunction rf : roleFunctionList) {
+                baseRepository.delete(RoleFunction.class, rf.getId());
             }
-            Role_Function roleFunction = null;
+            RoleFunction roleFunction = null;
             for (String str : functionIds) {
-                roleFunction = new Role_Function();
+                roleFunction = new RoleFunction();
                 roleFunction.setrId((int) role.getId());
                 roleFunction.setfId(Integer.parseInt(str));
                 baseRepository.create(roleFunction);
@@ -255,8 +255,8 @@ public class AuthService extends BaseService {
         String sql = " WHERE rId = :rId";
         params.put("rId", rId);
         StringBuilder stringBuilder = new StringBuilder();
-        List<Role_Function> roleFunctionList = baseRepository.list(Role_Function.class, sql, params);
-        for (Role_Function rf : roleFunctionList) {
+        List<RoleFunction> roleFunctionList = baseRepository.list(RoleFunction.class, sql, params);
+        for (RoleFunction rf : roleFunctionList) {
             if (status) {
                 // 获取名称
                 stringBuilder.append(find(Function.class, rf.getfId()).getName()).append(",");
@@ -274,8 +274,8 @@ public class AuthService extends BaseService {
         String sql = " WHERE uId = :uId";
         params.put("uId", uId);
         StringBuilder stringBuilder = new StringBuilder();
-        List<Auth_Role> authroleList = baseRepository.list(Auth_Role.class, sql, params);
-        for (Auth_Role ar : authroleList) {
+        List<AuthRole> authroleList = baseRepository.list(AuthRole.class, sql, params);
+        for (AuthRole ar : authroleList) {
             if (status) {
                 // 获取名称
                 stringBuilder.append(find(Role.class, ar.getrId()).getName()).append(",");
@@ -312,9 +312,9 @@ public class AuthService extends BaseService {
                         Map<String, Object> params = new HashMap<String, Object>();
                         String sql = " WHERE rId = :rId";
                         params.put("rId", role.getId());
-                        List<Role_Function> roleFunctionList = baseRepository.list(Role_Function.class, sql, params);
-                        for (Role_Function rf : roleFunctionList) {
-                            baseRepository.delete(Role_Function.class, rf.getId());
+                        List<RoleFunction> roleFunctionList = baseRepository.list(RoleFunction.class, sql, params);
+                        for (RoleFunction rf : roleFunctionList) {
+                            baseRepository.delete(RoleFunction.class, rf.getId());
                         }
                         baseRepository.delete(Role.class, role.getId());
                     }
@@ -393,7 +393,7 @@ public class AuthService extends BaseService {
                     user = find(User.class, Integer.parseInt(uId));
                     for (String rId : roleIds) {
                         // 创建用户多个角色
-                        Auth_Role auth_role = new Auth_Role();
+                        AuthRole auth_role = new AuthRole();
                         auth_role.setuId((int) user.getId());
                         auth_role.setrId(Integer.parseInt(rId));
                         baseRepository.create(auth_role);
@@ -417,13 +417,13 @@ public class AuthService extends BaseService {
             String sql = " WHERE uId = :uId";
             params.put("uId", auth.getuId());
             // 删除用户多个角色
-            List<Auth_Role> authRoleList = baseRepository.list(Auth_Role.class, sql, params);
-            for (Auth_Role ar : authRoleList) {
-                baseRepository.delete(Auth_Role.class, ar.getId());
+            List<AuthRole> authRoleList = baseRepository.list(AuthRole.class, sql, params);
+            for (AuthRole ar : authRoleList) {
+                baseRepository.delete(AuthRole.class, ar.getId());
             }
             for (String rId : roleIds) {
                 // 创建用户多个角色
-                Auth_Role auth_role = new Auth_Role();
+                AuthRole auth_role = new AuthRole();
                 auth_role.setuId(auth.getuId());
                 auth_role.setrId(Integer.parseInt(rId));
                 baseRepository.create(auth_role);

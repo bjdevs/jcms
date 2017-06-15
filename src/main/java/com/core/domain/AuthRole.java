@@ -3,7 +3,7 @@ package com.core.domain;
 /**
  * Created by sun on 2017/5/27.
  */
-public class Auth_Role {
+public class AuthRole {
     private long id;
     private int uId;
     private int rId;
@@ -34,7 +34,7 @@ public class Auth_Role {
 
     @Override
     public String toString() {
-        return "Auth_Role{" +
+        return "AuthRole{" +
                 "id=" + id +
                 ", uId=" + uId +
                 ", rId=" + rId +
