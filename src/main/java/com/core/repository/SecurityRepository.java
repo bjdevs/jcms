@@ -27,8 +27,8 @@ public class SecurityRepository extends BaseRepository {
                 "FROM " +
                     config.getDbName() + "_user AS u, " +
                     config.getDbName() + "_role AS r, " +
-                    config.getDbName() + "_auth_role AS ar, " +
-                    config.getDbName() + "_role_function AS rf " +
+                    config.getDbName() + "_authrole AS ar, " +
+                    config.getDbName() + "_rolefunction AS rf " +
                 "WHERE " +
                     "u.id = :userId " +
                     "AND rf.fId = :rightId " +
