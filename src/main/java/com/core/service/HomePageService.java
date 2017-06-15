@@ -103,10 +103,10 @@ public class HomePageService extends BaseService {
             staticNotice();
 
             // 导航
-            staticNav();
+            staticNav(0);
 
             // 广种福田、联系我们
-            staticFutian();
+            staticFutian(0);
 
             // 紫云法务
             staticFawu();
@@ -139,13 +139,20 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 导航
      */
-    public ObjectNode staticNav() {
+    public ObjectNode staticNav(long idStr) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         long id = createPublishLog(1, "导航");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             String[] nav;
             ToolContext toolManagerContext = toolManager.createContext();
+            if (idStr == 1 || idStr == 2) {
+                Article article = find(Article.class, idStr);
+                if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
+                    objectNode.put("success", "error");
+                    return objectNode;
+                }
+            }
             nav = searchNav("main");
             toolManagerContext.put("main", nav);
             nav = searchNav("deputy");
@@ -155,6 +162,7 @@ public class HomePageService extends BaseService {
         } catch (Exception e) {
             publishLog.setStatus(0);
             objectNode.put("success", false);
+            objectNode.put("result", e.getMessage());
         }
         publishLog.setFinishDate(new Date());
         update(publishLog);
@@ -164,12 +172,21 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 广种福田、联系我们
      */
-    public ObjectNode staticFutian() {
+    public ObjectNode staticFutian(long idStr) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         long id = createPublishLog(1, "广种福田、联系我们");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
+            if (idStr == 3 || idStr == 4) {
+                Article article = find(Article.class, idStr);
+                if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
+                    objectNode.put("success", "error");
+                    return objectNode;
+                }
+            }
+
             String[] resultFutian = searchFutian();
+
             List<String[]> resultContact = searchContact();
 
             ToolContext toolManagerContext = toolManager.createContext();
@@ -630,6 +647,9 @@ public class HomePageService extends BaseService {
         }
         StringBuffer sb = new StringBuffer();
         Article article = find(Article.class, articleId);
+        if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
+            return null;
+        }
         article.setStatus(9);
         update(article);
         sb.append(article.getContent());
@@ -659,8 +679,17 @@ public class HomePageService extends BaseService {
         articleMap.put("cId", Constant.CATEGORY_ID_FUTIAN + "");
 
         Article article = list(Article.class, " WHERE cId = :cId", articleMap).get(0);
+        if (null != article) {
+            if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
+                return null;
+            }
+        }
 
         sb.append(article.getTitle()).append(Constant.ARTICE_CONTENT_SPLICE).append(article.getContent());
+
+        article.setStatus(Constant.ARTICLE_ID_NINE);
+        article.setUpdateDate(new Date());
+        update(article);
 
         Map<String, Object> map = new HashedMap();
         map.put("aId", article.getId());
@@ -695,7 +724,12 @@ public class HomePageService extends BaseService {
         Map<String, Object> articleMap = new HashedMap();
         articleMap.put("cId", Constant.CATEGORY_ID_CONTACT + "");
         Article article = list(Article.class, " WHERE cId = :cId", articleMap).get(0);
-
+        if (null != article) {
+            System.out.println(article.getStatus());
+            if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
+                return null;
+            }
+        }
         sb.append(article.getContent());
 
         Map<String, Object> map = new HashedMap();
@@ -706,6 +740,9 @@ public class HomePageService extends BaseService {
         for (SubArticle subList : subArticles) {
             sb.append(subList.getContent());
         }
+        article.setStatus(Constant.ARTICLE_ID_NINE);
+        article.setUpdateDate(new Date());
+        update(article);
 
         String[] content = sb.toString().split(Constant.ARTICE_CONTENT_SPLICE);
         List<String[]> resultList = new ArrayList<String[]>();
