@@ -31,15 +31,15 @@ public class ArticleStaticController extends BaseController {
     @AsRight(id = 2, depict = "首页主/副导航")
     @ResponseBody
     @RequestMapping("/nav")
-    public String createNav() {
-        return homePageService.staticNav().toString();
+    public String createNav(long id) {
+        return homePageService.staticNav(id).toString();
     }
 
     @AsRight(id = 3, depict = "首页广种福田、联系我们静态化")
     @ResponseBody
     @RequestMapping("/embed")
-    public String createEmbed() {
-        return homePageService.staticFutian().toString();
+    public String createEmbed(long id) {
+        return homePageService.staticFutian(id).toString();
     }
 
     @AsRight(id = 4, depict = "首页紫云法务静态化")

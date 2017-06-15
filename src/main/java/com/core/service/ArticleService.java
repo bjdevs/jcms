@@ -339,36 +339,44 @@ public class ArticleService extends BaseService {
         int num = 0;
         boolean success = true;
         try {
-            for (int i = 0; i < ids.length; i++) {
-                long id = Long.parseLong(ids[i]);
-                num = getArticleStatusStr(type, id);
-                Article article = find(Article.class, id);
-
-                if (null != article) {
-                    article.setStatus(num);
-                    article.setUpdateDate(new Date());
-                    update(article);
-                    if (num == Constant.ARTICLE_ID_FIVE) {
-                        List<HeadLine> headLines = list(HeadLine.class, String.format(" WHERE aId = %s ", article.getId()));
-                        for (int k = 0; k < headLines.size(); k++) {
-                            HeadLine headLine = headLines.get(k);
-                            headLine.setStatus(0);
-                            update(headLine);
-                        }
-                    }
-                }
-            }
             if ("release".equals(type)) {
                 // 发布
                 for (int i = 0; i < ids.length; i++) {
                     long id = Long.parseLong(ids[i]);
-                    String path = homePageService.articlePublish(id, null);
                     Article article = find(Article.class, id);
-                    article.setUrl(path);
-                    article.setPublishDate(new Date());
-                    update(article);
-                }
+                    if (null != article) {
+                        if (article.getStatus() == Constant.ARTICLE_ID_ONE) {
+                            String path = homePageService.articlePublish(id, null);
+                            article.setUrl(path);
+                            article.setStatus(Constant.ARTICLE_ID_NINE);
+                            article.setPublishDate(new Date());
+                            update(article);
+                        } else {
+                            objectNode.put("success", "error");
+                            return objectNode;
+                        }
+                    }
 
+                }
+            } else {
+                for (int i = 0; i < ids.length; i++) {
+                    long id = Long.parseLong(ids[i]);
+                    num = getArticleStatusStr(type, id);
+                    Article article = find(Article.class, id);
+                    if (null != article) {
+                        article.setStatus(num);
+                        article.setUpdateDate(new Date());
+                        update(article);
+                        if (num == Constant.ARTICLE_ID_FIVE) {
+                            List<HeadLine> headLines = list(HeadLine.class, String.format(" WHERE aId = %s ", article.getId()));
+                            for (int k = 0; k < headLines.size(); k++) {
+                                HeadLine headLine = headLines.get(k);
+                                headLine.setStatus(0);
+                                update(headLine);
+                            }
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -767,6 +775,7 @@ public class ArticleService extends BaseService {
         if (contents.length > 0) {
             article = find(Article.class, id);
             article.setContent(contents[0]);
+            article.setStatus(Constant.ARTICLE_ID_FIVE);
             article.setUpdateDate(new Date());
             update(article);
             disposeSubArticle(id, contents);
@@ -801,7 +810,7 @@ public class ArticleService extends BaseService {
         Article article = find(Article.class, 3);
         article.setContent(content[0]);
         article.setUpdateDate(new Date());
-
+        article.setStatus(Constant.ARTICLE_ID_FIVE);
         update(article);
 
         createSubArticleForContents(3, content);
@@ -845,6 +854,7 @@ public class ArticleService extends BaseService {
         }
         article.setContent(sb.toString());
         article.setUpdateDate(new Date());
+        article.setStatus(Constant.ARTICLE_ID_FIVE);
         update(article);
         objectNode.put("success", true);
         return objectNode;
@@ -968,6 +978,25 @@ public class ArticleService extends BaseService {
         return objectNode;
     }
 
+    /**
+     * 获取内嵌状态
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode getEmbedInfo(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        Article article = find(Article.class, id);
+        if (null != article) {
+            int status = article.getStatus();
+
+            objectNode.put("statusStr", status);
+            objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
+        }
+
+        return objectNode;
+    }
 
     /**
      * 发布记录
