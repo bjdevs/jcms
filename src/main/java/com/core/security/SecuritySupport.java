@@ -78,7 +78,7 @@ public class SecuritySupport {
                         message = "账号："+user.getAccount()+"，没有登录权限";
                     }
                 } else {
-                    message = "账户名或账户密码输入错误";
+                    message = "账号或密码错误";
                 }
             }
             objectNode.put("result", result);
@@ -324,7 +324,7 @@ public class SecuritySupport {
     public boolean isAdmin(User user) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("id", user.getId());
-        int num = securityRepository.count(User.class, " WHERE id = :id and status = 9", param);
+        int num = securityRepository.count(User.class, " WHERE id = :id and status = " + Constant.GENERAL_ID_NINE, param);
         if (num == 0) {
             return false;
         } else {

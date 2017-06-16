@@ -62,6 +62,7 @@ Ext.define('Admin.view.ad.AdController', {
         adGrid.down('button[action=delete]').setDisabled(count < 1);
         adGrid.down('button[action=enabled]').setDisabled(count < 1);
         adGrid.down('button[action=abandon]').setDisabled(count < 1);
+        adGrid.down('button[action=publish]').setDisabled(count < 1);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
@@ -178,6 +179,17 @@ Ext.define('Admin.view.ad.AdController', {
             url: '/cn/admin/adAbandon'
         });
     },
+
+    onPublishBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
+
+        // todo edit
+        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
+            url: '/cn/admin/adPublish'
+        });
+    },
+
     onEditBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView(),
@@ -212,10 +224,6 @@ Ext.define('Admin.view.ad.AdController', {
 
         resetButton.setHidden(false);
         submitButton.setHidden(false);
-    },
-
-    onPublishBtnClicked: function (button) {
-
     },
 
     onSubmitBtnClicked: function (button) {
