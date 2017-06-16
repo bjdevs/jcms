@@ -139,17 +139,19 @@ public class AdService extends BaseService {
                 ad = baseRepository.find(Ad.class, ad.getId());
                 if (ad !=null && ad.getId() > 0) {
                     ad.setUpdateDate(new Date());
-                    if (type == 0) { // 废弃
+                    if (type == Constant.GENERAL_ID_ZERO) { // 废弃
                         ad.setStatus(Constant.GENERAL_ID_ZERO);
                         typeStr = "废弃";
                         baseRepository.update(ad);
-                    }
-                    if (type == 1) { // 启用
+                    } else if (type == Constant.GENERAL_ID_ONE) { // 启用
                         ad.setStatus(Constant.GENERAL_ID_ONE);
                         typeStr = "启用";
                         baseRepository.update(ad);
-                    }
-                    if (type == 2) { // 删除
+                    } else if (type == Constant.GENERAL_ID_NINE) { // 发布
+                        ad.setStatus(Constant.GENERAL_ID_NINE);
+                        typeStr = "发布";
+                        baseRepository.update(ad);
+                    } else if (type == Constant.GENERAL_ID_TWO) { // 删除
                         typeStr = "删除";
                         baseRepository.delete(Ad.class, ad.getId());
                     }

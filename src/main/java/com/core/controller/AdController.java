@@ -3,6 +3,7 @@ package com.core.controller;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.AdService;
+import com.core.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,21 +40,28 @@ public class AdController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/adEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adEnabledAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, 1).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ONE).toString();
     }
 
     @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adAbandonAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, 0).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ZERO).toString();
     }
 
     @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adDeleteAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, 2).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_TWO).toString();
+    }
+
+    @AsRight(id = 111)
+    @ResponseBody
+    @RequestMapping(value = "/adPublish", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String adPublishAH(HttpServletRequest request) throws Exception {
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_NINE).toString();
     }
 
     @AsRight(id = 111)

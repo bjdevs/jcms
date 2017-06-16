@@ -24,21 +24,6 @@ Ext.define('Admin.view.ad.AdGrid', {
             }),
             columns: [
                 // todo edit {dataIndex}
-                {
-                    text: '状态',
-                    dataIndex: 'status',
-                    width: 100,
-                    renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
-                        switch (value) {
-                            case 1:
-                                return '<span style="color: green">启用</span>';
-                            case 0:
-                                return '<span style="color: red">废弃</span>';
-                            default :
-                                return value;
-                        }
-                    }
-                },
                 {text: '序号', dataIndex: 'id', width: 80},
                 {
                     text: '标题 <span class="admin-color-red">+</span>',
@@ -77,6 +62,23 @@ Ext.define('Admin.view.ad.AdGrid', {
                     }
                 },
                 {text: '更新人', dataIndex: 'user', width: 100},
+                {
+                    text: '状态',
+                    dataIndex: 'status',
+                    width: 60,
+                    renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                        switch (value) {
+                            case 9:
+                                return '<span style="color: green">发布</span>';
+                            case 1:
+                                return '启用';
+                            case 0:
+                                return '<span style="color: red">废弃</span>';
+                            default :
+                                return value;
+                        }
+                    }
+                },
                 {text: '更新时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
             ],
             tbar: [
