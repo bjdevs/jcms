@@ -117,7 +117,7 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
                 depict: selectData.depict.trim(),
                 use: selectData.use,
                 bank: selectData.bank,
-                user: selectData.user,
+                userStr: selectData.user,
                 card: selectData.card
             },
             success: function (response, opts) {
