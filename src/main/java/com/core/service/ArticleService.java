@@ -795,7 +795,7 @@ public class ArticleService extends BaseService {
         String depict = request.getParameter("depict");
         String use = request.getParameter("use");
         String bank = request.getParameter("bank");
-        String user = request.getParameter("user");
+        String user = request.getParameter("userStr");
         String card = request.getParameter("card");
 
         StringBuffer contentSb = new StringBuffer();
@@ -1037,6 +1037,7 @@ public class ArticleService extends BaseService {
         if (type.equals("2")) {
             if (StringUtils.isBlank(imageUpload)) {
                 objectNode.put("success", false);
+                objectNode.put("msg", "头条图片不能为空");
                 return objectNode;
             }
             Map<String, Object> params = new HashMap<>();
@@ -1082,6 +1083,7 @@ public class ArticleService extends BaseService {
                 headLine.setCateOrderBy(0);
                 headLine.setmId(mId);
                 headLine.setDifferent(Integer.parseInt(type));
+                headLine.setUpdateDate(new Date());
                 long headId = create(headLine);
                 Article article = find(Article.class, Integer.parseInt(id));
                 if ("1".equals(type)) {

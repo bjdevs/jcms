@@ -269,9 +269,9 @@ Ext.define('Admin.controller.ViewController', {
         Ext.Ajax.request({
             url: '/cn/article/create/index',
             method: 'POST',
-            params: {
+            /*params: {
                 userId: _am.currentUser.id
-            },
+            },*/
             waitMsg: '正在发布，请稍候...',
             success: function (response) {
                 var data = JSON.parse(response.responseText);

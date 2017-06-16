@@ -111,7 +111,8 @@ Ext.define('Admin.view.content.index.embed.Fawu', {
                 '->',
                 {
                     xtype: 'label',
-                    tpl: '状态：{statusStr}&nbsp;&nbsp;修改日期：<strong>{updateDate}</strong>',
+                    itemId: 'label-info',
+                    tpl: new Ext.XTemplate('状态：{statusStr}&nbsp;&nbsp;修改日期：<strong>{updateDate}</strong>'),
                     style: {
                         // 'color': 'crimson'
                     },

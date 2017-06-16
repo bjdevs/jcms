@@ -75,7 +75,7 @@
 
         #if($life.first)
             <div class="pic">
-                <img src="$!life.first[4]" style="width: 240px;height: 160px;" alt=""/>
+                <a href="$!life.first[0]" target="_blank"><img src="$!life.first[4]" style="width: 240px;height: 160px;" alt=""/></a>
             </div>
             <dl>
                 <dt><span><a href="$!life.first[0]" target="_blank">$!life.first[1]</a></span><em>$!life.first[3]</em>
@@ -105,7 +105,7 @@
 
         #if($ziyun.first)
             <div class="pic">
-                <img src="$!ziyun.first[4]" style="width: 240px;height: 160px;" alt=""/>
+                <a href="$!ziyun.first[0]" target="_blank"><img src="$!ziyun.first[4]" style="width: 240px;height: 160px;" alt=""/></a>
             </div>
             <dl>
                 <dt><span><a href="$!ziyun.first[0]" target="_blank">$!ziyun.first[1]</a></span><em>$!ziyun.first[3]</em>
@@ -138,10 +138,10 @@
         #if($medical.first)
             <div class="pic">
                 #if($medical.first.size() > 4)
-                    <img src="$!medical.first[4]" style="width: 144px;height: 96px;" alt=""/>
+                <a href="$!medical.first[0]" target="_blank"><img src="$!medical.first[4]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
                 #if($medical.first.size() > 5)
-                    <img src="$!medical.first[5]" style="width: 144px;height: 96px;" alt=""/>
+                <a href="$!medical.first[0]" target="_blank"><img src="$!medical.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
             </div>
             <dl>
@@ -171,10 +171,10 @@
         #if($knowledge.first)
             <div class="pic">
                 #if($knowledge.first.size() > 4)
-                    <img src="$!knowledge.first[4]" style="width: 144px;height: 96px;" alt=""/>
+                <a href="$!knowledge.first[0]" target="_blank"><img src="$!knowledge.first[4]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
                 #if($knowledge.first.size() > 5)
-                    <img src="$!knowledge.first[5]" style="width: 144px;height: 96px;" alt=""/>
+                <a href="$!knowledge.first[0]" target="_blank"><img src="$!knowledge.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
             </div>
             <dl>

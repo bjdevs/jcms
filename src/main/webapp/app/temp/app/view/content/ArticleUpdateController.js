@@ -99,19 +99,25 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                     Ext.ux.Msg.info('文章已修改', function () {
                     });
                 } else {
-                    Ext.ux.Msg.info('文章修改异常，请稍后再试...', function () {
+                    Ext.ux.Msg.info('文章修改异常，请刷新页面稍后再试...', function () {
                     });
                 }
                 var panel = button.up().up();
                 var grid = button.up().up().up().down('content-mgrid');
+                console.log("grid: "+grid);
+                if (grid == null){
+                    grid = button.up().up().up().down('workbench-mgrid');
+                    console.log("grid2: "+grid);
+                }
                 var contentPanel = button.up().up().up();
-                grid.getStore().reload();
-                grid.getSelectionModel().deselectAll();
+
                 var cancelBtn = panel.down('button[action=cancel]');
                 var saveBtn = panel.down('button[action=save]');
                 cancelBtn.setHidden(true);
                 saveBtn.setHidden(true);
                 contentPanel.remove(panel, true);
+                grid.getStore().reload();
+                grid.getSelectionModel().deselectAll();
             }
         });
     },

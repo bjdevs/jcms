@@ -83,18 +83,28 @@ Ext.define('Admin.view.content.index.nav.NavController', {
                     });
                 }
             }
-
-
         });
     },
 
     onBeforeRender: function (panel, eOpts) {
         this.onRefresh(panel);
     },
-    onRefreshBtnClicked: function () {
-        //  刷新显示有问题
-        var view = this.getView();
-        this.onRefresh(view);
+
+    onRefreshBtnClicked: function (button) {
+        var navType = location.hash.split('-'),
+            navType = navType[navType.length - 1];
+        var panel = button.up().up().up('content-index-nav');
+        var tpl = panel.down("[itemId=nav]").tpl;
+
+        Ext.Ajax.request({
+            url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
+        }).then(function (response, opts) {
+                var obj = Ext.decode(response.responseText);
+                tpl.overwrite(panel.down().body, obj);
+            },
+            function (response, opts) {
+                Ext.log('server-side failure with status code ' + response.status);
+            });
     },
 
     onRefresh: function (panel) {
@@ -148,11 +158,11 @@ Ext.define('Admin.view.content.index.nav.NavController', {
     onEditBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView(),
-
             navType = view.id.split('-'),
             navType = navType[navType.length - 1],
+            dateTime = new Date().getTime(),
 
-            winReference = 'content-index-nav-mform-' + navType,
+            winReference = 'content-index-nav-mform-' + navType + dateTime,
             win = ctrl.lookupReference(winReference);
 
         if (!win) {
@@ -171,6 +181,7 @@ Ext.define('Admin.view.content.index.nav.NavController', {
         // render
         var record = view.down('#nav').data,
             form = win.down('form').getForm();
+
         var content = record['content'].replace(/,/g, "\n");
 
         form.findField('id').setValue(record['id']);
@@ -213,7 +224,10 @@ Ext.define('Admin.view.content.index.nav.NavController', {
     onSubmitBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView();// nav
-
+        var navType = location.hash.split('-'),
+            navType = navType[navType.length - 1];
+        var panel = button.up().up().up('content-index-nav');
+        var tpl = panel.down("[itemId=nav]").tpl;
         var form = view.down('form').getForm();
 
         ctrl.formSubmit(form, {
@@ -222,8 +236,16 @@ Ext.define('Admin.view.content.index.nav.NavController', {
             Ext.ux.Msg.info('保存成功', function () {
 
                 view.hide();
-                // 保存之后刷新显示有问题
-                // ctrl.onRefresh(ownerView);
+
+                Ext.Ajax.request({
+                    url: navType == 'main' ? '/cn/article/articleForId?id=1' : '/cn/article/articleForId?id=2'
+                }).then(function (response, opts) {
+                        var obj = Ext.decode(response.responseText);
+                        tpl.overwrite(panel.down().body, obj);
+                    },
+                    function (response, opts) {
+                        Ext.log('server-side failure with status code ' + response.status);
+                    });
             });
         });
     }
