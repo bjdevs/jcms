@@ -78,7 +78,7 @@ public class SecuritySupport {
                         message = "账号："+user.getAccount()+"，没有登录权限";
                     }
                 } else {
-                    message = "账户名或账户密码输入错误";
+                    message = "账号或密码错误";
                 }
             }
             objectNode.put("result", result);
