@@ -84,6 +84,8 @@ public class Constant {
     public static final byte GENERAL_ID_TWO = 2;
     // 适用：媒体类型-文档 ...
     public static final byte GENERAL_ID_THREE = 3;
+    // 使用：发布状态 ...
+    public static final byte GENERAL_ID_NINE = 9;
 
     public static final String ARTICLE_LIST_PAGE_NAME = "articleList";
     public static final String PHOTO_LIST_PAGE_NAME = "photoList";
