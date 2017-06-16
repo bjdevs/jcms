@@ -24,7 +24,7 @@ Ext.define('Admin.view.login.LoginController', {
                             window.location.reload();
                             break;
                         case 'failed' :
-                            Ext.Msg.alert({title: "提示", msg: "登录失败，账户名或账户密码错误", buttons: Ext.Msg.OK, fn: "", icon: Ext.Msg.ERROR});
+                            Ext.Msg.alert({title: "提示", msg: "登录失败，账号或密码错误", buttons: Ext.Msg.OK, fn: "", icon: Ext.Msg.ERROR});
                         default :
                             break;
                     }
