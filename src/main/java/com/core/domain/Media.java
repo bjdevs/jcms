@@ -6,7 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import java.util.Date;
 
 /**
- * Created by sun on 2017/5/2.
+ * Created by sun
  */
 public class Media {
 
