@@ -1,17 +1,12 @@
 package com.core.util;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 /**
  * 项目工具包
- * Created by sun on 2017/5/5.
+ * Created by sun
  */
 
 public class ProjectUtil {

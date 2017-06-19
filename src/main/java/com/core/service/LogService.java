@@ -1,13 +1,9 @@
 package com.core.service;
 
 import com.core.domain.Log;
-import com.core.domain.User;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
-import com.core.util.ProjectUtil;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.stereotype.Service;
@@ -100,10 +96,11 @@ public class LogService extends BaseService {
     // 基础数据
     static Map<Integer, String> searchModule = new LinkedHashMap<Integer, String>() {{
         put(100, "全部");
-        put(101, "用户管理");
-        put(101, "权限管理");
-        put(103, "媒体管理");
-        put(104, "广告管理");
+        put(101, "系统日志");
+        put(102, "用户管理");
+        put(103, "权限管理");
+        put(104, "媒体管理");
+        put(105, "广告管理");
     }};
 
     static Map<Integer, String> searchAction = new LinkedHashMap<Integer, String>() {{
@@ -118,5 +115,7 @@ public class LogService extends BaseService {
         put(208, "返工");
         put(209, "已发");
         put(210, "已删");
+        put(300, "登录");
+        put(301, "退出");
     }};
 }

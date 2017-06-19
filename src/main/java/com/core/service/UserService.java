@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sun on 2017/4/19.
+ * Created by sun on
  */
 @Service
 public class UserService extends BaseService {
@@ -349,12 +349,12 @@ public class UserService extends BaseService {
                         _user.setPassword(EncryptUtil.md5(rePassword));
                         baseRepository.update(_user);
                         result = "success";
+                        log("用户管理", "更新", "自己更新密码->" + _user.toString());
                     }
                 }
             }
             objectNode.put("result", result);
             objectNode.put("success", true);
-            log("用户管理", "更新", "自己更新密码->"+user.toString());
             return objectNode;
         } catch (Exception e) {
             logger.error(e);
