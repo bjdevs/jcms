@@ -33,7 +33,7 @@ Ext.define('Admin.view.content.index.embed.ContactGrid', {
                     hidden: true
                 },
                 {
-                    text: 'key',
+                    text: '项目',
                     dataIndex: 'key',
                     width: 250,
                     editor: {
@@ -42,7 +42,7 @@ Ext.define('Admin.view.content.index.embed.ContactGrid', {
                     }
                 },
                 {
-                    text: 'value',
+                    text: '内容',
                     dataIndex: 'value',
                     flex: 1,
                     editor: {

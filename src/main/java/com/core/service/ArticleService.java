@@ -52,8 +52,8 @@ public class ArticleService extends BaseService {
         } else if ("all".equals(cName)) {
             // 都显示
 //            param.put("status", Constant.ARTICLE_ID_NINE);
-//            sql.append("status = :status AND id > 4");
-            sql.append("id > 4");
+            sql.append(" id > 4");
+            sql.append(" AND status < :status");
         } else {
             cId = getCategoryId(cName, false);
             if (cId == 0) {
