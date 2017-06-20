@@ -6,7 +6,8 @@ Ext.define('Admin.view.media.MediaGrid', {
         var me = this;
 
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
+                remoteFilter:true,
                 proxy: {
                     type: 'ajax',
                     url: '/cn/admin/mediaList',

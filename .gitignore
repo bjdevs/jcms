@@ -53,6 +53,7 @@ src/main/webapp/article/*
 !src/main/webapp/article/static
 
 src/main/webapp/app/application.js
+src/main/webapp/app/temp/resources/extjs/ext-expand.js
 src/main/webapp/WEB-INF/indexDir/
 src/main/webapp/WEB-INF/lib/
 src/main/webapp/WEB-INF/log/

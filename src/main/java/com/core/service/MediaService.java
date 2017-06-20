@@ -1,7 +1,6 @@
 package com.core.service;
 
-import com.core.domain.Media;
-import com.core.domain.User;
+import com.core.domain.*;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
 import com.core.util.ProjectUtil;
@@ -59,8 +58,8 @@ public class MediaService extends BaseService {
         sql = " WHERE 1 = 1";
         Map<String, Object> params = new HashMap<String, Object>();
         if (!StringUtils.isBlank(title)) {
-            params.put("title", title);
-            sql += " AND title = :title";
+            params.put("title", "%" + title + "%");
+            sql += " AND title LIKE :title";
         }
         if (type > 0) {
             params.put("type", type);
@@ -72,6 +71,7 @@ public class MediaService extends BaseService {
             params.put("endDate", endDate.replace("00:00:00", "23:59:59"));
             sql += " AND createDate > :createDate AND createDate < :endDate";
         }
+        sql += " ORDER BY id DESC";
 
         Page<Media> page = this.getPage(Media.class, sql, params, pageSize, pageNum);
         List<Media> list = page.getResultList();
@@ -151,9 +151,9 @@ public class MediaService extends BaseService {
      */
     public ObjectNode multifunctionMediaAH(HttpServletRequest request, int type) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.put("result", "failed");
-        objectNode.put("message", "");
         objectNode.put("success", true);
+        String result = "failed";
+        String message = "";
         try {
             String[] ids = request.getParameterValues("ids");
             StringBuilder stringBuilder = new StringBuilder("广告ID:[");
@@ -166,28 +166,60 @@ public class MediaService extends BaseService {
                 media = baseRepository.find(Media.class, media.getId());
                 if (media != null && media.getId() > 0) {
                     if (type == 0) { // 废弃
-                        media.setStatus(Constant.GENERAL_ID_ZERO);
-                        typeStr = "废弃";
-                        baseRepository.update(media);
+                        // 查询关联表
+                        //select count(1) from jcms_headline where mid =;
+                        List<HeadLine> headLineList = getHeadLineList(media.getId());
+                        if (headLineList.size() == 0) {
+                            media.setStatus(Constant.GENERAL_ID_ZERO);
+                            typeStr = "废弃";
+                            result = "success";
+                            baseRepository.update(media);
+                        } else {
+                            StringBuilder stringBuilder2 = new StringBuilder();
+                            String articleTitle = "";
+                            for (HeadLine hl : headLineList) {
+                                Article article = find(Article.class, hl.getaId());
+                                Category category = find(Category.class, hl.getcId());
+                                articleTitle = article.getTitle();
+                                if (article != null && article.getId() > 0 && category != null && category.getId() > 0) {
+                                    stringBuilder2.append("〔").append(category.getName()).append("〕")
+                                            .append("，").append("<br/>");
+                                }
+                            }
+                            stringBuilder2.append("中作为焦点图引用，无法删除");
+                            message = "该图片被〔" + articleTitle + "〕在<br/>" + stringBuilder2.toString();
+                            break;
+                        }
                     }
                     if (type == 1) { // 启用
                         media.setStatus(Constant.GENERAL_ID_ONE);
                         typeStr = "启用";
+                        result = "success";
                         baseRepository.update(media);
                     }
                     if (type == 2) { // 删除
-                        qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
-                        typeStr = "删除";
-                        baseRepository.delete(Media.class, media.getId());
+                        if (media.getStatus() == Constant.GENERAL_ID_ONE) { // 如果状态是启用，是不能删除
+                            message = "当前状态为启用，禁止删除";
+                            break;
+                        } else if (media.getStatus() == Constant.GENERAL_ID_ZERO) {
+                            // 如果可以删除，那么要再去查询表，如果大于
+                            qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
+                            typeStr = "删除";
+                            baseRepository.delete(Media.class, media.getId());
+                            result = "success";
+                        }
                     }
-                    objectNode.put("result", "success");
                     stringBuilder.append(media.getId()).append(",");
                 }
             }
-            log("媒体管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            if ("success".equals(result)) {
+                log("媒体管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        objectNode.put("result", result);
+        objectNode.put("message", message);
         return objectNode;
     }
 
@@ -353,5 +385,12 @@ public class MediaService extends BaseService {
                 key,
                 uploadType == 0 ? qiniuAuthUtil.getUpToken0(mediaType) : qiniuAuthUtil.getUpToken1(mediaType, key));
         return response.statusCode;
+    }
+
+    private List<HeadLine> getHeadLineList(long mId) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String sql = " WHERE mId = :mId";
+        params.put("mId", mId);
+        return baseRepository.list(HeadLine.class, sql, params);
     }
 }
