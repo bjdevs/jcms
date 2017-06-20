@@ -92,7 +92,7 @@ Ext.define('Admin.view.auth.acl.AclMainForm', {
                                 minChars: 1,
                                 //pageSize: 10,
 
-                                emptyText: '请输入用户名',
+                                emptyText: '请输入账号',
                                 matchFieldWidth: false, // 取消下拉选择器与表单宽度一致的规定
                                 listConfig: { // 下拉选择器的配置
                                     width: 200

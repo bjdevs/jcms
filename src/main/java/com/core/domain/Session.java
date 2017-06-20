@@ -72,4 +72,17 @@ public class Session {
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
     }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "id=" + id +
+                ", sessionKey='" + sessionKey + '\'' +
+                ", userId=" + userId +
+                ", account='" + account + '\'' +
+                ", status=" + status +
+                ", loginDate=" + loginDate +
+                ", expireDate=" + expireDate +
+                '}';
+    }
 }

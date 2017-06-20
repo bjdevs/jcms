@@ -1,10 +1,8 @@
 package com.core.security;
 
-import com.core.config.Config;
 import com.core.domain.User;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
-import com.core.util.Constant;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;

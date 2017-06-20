@@ -5,7 +5,7 @@ import com.core.domain.User;
 import com.core.repository.SecurityRepository;
 import com.core.util.Constant;
 import com.core.util.EncryptUtil;
-import com.core.util.ProjectUtil;
+import com.core.util.IpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,6 +73,7 @@ public class SecuritySupport {
                         user.setLastLoginDate(new Date());
                         securityRepository.update(user);
                         result = "success";
+                        log(user.getAccount(),"系统日志","登录", user.toString());
                         // 此处记录日志
                     } else {
                         message = "账号："+user.getAccount()+"，没有登录权限";
@@ -178,7 +179,10 @@ public class SecuritySupport {
         try {
             String cookieValue = getCookie(TOOKEN_COOKIE_NAME);
             Session session = findSession(cookieValue);
+
             if (session != null && session.getId() > 0) {
+                User user = getUserInfo(session.getUserId(), session.getAccount(), null);
+                log(user.getAccount(),"系统日志","退出", user.toString());
                 securityRepository.delete(Session.class, session.getId());
             }
             deleteCookie(response, cookieValue);
@@ -334,6 +338,17 @@ public class SecuritySupport {
 
     public boolean hasRight(long userId, Method method) throws Exception {
         return securityRepository.hasRight(userId, method);
+    }
+
+    private void log(String account, String name, String action, String content) throws Exception {
+        com.core.domain.Log log = new com.core.domain.Log();
+        log.setAccount(account);
+        log.setName(name);
+        log.setAction(action);
+        log.setContent(content);
+        log.setIp(IpUtil.getIp(request));
+        log.setCreateDate(new Date());
+        securityRepository.create(log);
     }
 
 }

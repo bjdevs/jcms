@@ -1,6 +1,5 @@
 package com.core.controller;
 
-import com.core.domain.Media;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.MediaService;
