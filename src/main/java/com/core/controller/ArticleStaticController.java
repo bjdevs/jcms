@@ -6,7 +6,6 @@ import com.core.service.HomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class ArticleStaticController extends BaseController {
     @Autowired
     private HomePageService homePageService;
 
-    @AsRight(id=137)
+    @AsRight(id = 137)
     @ResponseBody
     @RequestMapping("/index")
     public String createIndexAH(HttpServletRequest request) {
@@ -48,7 +47,7 @@ public class ArticleStaticController extends BaseController {
         return getViewRedirect("/article/index.html");
     }
 
-    @AsRight(id=137)
+    @AsRight(id = 137)
     @ResponseBody
     @RequestMapping("/ad")
     public String createAdAH(HttpServletRequest request) {
