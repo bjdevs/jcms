@@ -23,7 +23,10 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
 
     onAuditBtnClicked: function (button) {
         var ctrl = this,
-            grid = button.up('grid');
+            grid = button.up('grid'),
+            panel = button.up().up('panel'),
+            tpl = panel.down('[itemId=label-info]').tpl;
+        console.log("tpl: "+tpl);
         var type = location.hash;
         type = type.split('-');
         type = type[type.length - 1];
@@ -58,6 +61,7 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                     } else {
                         Ext.ux.Msg.info('审核成功', function () {
                         });
+                        // tpl.overwrite(panel.body, null);
                     }
                 } else if (success == "error") {
                     Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
@@ -66,6 +70,18 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                     Ext.ux.Msg.info('审核失败，' + result, function () {
                     });
                 }
+                /*Ext.Ajax.request({
+                    url: '/cn/article/getEmbedInfo?id=' + id
+                }).then(function (response, opts) {
+                        var obj = Ext.decode(response.responseText);
+                    console.log("obj: "+obj);
+                        // tpl.overwrite(panel.down().body, obj);
+                    },
+                    function (response, opts) {
+                        Ext.log('server-side failure with status code ' + response.status);
+                    });*/
+                // tpl.overwrite(button.up().up().body, "{\"statusStr\":0,\"updateDate\":\"2017-06-16 11:07:18\"}");
+                // tpl.set("{\"statusStr\":0,\"updateDate\":\"2017-06-16 11:07:18\"}");
             }
         });
     },

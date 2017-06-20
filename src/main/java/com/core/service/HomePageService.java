@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,11 +43,12 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 首页
      */
-    public ObjectNode staticIndex(int userId) {
+    public ObjectNode staticIndex(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
         log = new Log();
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        long publishId = createPublishLog(userId, "首页静态化");
+        long publishId = createPublishLog(user.getId(), "首页静态化");
         PublishLog publishLog = find(PublishLog.class, publishId);
 
         String staticResPrefix = config.getStaticResourceURLPrefix();
@@ -61,7 +63,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("depict", "首页,描述");
 
         log.setIp(IpUtil.getIp(request));
-        log.setAccount(find(User.class, userId).getAccount());
+        log.setAccount(find(User.class, user.getId()).getAccount());
         log.setName("发布管理");
         log.setAction("首页");
 
@@ -112,7 +114,7 @@ public class HomePageService extends BaseService {
             staticFawu();
 
             // banner
-            staticAd(userId);
+            staticAd(request);
 
             create("/index.html", "base/index.vm", toolManagerContext, null);
 
@@ -144,7 +146,8 @@ public class HomePageService extends BaseService {
         long id = createPublishLog(1, "导航");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
-            String[] nav;
+            String[] mainNav;
+            String[] deputyNav;
             ToolContext toolManagerContext = toolManager.createContext();
             if (idStr == 1 || idStr == 2) {
                 Article article = find(Article.class, idStr);
@@ -153,12 +156,16 @@ public class HomePageService extends BaseService {
                     return objectNode;
                 }
             }
-            nav = searchNav("main");
-            toolManagerContext.put("main", nav);
-            nav = searchNav("deputy");
-            toolManagerContext.put("deputy", nav);
-            create("/base/nav.html", "base/nav.vm", toolManagerContext, null);
-            objectNode.put("success", true);
+            mainNav = searchNav("main");
+            deputyNav = searchNav("deputy");
+
+            if (null != mainNav && null != deputyNav){
+                toolManagerContext.put("main", mainNav);
+                toolManagerContext.put("deputy", deputyNav);
+                create("/base/nav.html", "base/nav.vm", toolManagerContext, null);
+                objectNode.put("success", true);
+            }
+
         } catch (Exception e) {
             publishLog.setStatus(0);
             objectNode.put("success", false);
@@ -254,9 +261,10 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 广告位
      */
-    public ObjectNode staticAd(int userId) {
+    public ObjectNode staticAd(HttpServletRequest request) {
         ObjectNode objectNode1 = objectMapper.createObjectNode();
-        long id = createPublishLog(userId, "广告位");
+        User user = (User) request.getAttribute("user");
+        long id = createPublishLog(user.getId(), "广告位");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             List<Ad> resultAdList = searchAd();
@@ -647,9 +655,6 @@ public class HomePageService extends BaseService {
         }
         StringBuffer sb = new StringBuffer();
         Article article = find(Article.class, articleId);
-        if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
-            return null;
-        }
         article.setStatus(9);
         update(article);
         sb.append(article.getContent());
@@ -679,11 +684,6 @@ public class HomePageService extends BaseService {
         articleMap.put("cId", Constant.CATEGORY_ID_FUTIAN + "");
 
         Article article = list(Article.class, " WHERE cId = :cId", articleMap).get(0);
-        if (null != article) {
-            if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
-                return null;
-            }
-        }
 
         sb.append(article.getTitle()).append(Constant.ARTICE_CONTENT_SPLICE).append(article.getContent());
 
@@ -724,12 +724,6 @@ public class HomePageService extends BaseService {
         Map<String, Object> articleMap = new HashedMap();
         articleMap.put("cId", Constant.CATEGORY_ID_CONTACT + "");
         Article article = list(Article.class, " WHERE cId = :cId", articleMap).get(0);
-        if (null != article) {
-            System.out.println(article.getStatus());
-            if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
-                return null;
-            }
-        }
         sb.append(article.getContent());
 
         Map<String, Object> map = new HashedMap();
@@ -982,9 +976,9 @@ public class HomePageService extends BaseService {
      *
      * @param content
      */
-    private long createPublishLog(int userId, String content) {
+    private long createPublishLog(long userId, String content) {
         PublishLog publishLog = new PublishLog();
-        publishLog.setUserId(userId);
+        publishLog.setUserId(Integer.parseInt(userId + ""));
         publishLog.setCategory(content);
         publishLog.setStatus(1);
         publishLog.setRequestDate(new Date());
