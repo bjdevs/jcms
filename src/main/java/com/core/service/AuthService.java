@@ -371,6 +371,7 @@ public class AuthService extends BaseService {
         boolean isVerify = true;
         String message = "";
         String id = request.getParameter("id");
+        StringBuilder stringBuilder = new StringBuilder();
         if (StringUtils.isBlank(id)) {
             // 新增
             String[] roleIds = request.getParameter("role_ids").split(",");
@@ -403,10 +404,11 @@ public class AuthService extends BaseService {
                     authNew.setuId((int) user.getId());
                     authNew.setName(user.getAccount());
                     baseRepository.create(authNew);
+                    stringBuilder.append(user.getAccount()).append(",");
                 }
                 // 执行保存的逻辑
                 result = "success";
-                log("权限管理", "新增", "权限，" + auth.toString() + "," + getAuthRoleList(auth.getuId(),true));
+                log("权限管理", "新增", "权限，为：" + stringBuilder.toString().substring(0,stringBuilder.length()-1) + ",增加：" + getAuthRoleList((int) user.getId(),true));
             }
         } else {
             // 修改
