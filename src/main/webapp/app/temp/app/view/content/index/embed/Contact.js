@@ -48,6 +48,7 @@ Ext.define('Admin.view.content.index.embed.Contact', {
                 '->',
                 {
                     xtype: 'label',
+                    reference: 'status',
                     tpl: '状态：{statusStr}&nbsp;&nbsp;修改日期：<strong>{updateDate}</strong>',
                     style: {
                         // 'color': 'crimson'

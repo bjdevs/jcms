@@ -22,6 +22,8 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
         var ctrl = this,
             grid = button.up('grid');
 
+        var panel1 = button.up('content-index-embed-contact');
+
         Ext.Ajax.request({
             url: '/cn/article/auditArticleForId',
             method: 'POST',
@@ -33,12 +35,18 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
                         });
                     } else {
                         Ext.ux.Msg.info('审核成功', function () {
+                        });
+                        panel1.lookupReference('status').setHtml({
+                            statusStr: ctrl.getStatus(statusStr),
+                            updateDate: updateDate
                         });
                     }
                 } else if (success == "error") {
@@ -52,7 +60,9 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
         });
     },
 
-    onClickedRelease: function () {
+    onClickedRelease: function (button) {
+        var ctrl = this,
+            panel1 = button.up('content-index-embed-contact');
         // 联系我们
         Ext.Ajax.request({
             method: 'POST',
@@ -65,12 +75,18 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
                         });
                     } else {
                         Ext.ux.Msg.info('发布成功', function () {
+                        });
+                        panel1.lookupReference('status').setHtml({
+                            statusStr: ctrl.getStatus(statusStr),
+                            updateDate: updateDate
                         });
                     }
                 } else if (success == "error") {
@@ -85,7 +101,9 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
     },
 
     onClickedEdit: function (button) {
-        var grid = button.up().up().down('grid');
+        var ctrl = this,
+            grid = button.up().up().down('grid');
+        var panel1 = button.up('content-index-embed-contact');
 
         var selected = grid.getSelection();
 
@@ -106,6 +124,8 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
             success: function (response, opts) {
                 var data = Ext.decode(response.responseText);
                 var success = data.success;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success) {
                     Ext.MessageBox.show({
                         title: '操作提示',
@@ -117,17 +137,34 @@ Ext.define('Admin.view.content.index.embed.ContactController', {
                         fn: function (buttonId) {
                             var store = grid.getStore();
                             store.reload();
+                            panel1.lookupReference('status').setHtml({
+                                statusStr: ctrl.getStatus(statusStr),
+                                updateDate: updateDate
+                            });
                         }
                     });
                 }
             }
         });
     },
-
     onClickedRefresh: function (button) {
         var grid = button.up().up().down('grid');
         var store = grid.getStore();
         store.reload();
+    },
+    getStatus: function (status) {
+        switch (status) {
+            case 0:
+                return '<strong style="color: #0066FF;">初稿</strong>';
+            case 1:
+                return '<strong style="color: black;">已签</strong>';
+            case 5:
+                return '<strong style="color: #FF6633;">返工</strong>';
+            case 9:
+                return '<strong style="color: #7DB336;">已发</strong>';
+            case 10:
+                return '<strong style="color: red;">已删</strong>';
+        }
     }
 
 

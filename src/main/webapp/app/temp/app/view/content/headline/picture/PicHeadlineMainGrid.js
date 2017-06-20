@@ -62,7 +62,7 @@ Ext.define('Admin.view.content.headline.picture.PicHeadlineMainGrid', {
                         allowBlank: false
                     }
                 },
-                {text: '栏目', dataIndex: 'category', width: 150},
+                {text: '栏目头条', dataIndex: 'category', width: 150},
                 {text: '套红 <span class="admin-color-red">+</span>', dataIndex: 'redStatus', xtype: 'checkcolumn'},
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
