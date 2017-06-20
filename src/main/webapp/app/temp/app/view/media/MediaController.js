@@ -11,6 +11,12 @@ Ext.define('Admin.view.media.MediaController', {
     },
 
     control: {
+        'media-sp button[action=search]': {
+            click: 'onSearchPanelQuery'
+        },
+        'media-sp button[action=reset]': {
+            click: 'onSearchPanelReset'
+        },
         'media-mgrid': {
             selectionchange: 'onSelectionChange',
             itemclick: 'onItemClick'
@@ -35,13 +41,8 @@ Ext.define('Admin.view.media.MediaController', {
         },
         'media-mgrid button[action=edit]': {
             click: 'onEditBtnClicked'
-        },
-        'media-sp button[action=search]': {
-            click: 'onSearchPanelQuery'
-        },
-        'media-sp button[action=reset]': {
-            click: 'onSearchPanelReset'
         }
+
     },
 
     onSelectionChange: function (model, selected, eOpts) {
@@ -55,11 +56,21 @@ Ext.define('Admin.view.media.MediaController', {
 
         if (count == 0) Ext.log('No selection');
 
+        var deleteStatus = false,
+            enabledStatus = false;
+        for (var i = 0; i < selected.length; i++) {
+            var status = selected[i].data.status;
+            if (status == 1) { // status -> on
+                deleteStatus = true;
+                enabledStatus = true;
+            }
+        }
+
         mediaGrid.down('button[action=save]').setDisabled(count < 1);
-        mediaGrid.down('button[action=delete]').setDisabled(count < 1);
-        mediaGrid.down('button[action=enabled]').setDisabled(count < 1);
-        mediaGrid.down('button[action=abandon]').setDisabled(count < 1);
         mediaGrid.down('button[action=edit]').setDisabled(count < 1);
+        mediaGrid.down('button[action=enabled]').setDisabled(enabledStatus);
+        mediaGrid.down('button[action=abandon]').setDisabled(count < 1);
+        mediaGrid.down('button[action=delete]').setDisabled(deleteStatus);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
