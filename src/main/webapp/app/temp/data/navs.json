@@ -27,6 +27,11 @@
               "leaf": true
             },
             {
+              "viewType": "report-outsource",
+              "text": "广告管理",
+              "leaf": true
+            },
+            {
               "text": "紫云法务",
               "children": [
                 {
@@ -188,7 +193,7 @@
       ]
     },
     {
-      "text": "账户资料",
+      "text": "帐户资料",
       "iconCls": "x-fa fa-user",
       "children": [
         {

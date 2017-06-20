@@ -149,7 +149,6 @@ public class HomePageService extends BaseService {
             String[] mainNav;
             String[] deputyNav;
             ToolContext toolManagerContext = toolManager.createContext();
-
             if (idStr == 1 || idStr == 2) {
                 Article article = find(Article.class, idStr);
                 if (article.getStatus() != Constant.ARTICLE_ID_ONE) {
@@ -160,19 +159,12 @@ public class HomePageService extends BaseService {
             mainNav = searchNav("main");
             deputyNav = searchNav("deputy");
 
-            if (null != mainNav && null != deputyNav) {
+            if (null != mainNav && null != deputyNav){
                 toolManagerContext.put("main", mainNav);
                 toolManagerContext.put("deputy", deputyNav);
                 create("/base/nav.html", "base/nav.vm", toolManagerContext, null);
                 objectNode.put("success", true);
             }
-
-            if (idStr == 1 || idStr == 2) {
-                Article article = find(Article.class, idStr);
-                objectNode.put("status", article.getStatus());
-                objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
-            }
-
 
         } catch (Exception e) {
             publishLog.setStatus(0);
@@ -209,11 +201,6 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("contact", resultContact);
 
             create("/base/futian.html", "base/futian.vm", toolManagerContext, null);
-            if (idStr == 3 || idStr == 4) {
-                Article article = find(Article.class, idStr);
-                objectNode.put("status", article.getStatus());
-                objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
-            }
             objectNode.put("success", true);
         } catch (Exception e) {
             publishLog.setStatus(0);
@@ -300,7 +287,7 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 活动通知
      */
-    public void staticNotice() throws Exception {
+    public void staticNotice() {
         long id = createPublishLog(1, "活动通知");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
@@ -328,7 +315,6 @@ public class HomePageService extends BaseService {
         } catch (Exception e) {
             e.printStackTrace();
             publishLog.setStatus(0);
-            throw new Exception(e.getMessage());
         }
 
         publishLog.setFinishDate(new Date());
@@ -386,7 +372,7 @@ public class HomePageService extends BaseService {
             map.put("publishDate", new SimpleDateFormat("yyyy-MM-dd").format(article.getPublishDate()));
 //            map.put("pageContent", "<a href=\"#\">上一页</a>");
 
-            String finalPath = getArticlePathSuffix(category.getName(), article.getId(), "", "");
+            String finalPath = getArticlePathSuffix(category.getName(), article.getId(), "");
 
             if (null != type && "preview".equals(type)) {
                 articleStaticDispose(contents, category, article, map, staticResPrefix, toolManagerContext, stringBuffer, "preview");
@@ -397,7 +383,7 @@ public class HomePageService extends BaseService {
             if (null != type && "preview".equals(type)) {
                 return getPreviewResultPathSuffix((config.getArticleIdAddend() + id) + "");
             } else {
-                return staticResPrefix + File.separator + finalPath;
+                return staticResPrefix + finalPath;
             }
         }
         return null;
@@ -413,11 +399,10 @@ public class HomePageService extends BaseService {
      * @return
      */
     private String create(String create, String templatePath, ToolContext toolManagerContext, String type) {
+
         String createPath = config.getArticleDir();
         if (null != type && ("preview".equals(type) || "jsp".equals(type))) {
             createPath = "";
-        } else {
-            createPath += File.separator;
         }
         String checkPath = create.substring(0, create.lastIndexOf("/"));
         fileCheck(createPath, checkPath);
@@ -886,7 +871,7 @@ public class HomePageService extends BaseService {
 
             // 获取文章路径
             if (!"preview".equals(type)) {
-                articlePath = getArticlePathSuffix(category.getName(), article.getId(), i == 0 ? "" : "_" + (i + 1), "");
+                articlePath = getArticlePathSuffix(category.getName(), article.getId(), i == 0 ? "" : "_" + (i + 1));
             } else {
                 articlePath = getArticlePreviewPathSuffix(category.getName(), article.getId(), i == 0 ? "" : "_" + (i + 1));
             }
@@ -897,7 +882,7 @@ public class HomePageService extends BaseService {
             if (i > 0) {
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), i > 1 ? "_" + i : "", "");
+                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), i > 1 ? "_" + i : "");
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + (i > 1 ? "_" + i : ""));
                     staticResPrefix = "http://";
@@ -911,7 +896,7 @@ public class HomePageService extends BaseService {
                         pageNoSb.append("<span class=\"current\">" + (k + 1) + "</span>");
                     } else {
                         if (!"preview".equals(type)) {
-                            pathTemp = getArticlePathSuffix(category.getName(), article.getId(), k == 0 ? "" : "_" + (k + 1), "");
+                            pathTemp = getArticlePathSuffix(category.getName(), article.getId(), k == 0 ? "" : "_" + (k + 1));
                         } else {
                             pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + (k == 0 ? "" : "_" + (k + 1)));
                             staticResPrefix = "http://";
@@ -924,7 +909,7 @@ public class HomePageService extends BaseService {
             if (contents.length > 1 && i != (contents.length - 1)) {
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_" + (i + 2), "");
+                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_" + (i + 2));
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + ("_" + (i + 2)));
                     staticResPrefix = "http://";
@@ -934,7 +919,7 @@ public class HomePageService extends BaseService {
                 // 阅读全文
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_1", "");
+                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_1");
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "_1");
                     staticResPrefix = "http://";
@@ -951,8 +936,8 @@ public class HomePageService extends BaseService {
         if (contents.length > 1) {
             // 获取文章路径
             if (!"preview".equals(type)) {
-                articlePath = getArticlePathSuffix(category.getName(), article.getId(), "_1", "");
-                pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "", "");
+                articlePath = getArticlePathSuffix(category.getName(), article.getId(), "_1");
+                pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "");
             } else {
                 articlePath = getArticlePreviewPathSuffix(category.getName(), article.getId(), "_1");
                 pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "");
@@ -1030,8 +1015,8 @@ public class HomePageService extends BaseService {
      * @param aId
      * @return
      */
-    public String getArticlePathSuffix(String category, long aId, String suffix, String base) {
-        return base + category + "/" + getThisYear() + "/" + (config.getArticleIdAddend() + aId) + suffix + ".html";
+    public String getArticlePathSuffix(String category, long aId, String suffix) {
+        return "/base/" + getThisYear() + "/" + category + "/" + (config.getArticleIdAddend() + aId) + suffix + ".html";
     }
 
     /**
@@ -1052,8 +1037,8 @@ public class HomePageService extends BaseService {
      * @return
      */
     public String getPreviewResultPathSuffix(String id) {
-        String path = config.getPreViewDomain();
-        path = path + "cn/article/preview?id=" + id;
+        String path = config.getDomain();
+        path = path.substring(0, path.lastIndexOf("/") + 1) + "cn/article/preview?id=" + id;
         return path;
     }
 

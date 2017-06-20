@@ -25,7 +25,8 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
         var ctrl = this,
             grid = button.up('grid'),
             panel = button.up().up('panel'),
-            panel1 = button.up('content-index-embed-fawu');
+            tpl = panel.down('[itemId=label-info]').tpl;
+        console.log("tpl: "+tpl);
         var type = location.hash;
         type = type.split('-');
         type = type[type.length - 1];
@@ -53,8 +54,6 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
-                var statusStr = data.status,
-                    updateDate = data.updateDate;
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
@@ -62,10 +61,7 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                     } else {
                         Ext.ux.Msg.info('审核成功', function () {
                         });
-                        panel1.lookupReference('status').setHtml({
-                            statusStr: ctrl.getStatus(statusStr),
-                            updateDate: updateDate
-                        });
+                        // tpl.overwrite(panel.body, null);
                     }
                 } else if (success == "error") {
                     Ext.ux.Msg.info('审核失败，只有返工状态才可执行该操作', function () {
@@ -74,20 +70,30 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                     Ext.ux.Msg.info('审核失败，' + result, function () {
                     });
                 }
+                /*Ext.Ajax.request({
+                    url: '/cn/article/getEmbedInfo?id=' + id
+                }).then(function (response, opts) {
+                        var obj = Ext.decode(response.responseText);
+                    console.log("obj: "+obj);
+                        // tpl.overwrite(panel.down().body, obj);
+                    },
+                    function (response, opts) {
+                        Ext.log('server-side failure with status code ' + response.status);
+                    });*/
+                // tpl.overwrite(button.up().up().body, "{\"statusStr\":0,\"updateDate\":\"2017-06-16 11:07:18\"}");
+                // tpl.set("{\"statusStr\":0,\"updateDate\":\"2017-06-16 11:07:18\"}");
             }
         });
     },
 
     onSaveBtnClicked: function (button) {
-        var ctrl = this,
-            form = button.up().up(),
-            showContent = form.query('[itemId^=d-]'),
-            disContent = form.query('[itemId^=v-]'),
-            cancelBtn = form.down('[action=cancel]'),
-            saveBtn = form.down('[action=save]'),
-            updateBtn = form.down('[action=update]'),
-            releaseBtn = form.down('[action=release]');
-        var panel1 = button.up('content-index-embed-fawu');
+        var form = button.up().up();
+        var showContent = form.query('[itemId^=d-]');
+        var disContent = form.query('[itemId^=v-]');
+        var cancelBtn = form.down('[action=cancel]');
+        var saveBtn = form.down('[action=save]');
+        var updateBtn = form.down('[action=update]');
+        var releaseBtn = form.down('[action=release]');
 
         var type = location.hash.split('-'),
             type = type[type.length - 1];
@@ -114,17 +120,11 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
             success: function (response) {
                 var data = response.responseText;
                 data = JSON.parse(data);
-                var statusStr = data.status,
-                    updateDate = data.updateDate;
                 if (data.success) {
                     Ext.ux.Msg.info('修改成功', function () {
                     });
-                    panel1.lookupReference('status').setHtml({
-                        statusStr: ctrl.getStatus(statusStr),
-                        updateDate: updateDate
-                    });
                 } else {
-                    Ext.ux.Msg.error('修改失败：' + data.msg, function () {
+                    Ext.ux.Msg.error('修改失败', function () {
                     });
                 }
             }
@@ -193,10 +193,8 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
     },
 
     onReleaseBtnClicked: function (button) {
-        var ctrl = this,
-            type = location.hash.split('-'),
+        var type = location.hash.split('-'),
             type = type[type.length - 1];
-        var panel1 = button.up('content-index-embed-fawu');
         switch (type) {
             case "short": // 短期出家
                 type = 5;
@@ -221,18 +219,13 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
-                var statusStr = data.status,
-                    updateDate = data.updateDate;
+
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
                         });
                     } else {
                         Ext.ux.Msg.info('发布成功', function () {
-                        });
-                        panel1.lookupReference('status').setHtml({
-                            statusStr: ctrl.getStatus(statusStr),
-                            updateDate: updateDate
                         });
                     }
                 } else if (success == "error") {
@@ -244,19 +237,5 @@ Ext.define('Admin.view.content.index.embed.FawuController', {
                 }
             }
         });
-    },
-    getStatus: function (status) {
-        switch (status) {
-            case 0:
-                return '<strong style="color: #0066FF;">初稿</strong>';
-            case 1:
-                return '<strong style="color: black;">已签</strong>';
-            case 5:
-                return '<strong style="color: #FF6633;">返工</strong>';
-            case 9:
-                return '<strong style="color: #7DB336;">已发</strong>';
-            case 10:
-                return '<strong style="color: red;">已删</strong>';
-        }
     }
 });

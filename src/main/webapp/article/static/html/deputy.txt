@@ -1,3 +1,3 @@
-<li><a href="http://list.hmlzs.cn/c-9-1.html">紫云法务</a></li>
-<li><a href="http://list.hmlzs.cn/c-9-1.html">广种福田</a></li>
-<li><a href="http://list.hmlzs.cn/c-9-1.html">联系我们</a></li>
+<li><a href="http://list.hmlzs.me:8080/cn/c-9-1.html">紫云法务</a></li>
+<li><a href="http://list.hmlzs.me:8080/cn/c-9-1.html">广种福田</a></li>
+<li><a href="http://list.hmlzs.me:8080/cn/c-9-1.html">联系我们</a></li>

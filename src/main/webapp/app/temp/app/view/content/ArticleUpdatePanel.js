@@ -271,12 +271,12 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                     hidden: true,
                     name: 'content',
                     xtype: 'panel',
-                    html: '<textarea id="content" style="width: 100%; height: 350px;"></textarea>',
+                    html: '<textarea id="content" style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
                     listeners: {
                         afterrender: function (filed, eOpts) {
                             var content = filed.up().getViewModel().data.article.data.content;
                             // editor = KindEditor.create('#' + filed.id, {
-                            window.editor = KindEditor.create('#content', {
+                            editor = KindEditor.create('#content', {
                                 resizeType: 1,
                                 allowPreviewEmoticons: false,
                                 items: [
@@ -295,7 +295,7 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                                     rule: 0
                                 }
                             });
-                            window.editor.html(content);
+                            editor.html(content);
                         }
                     }
                 }
@@ -330,29 +330,29 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                     action: 'update'
                 },
                 /*{
-                 xtype: 'button',
-                 text: '审核',
-                 iconCls: 'x-fa fa-check-circle-o',
-                 action: 'audit'
-                 },
-                 {
-                 xtype: 'button',
-                 text: '返工',
-                 iconCls: 'x-fa fa-undo',
-                 action: 'rework'
-                 },
-                 {
-                 xtype: 'button',
-                 text: '发布',
-                 iconCls: 'x-fa fa-paper-plane-o',
-                 action: 'release'
-                 },
-                 {
-                 xtype: 'button',
-                 text: '删除',
-                 iconCls: 'x-fa fa-trash-o',
-                 action: 'delete'
-                 }*/
+                    xtype: 'button',
+                    text: '审核',
+                    iconCls: 'x-fa fa-check-circle-o',
+                    action: 'audit'
+                },
+                {
+                    xtype: 'button',
+                    text: '返工',
+                    iconCls: 'x-fa fa-undo',
+                    action: 'rework'
+                },
+                {
+                    xtype: 'button',
+                    text: '发布',
+                    iconCls: 'x-fa fa-paper-plane-o',
+                    action: 'release'
+                },
+                {
+                    xtype: 'button',
+                    text: '删除',
+                    iconCls: 'x-fa fa-trash-o',
+                    action: 'delete'
+                }*/
             ]
 
         });

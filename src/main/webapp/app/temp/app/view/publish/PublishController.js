@@ -16,6 +16,6 @@ Ext.define('Admin.view.publish.publishController', {
     },
 
     onRedirectBtnClicked: function () {
-        window.open("http://www.hmlzs.org");
+        window.open("../../article/index.html");
     }
 });

@@ -9,7 +9,6 @@ public class Config {
     private String projectName;
 
     private String domain;
-    private String preViewDomain;
     private String listDomain;
     private String listParam;
 
@@ -150,13 +149,5 @@ public class Config {
 
     public void setListSerialParam(String listSerialParam) {
         this.listSerialParam = listSerialParam;
-    }
-
-    public String getPreViewDomain() {
-        return preViewDomain;
-    }
-
-    public void setPreViewDomain(String preViewDomain) {
-        this.preViewDomain = preViewDomain;
     }
 }

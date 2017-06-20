@@ -68,7 +68,6 @@
           p:listDomain="${config.hmlzs.domain.list}"
           p:listParam="${config.hmlzs.domain.list.param}"
           p:domain="${config.hmlzs.domain}"
-          p:preViewDomain="${config.hmlzs.preview.domain}"
           p:projectName="${config.hmlzs.project.name}"
           p:preTag="${lucene.preTag}"
           p:postTag="${lucene.postTag}"
