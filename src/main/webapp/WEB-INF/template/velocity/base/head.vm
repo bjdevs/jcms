@@ -7,7 +7,7 @@
     <title>${winTitle}</title>
     <meta name="author" content="4what"/>
     <meta name="description" content="黄梅老祖寺 ${depict}"/>
-    <meta name="keywords" content="黄梅老祖寺 ${keyWord}"/>
+    <meta name="keywords" content="老祖寺,黄梅老祖寺,紫云山,${keyWord}"/>
 
     <link rel="stylesheet" type="text/css" href="${resURLPrefix}/static/lzs/css/style.css"/>
 </head>

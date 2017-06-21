@@ -36,7 +36,7 @@ public class ListService extends BaseService {
         }
 
         Category category = find(Category.class, cId);
-        objects[2] = category.geteName() + Constant.WINDOW_TITLE_SUFFIX;
+        objects[2] = category.getName() + Constant.WINDOW_TITLE_SUFFIX;
 
         return objects;
     }
@@ -112,7 +112,7 @@ public class ListService extends BaseService {
 
         Category category = find(Category.class, categoryId);
         param.put("categoryId", category.getId());
-        param.put("category", category.geteName());
+        param.put("category", category.getName());
         param.put("data", articleList);
         param.put("totalPage", page.getTotalPage());
         param.put("pageNum", page.getPageNum());
@@ -162,7 +162,7 @@ public class ListService extends BaseService {
 
         Category category = find(Category.class, categoryId);
         param.put("categoryId", category.getId());
-        param.put("category", category.geteName());
+        param.put("category", category.getName());
         param.put("data", articleList);
         param.put("totalPage", page.getTotalPage());
         param.put("pageNum", page.getPageNum());

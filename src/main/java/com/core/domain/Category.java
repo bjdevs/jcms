@@ -8,8 +8,8 @@ import java.util.Date;
 public class Category {
 
     private long id;
-    private String name;
     private String eName;
+    private String name;
     private int parentId;
     private int tId;
     private int tAId;
@@ -25,20 +25,20 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String geteName() {
         return eName;
     }
 
     public void seteName(String eName) {
         this.eName = eName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getParentId() {
