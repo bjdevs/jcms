@@ -9,6 +9,7 @@ public class Ad {
 
     private long id;
     private String name;
+    private String location;
     private int status;
     private String size;
     private String url;
@@ -31,6 +32,14 @@ public class Ad {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getStatus() {

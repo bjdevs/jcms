@@ -59,9 +59,9 @@ Ext.define('Admin.view.media.MediaGrid', {
                     width: 80,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
-                            case 1:
+                            case GENERAL_ID_ONE:
                                 return '<span style="color: green">启用</span>';
-                            case 0:
+                            case GENERAL_ID_ZERO:
                                 return '<span style="color: red">废弃</span>';
                             default :
                                 return value;

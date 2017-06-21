@@ -58,11 +58,29 @@ Ext.define('Admin.view.ad.AdController', {
 
         if (count == 0) Ext.log('No selection');
 
+        var deleteStatus = true,
+            enabledStatus = false,
+            abandonStatus = false,
+            publishStatus = true;
+
+        // 删除0 -> 废弃1 -> 待审2 -> 已审3 -> 已发9
+        for (var i = 0; i < selected.length; i++) {
+            var status = selected[i].data.status;
+            if (status == GENERAL_ID_ONE) {
+                deleteStatus = false;
+                abandonStatus = true;
+            } else if (status == GENERAL_ID_THREE){
+                enabledStatus = true;
+                publishStatus = false;
+            } else if (status == GENERAL_ID_NINE){
+                enabledStatus = true;
+            }
+        }
         adGrid.down('button[action=save]').setDisabled(count < 1);
-        adGrid.down('button[action=delete]').setDisabled(count < 1);
-        adGrid.down('button[action=enabled]').setDisabled(count < 1);
-        adGrid.down('button[action=abandon]').setDisabled(count < 1);
-        adGrid.down('button[action=publish]').setDisabled(count < 1);
+        adGrid.down('button[action=delete]').setDisabled(deleteStatus);
+        adGrid.down('button[action=enabled]').setDisabled(enabledStatus);
+        adGrid.down('button[action=abandon]').setDisabled(abandonStatus);
+        adGrid.down('button[action=publish]').setDisabled(publishStatus);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
@@ -151,6 +169,7 @@ Ext.define('Admin.view.ad.AdController', {
         });
     },
 
+    // 删除
     onDeleteBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
@@ -161,6 +180,7 @@ Ext.define('Admin.view.ad.AdController', {
         });
     },
 
+    // 已审
     onEnabledBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
@@ -170,6 +190,8 @@ Ext.define('Admin.view.ad.AdController', {
             url: '/cn/admin/adEnabled'
         });
     },
+
+    // 废弃
     onAbandonBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
@@ -180,6 +202,7 @@ Ext.define('Admin.view.ad.AdController', {
         });
     },
 
+    // 已删
     onPublishBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
@@ -252,8 +275,10 @@ Ext.define('Admin.view.ad.AdController', {
                             break;
                         case 'failed' :
                             Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                            break;
                         case 'noRight' :
                             Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
+                            break;
                         default :
                             break;
                     }

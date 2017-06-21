@@ -105,7 +105,7 @@ public class MediaService extends BaseService {
         objectNode.put("success", true);
         try {
             String data = request.getParameter("data");
-            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
+            StringBuilder stringBuilder = new StringBuilder();
             Media media = null;
             Media mediaOld = null;
             ObjectMapper mapper = new ObjectMapper();
@@ -209,7 +209,7 @@ public class MediaService extends BaseService {
                             result = "success";
                         }
                     }
-                    stringBuilder.append(media.getId()).append(",");
+                    stringBuilder.append(media.toString()).append(",");
                 }
             }
             if ("success".equals(result)) {

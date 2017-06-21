@@ -6,11 +6,22 @@
     pageContext.setAttribute("MEDIA_TYPE_PICTURE", Constant.MEDIA_TYPE_PICTURE);
     pageContext.setAttribute("MEDIA_TYPE_AUDIO", Constant.MEDIA_TYPE_AUDIO);
     pageContext.setAttribute("MEDIA_TYPE_DOCUMENT", Constant.MEDIA_TYPE_DOCUMENT);
+
+    pageContext.setAttribute("GENERAL_ID_ZERO", Constant.GENERAL_ID_ZERO);
+    pageContext.setAttribute("GENERAL_ID_ONE", Constant.GENERAL_ID_ONE);
+    pageContext.setAttribute("GENERAL_ID_TWO", Constant.GENERAL_ID_TWO);
+    pageContext.setAttribute("GENERAL_ID_THREE", Constant.GENERAL_ID_THREE);
+    pageContext.setAttribute("GENERAL_ID_NINE", Constant.GENERAL_ID_NINE);
 %>
 
 <script>
     var pageSize = ${PAGE_SIZE},
         MEDIA_TYPE_PICTURE = ${MEDIA_TYPE_PICTURE},
         MEDIA_TYPE_AUDIO = ${MEDIA_TYPE_AUDIO},
-        MEDIA_TYPE_DOCUMENT = ${MEDIA_TYPE_DOCUMENT};
+        MEDIA_TYPE_DOCUMENT = ${MEDIA_TYPE_DOCUMENT},
+        GENERAL_ID_ZERO = ${GENERAL_ID_ZERO},
+        GENERAL_ID_ONE = ${GENERAL_ID_ONE},
+        GENERAL_ID_TWO = ${GENERAL_ID_TWO},
+        GENERAL_ID_THREE = ${GENERAL_ID_THREE},
+        GENERAL_ID_NINE = ${GENERAL_ID_NINE};
 </script>

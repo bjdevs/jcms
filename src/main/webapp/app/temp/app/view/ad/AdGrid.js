@@ -35,13 +35,14 @@ Ext.define('Admin.view.ad.AdGrid', {
                     }
                 },
                 {
-                    text: '尺寸 <span class="admin-color-red">+</span>',
+                    text: '位置',
+                    dataIndex: 'location',
+                    width: 200
+                },
+                {
+                    text: '尺寸',
                     dataIndex: 'size',
-                    width: 80,
-                    editor: {
-                        xtype: 'textfield',
-                        allowBlank: false
-                    }
+                    width: 90
                 },
                 {
                     text: '链接 <span class="admin-color-red">+</span>',
@@ -68,11 +69,13 @@ Ext.define('Admin.view.ad.AdGrid', {
                     width: 60,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
-                            case 9:
-                                return '<span style="color: green">发布</span>';
-                            case 1:
-                                return '启用';
-                            case 0:
+                            case GENERAL_ID_NINE:
+                                return '<span style="color: green">已发</span>';
+                            case GENERAL_ID_THREE:
+                                return '已审';
+                            case GENERAL_ID_TWO:
+                                return '待审';
+                            case GENERAL_ID_ONE:
                                 return '<span style="color: red">废弃</span>';
                             default :
                                 return value;
