@@ -38,7 +38,6 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
         var panel = formPanel.up().down('main-panel-article');
         // 解决显示没有效果的问题
         panel.setHeight(panel.getHeight());
-
     },
 
     /* 取消修改 */
@@ -48,7 +47,7 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
         var submitFields = formPanel.query('[itemId^="v-"]');
         var cancelBtn = formPanel.down('button[action=cancel]');
         var saveBtn = formPanel.down('button[action=save]');
-        // var updateBtn = formPanel.down('button[action=update]');
+        var updateBtn = formPanel.down('button[action=update]');
 
         Ext.each(displayFields, function (item, index, allItems) {
             item.setHidden(false);
@@ -59,7 +58,9 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
 
         cancelBtn.setHidden(true);
         saveBtn.setHidden(true);
-        // updateBtn.setHidden(false);
+        updateBtn.setHidden(false);
+
+        // KindEditor.remove('#content');
 
         var panel = formPanel.up().down('main-panel-article');
         // 解决显示没有效果的问题
@@ -104,10 +105,10 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 }
                 var panel = button.up().up();
                 var grid = button.up().up().up().down('content-mgrid');
-                console.log("grid: "+grid);
-                if (grid == null){
+                console.log("grid: " + grid);
+                if (grid == null) {
                     grid = button.up().up().up().down('workbench-mgrid');
-                    console.log("grid2: "+grid);
+                    console.log("grid2: " + grid);
                 }
                 var contentPanel = button.up().up().up();
 
@@ -126,7 +127,6 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
         var panel = button.up().up();
         var contentPanel = button.up().up().up();
         contentPanel.remove(panel, true);
-        console.log("close");
     }
 
 });

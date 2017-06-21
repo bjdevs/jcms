@@ -196,11 +196,11 @@ Ext.define('Admin.view.content.ContentMainForm', {
                     name: 'content',
                     // anchor: '100% 100%',
                     xtype: 'panel',
-                    html: '<textarea id=' + contentId + ' style="width: 100%; height: 350px;"></textarea><script>document.getElementById("#content-area").val("")</script>',
+                    html: '<textarea id="' + contentId + '" style="width: 100%; height: 350px;"></textarea>',
                     listeners: {
                         afterrender: function (self, eOpts) {
                             // editor = KindEditor.create('#' + self.id, {
-                            editor = KindEditor.create('#' + contentId, {
+                            window.editor = KindEditor.create('#' + contentId, {
                                 resizeType: 1,
                                 allowPreviewEmoticons: false,
                                 items: [
