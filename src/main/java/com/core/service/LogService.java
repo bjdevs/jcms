@@ -71,7 +71,7 @@ public class LogService extends BaseService {
         return objectNode;
     }
 
-    public ObjectNode getSearchModuleActionList(HttpServletRequest request, boolean on_off) throws IOException {
+    public ObjectNode getSearchModuleActionList(boolean on_off) throws IOException {
         ArrayNode arrayNode = objectMapper.createArrayNode();
         ObjectNode objectNode = objectMapper.createObjectNode();
         Iterator<Map.Entry<Integer, String>> iterator = null;
@@ -108,7 +108,7 @@ public class LogService extends BaseService {
         put(201, "新增");
         put(202, "更新");
         put(203, "删除");
-        put(204, "启用");
+        put(204, "已审");
         put(205, "废弃");
         put(206, "初稿");
         put(207, "已签");
