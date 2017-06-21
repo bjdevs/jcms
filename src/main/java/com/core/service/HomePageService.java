@@ -61,6 +61,7 @@ public class HomePageService extends BaseService {
         toolManagerContext.put("listURLPrefix", listDomain);
         toolManagerContext.put("winTitle", "首页_" + config.getProjectName());
         toolManagerContext.put("depict", "首页,描述");
+        toolManagerContext.put("keyWord", " ");
 
         log.setIp(IpUtil.getIp(request));
         log.setAccount(find(User.class, user.getId()).getAccount());
@@ -71,26 +72,56 @@ public class HomePageService extends BaseService {
 
             // 焦点图
             Map<String, Object> focus = staticOtherModules(Constant.CATEGORY_ID_FOCUS, Constant.GENERAL_ID_TWO);
+            if (focus.containsKey("temp") && focus.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("focus", focus);
 
             // 新闻法讯
             Map<String, Object> news = staticOtherModules(Constant.CATEGORY_ID_NEWS, Constant.GENERAL_ID_ONE);
+            if (news.containsKey("temp") && news.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("news", news);
 
             // 生活禅
             Map<String, Object> life = staticOtherModules(Constant.CATEGORY_ID_LIFE, Constant.GENERAL_ID_TWO);
+            if (life.containsKey("temp") && life.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("life", life);
 
             // 紫云佛国
             Map<String, Object> ziyun = staticOtherModules(Constant.CATEGORY_ID_ZIYUNFOGUO, Constant.GENERAL_ID_TWO);
+            if (ziyun.containsKey("temp") && ziyun.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("ziyun", ziyun);
 
             // 佛教常识
             Map<String, Object> knowledge = staticOtherModules(Constant.CATEGORY_ID_KNOWLEDGE, Constant.GENERAL_ID_TWO);
+            if (knowledge.containsKey("temp") && knowledge.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("knowledge", knowledge);
 
             // 禅医养生
             Map<String, Object> medical = staticOtherModules(Constant.CATEGORY_ID_MEDICAL, Constant.GENERAL_ID_TWO);
+            if (medical.containsKey("temp") && medical.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("medical", medical);
 
             // 藏经阁
@@ -99,6 +130,11 @@ public class HomePageService extends BaseService {
 
             // 水墨禅韵
             Map<String, Object> waterzen = staticOtherModules(Constant.CATEGORY_ID_WATERZEN, Constant.GENERAL_ID_TWO);
+            if (waterzen.containsKey("temp") && waterzen.get("temp").equals("false")){
+                publishLog.setStatus(0);
+                publishLog.setFinishDate(new Date());
+                update(publishLog);
+            }
             toolManagerContext.put("waterzen", waterzen);
 
             // 活动通知
@@ -236,7 +272,7 @@ public class HomePageService extends BaseService {
             Map map = new HashedMap();
             List<String[]> res = new ArrayList<String[]>();
 
-            String name = find(Category.class, Constant.CATEGORY_ID_LAW).geteName();
+            String name = find(Category.class, Constant.CATEGORY_ID_LAW).getName();
             map.put("name", name);
 
             List<String[]> resultList = searchFawu();
@@ -362,9 +398,13 @@ public class HomePageService extends BaseService {
                 KeyWord keyWord = find(KeyWord.class, articleKeyWord.getkId());
                 kw += keyWord.getName() + ",";
             }
+            String doc = article.getDepict();
+            if (doc.contains("\"")){
+                doc = doc.replaceAll("\"", "");
+            }
             toolManagerContext.put("keyWord", kw.contains(",") ? kw.substring(0, kw.length() - 1) : kw);
             toolManagerContext.put("winTitle", article.getTitle());
-            toolManagerContext.put("depict", article.getDepict());
+            toolManagerContext.put("depict", doc);
 
             Category category = find(Category.class, article.getcId());
             // 封装content
@@ -380,13 +420,13 @@ public class HomePageService extends BaseService {
             map.put("source", article.getSource());
             map.put("author", article.getAuthor());
             map.put("categoryId", article.getcId());
-            map.put("showCategory", category.geteName());
-            map.put("category", category.geteName());
+            map.put("showCategory", category.getName());
+            map.put("category", category.getName());
             map.put("categoryUrl", getCategoryList(category.getId()));
             map.put("publishDate", new SimpleDateFormat("yyyy-MM-dd").format(article.getPublishDate()));
 //            map.put("pageContent", "<a href=\"#\">上一页</a>");
 
-            String finalPath = getArticlePathSuffix(category.getName(), article.getId(), "", "");
+            String finalPath = getArticlePathSuffix(category.geteName(), article.getId(), "", "");
 
             if (null != type && "preview".equals(type)) {
                 articleStaticDispose(contents, category, article, map, staticResPrefix, toolManagerContext, stringBuffer, "preview");
@@ -442,7 +482,7 @@ public class HomePageService extends BaseService {
     /**
      * 获取其他模块Map
      */
-    private Map<String, Object> staticOtherModules(int articleId, int different) {
+    private Map<String, Object> staticOtherModules(int articleId, int different) throws Exception {
         String titleName = articleId == Constant.CATEGORY_ID_FOCUS ? null : getCategoryEName(articleId);
         Map<String, Object> map = new HashMap<String, Object>();
         List<String[]> list;
@@ -500,6 +540,9 @@ public class HomePageService extends BaseService {
                 if (null != headLine && headLine.getId() > 0) {
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
+                    if (null == media) {
+                        map.put("temp", "false");
+                    }
                     if (null != article) {
                         news[0] = article.getUrl();
                         news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
@@ -511,7 +554,6 @@ public class HomePageService extends BaseService {
                     } else {
                         news[4] = null != media ? media.getPic_144x96() : "#";
                     }
-
                 }
                 map.put("first", news);
                 headLines = headLineService.searchHeadLine(articleId, Constant.GENERAL_ID_ONE, maxLimit);
@@ -552,10 +594,13 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
+                    if (null == media){
+                        map.put("temp", "false");
+                    }
                     if (null != article) {
                         news[0] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[1] = article.getUrl();
-                        news[2] = media.getPic_279x186();
+                        news[2] = null != media ? media.getPic_279x186() : "null";
                     }
                     list.add(news);
                 }
@@ -568,16 +613,18 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
+                    if (null == media){
+                        map.put("temp", "false");
+                    }
                     news = new String[4];
                     if (null != article) {
                         news[0] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[1] = article.getUrl();
-                        news[2] = media.getPic_630x420();
-                        news[3] = media.getPic_102x68();
+                        news[2] = null != media ? media.getPic_630x420() : "null";
+                        news[3] = null != media ? media.getPic_102x68() : "null";
                     }
                     list.add(i, news);
                 }
-
                 map.put("list", list);
                 return map;
             default:
@@ -877,6 +924,7 @@ public class HomePageService extends BaseService {
      */
     public void articleStaticDispose(String[] contents, Category category, Article article, Map map,
                                      String staticResPrefix, ToolContext toolManagerContext, StringBuffer stringBuffer, String type) {
+        staticResPrefix += "/";
         String pathTemp;
         Template template = find(Template.class, category.gettAId());
         String templatePath = "/base/" + template.getFileName();
@@ -886,9 +934,9 @@ public class HomePageService extends BaseService {
 
             // 获取文章路径
             if (!"preview".equals(type)) {
-                articlePath = getArticlePathSuffix(category.getName(), article.getId(), i == 0 ? "" : "_" + (i + 1), "");
+                articlePath = getArticlePathSuffix(category.geteName(), article.getId(), i == 0 ? "" : "_" + (i + 1), "");
             } else {
-                articlePath = getArticlePreviewPathSuffix(category.getName(), article.getId(), i == 0 ? "" : "_" + (i + 1));
+                articlePath = getArticlePreviewPathSuffix(category.geteName(), article.getId(), i == 0 ? "" : "_" + (i + 1));
             }
 
             // 页码
@@ -897,10 +945,10 @@ public class HomePageService extends BaseService {
             if (i > 0) {
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), i > 1 ? "_" + i : "", "");
+                    pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), i > 1 ? "_" + i : "", "");
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + (i > 1 ? "_" + i : ""));
-                    staticResPrefix = "http://";
+                    staticResPrefix = "";
                 }
                 pageNoSb.append("<a href=\"" + staticResPrefix + pathTemp + "\">上一页</a>");
             }
@@ -911,10 +959,10 @@ public class HomePageService extends BaseService {
                         pageNoSb.append("<span class=\"current\">" + (k + 1) + "</span>");
                     } else {
                         if (!"preview".equals(type)) {
-                            pathTemp = getArticlePathSuffix(category.getName(), article.getId(), k == 0 ? "" : "_" + (k + 1), "");
+                            pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), k == 0 ? "" : "_" + (k + 1), "");
                         } else {
                             pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + (k == 0 ? "" : "_" + (k + 1)));
-                            staticResPrefix = "http://";
+                            staticResPrefix = "";
                         }
                         pageNoSb.append("<a href=\"" + staticResPrefix + pathTemp + "\">" + (k + 1) + "</a>");
                     }
@@ -924,20 +972,20 @@ public class HomePageService extends BaseService {
             if (contents.length > 1 && i != (contents.length - 1)) {
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_" + (i + 2), "");
+                    pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "_" + (i + 2), "");
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + ("_" + (i + 2)));
-                    staticResPrefix = "http://";
+                    staticResPrefix = "";
                 }
                 pageNoSb.append("<a href=\"" + staticResPrefix + pathTemp + "\">下一页</a>");
 
                 // 阅读全文
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "_1", "");
+                    pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "_1", "");
                 } else {
                     pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "_1");
-                    staticResPrefix = "http://";
+                    staticResPrefix = "";
                 }
                 pageNoSb.append("<a href=\"" + staticResPrefix + pathTemp + "\">浏览全文</a>");
             }
@@ -951,12 +999,12 @@ public class HomePageService extends BaseService {
         if (contents.length > 1) {
             // 获取文章路径
             if (!"preview".equals(type)) {
-                articlePath = getArticlePathSuffix(category.getName(), article.getId(), "_1", "");
-                pathTemp = getArticlePathSuffix(category.getName(), article.getId(), "", "");
+                articlePath = getArticlePathSuffix(category.geteName(), article.getId(), "_1", "");
+                pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "", "");
             } else {
-                articlePath = getArticlePreviewPathSuffix(category.getName(), article.getId(), "_1");
+                articlePath = getArticlePreviewPathSuffix(category.geteName(), article.getId(), "_1");
                 pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "");
-                staticResPrefix = "http://";
+                staticResPrefix = "";
             }
 
             map.put("pageContent", "<a href=\"" + staticResPrefix + pathTemp + "\">返回</a>");
@@ -973,7 +1021,7 @@ public class HomePageService extends BaseService {
      * @return
      */
     private String getCategoryEName(int id) {
-        return find(Category.class, id).geteName();
+        return find(Category.class, id).getName();
     }
 
     /**

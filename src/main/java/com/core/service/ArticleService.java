@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -371,6 +369,7 @@ public class ArticleService extends BaseService {
                         article.setStatus(num);
                         article.setUpdateDate(new Date());
                         update(article);
+                        // 文章返工 撤下头条
                         if (num == Constant.ARTICLE_ID_FIVE) {
                             List<HeadLine> headLines = list(HeadLine.class, String.format(" WHERE aId = %s ", article.getId()));
                             for (int k = 0; k < headLines.size(); k++) {
@@ -379,12 +378,17 @@ public class ArticleService extends BaseService {
                                 update(headLine);
                             }
                         }
+                        // 删除文章静态文件
+                        if (num == 19) {
+                            removeArticleFile(article.getId());
+                        }
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             success = false;
+            objectNode.put("msg", e.getMessage());
         }
         objectNode.put("success", success);
         return objectNode;
@@ -529,7 +533,7 @@ public class ArticleService extends BaseService {
         for (int i = 0; i < categories.size(); i++) {
             Category category = categories.get(i);
             objectNode1 = objectMapper.valueToTree(category);
-            objectNode1.put("path", "/" + category.geteName() + "/");
+            objectNode1.put("path", "/" + category.getName() + "/");
             objectNode1.put("category_template", getTemplateTypeForId(category.gettId()));
 //            objectNode1.put("article_template", getTemplateNameForId(category.gettAId()));
             arrayNode.add(objectNode1);
@@ -565,8 +569,8 @@ public class ArticleService extends BaseService {
                     if (eName.contains("\"")) {
                         eName = eName.replaceAll("\"", "").trim();
                     }
-                    category.setName(name);
-                    category.seteName(eName);
+                    category.seteName(name);
+                    category.setName(eName);
                     category.setParentId(Integer.parseInt(jsonNode.get("parentId").toString()));
                     category.settId(Integer.parseInt(jsonNode.get("tId").toString()));
                     category.settAId(Integer.parseInt(jsonNode.get("tAId").toString()));
@@ -1161,24 +1165,10 @@ public class ArticleService extends BaseService {
     /**
      * 修改头条
      *
-     * @param id
-     * @param status
-     * @param redStatus
      * @return
      */
-    public ObjectNode updateHeadLine(long id, int status, String redStatus, int cateOrderBy, String name, String data) {
+    public ObjectNode updateHeadLine(String data) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-
-        /*HeadLine headLine = find(HeadLine.class, id);
-
-        int red = redStatus.equals("true") ? 1 : 0;
-        if (isNumeric(redStatus)) red = Integer.parseInt(redStatus);
-        headLine.setStatus(status);
-        headLine.setRedStatus(red);
-        headLine.setCateOrderBy(cateOrderBy);
-        headLine.setName(name);
-        headLine.setUpdateDate(new Date());
-        update(headLine);*/
 
         try {
             ArrayNode arrayNode = objectMapper.readValue(data, ArrayNode.class);
@@ -1267,6 +1257,40 @@ public class ArticleService extends BaseService {
         return objectNode;
     }
 
+    /**
+     * 删除文章静态文件
+     *
+     * @param id
+     * @return
+     */
+    public ObjectNode removeArticleFile(long id) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        Article article = find(Article.class, id);
+        if (null != article) {
+            Category category = find(Category.class, article.getcId());
+            String catePath = category.geteName() + File.separator + getThisYear();
+            long idStr = config.getArticleIdAddend() + id;
+            String prefixPath = config.getArticleDir() + File.separator + catePath + File.separator;
+            String finalPath = prefixPath + idStr + ".html";
+            File file = new File(finalPath);
+            if (file.exists()) {
+                file.delete();
+                for (int i = 1; i < 50; i++) {
+                    String otherId = idStr + "_" + i + ".html";
+                    String otherPath = prefixPath + otherId;
+                    File file1 = new File(otherPath);
+                    if (!file1.exists()) {
+                        break;
+                    } else {
+                        file1.delete();
+                    }
+                }
+            }
+        }
+        objectNode.put("success", true);
+        return objectNode;
+    }
+
     /////////////////////////////////////////////////
 
     /**
@@ -1313,7 +1337,7 @@ public class ArticleService extends BaseService {
      */
     private String getCategory(long id) {
         Category category = find(Category.class, id);
-        return null != category ? category.geteName() : "";
+        return null != category ? category.getName() : "";
     }
 
     /**
@@ -1326,15 +1350,16 @@ public class ArticleService extends BaseService {
         try {
             List<Category> categories;
             if (eName) {
-                categories = list(Category.class, "WHERE eName = '" + cName + "'");
-            } else {
                 categories = list(Category.class, "WHERE name = '" + cName + "'");
+            } else {
+                categories = list(Category.class, "WHERE eName = '" + cName + "'");
             }
 
             Category category = categories.size() > 0 ? categories.get(0) : null;
 
             return null != category ? category.getId() : 0;
         } catch (Exception e) {
+            e.printStackTrace();
             return 0;
         }
     }
@@ -1360,8 +1385,8 @@ public class ArticleService extends BaseService {
     private int getCategoryIdForStr(String category) {
         int id = 0;
         Map<String, Object> params = new HashMap<>();
-        params.put("name", category);
-        List<Category> categories = list(Category.class, " WHERE name = :name", params);
+        params.put("eName", category);
+        List<Category> categories = list(Category.class, " WHERE eName = :eName", params);
         if (categories.size() > 0) {
             id = (int) categories.get(0).getId();
         }
@@ -1402,20 +1427,6 @@ public class ArticleService extends BaseService {
             default:
                 return 0;
         }
-    }
-
-    /**
-     * 根据Template获取name
-     *
-     * @param id
-     * @return
-     */
-    public String getTemplateNameForId(int id) {
-        if (id == 0) {
-            return "未知";
-        }
-
-        return find(Template.class, id).getName();
     }
 
     public String getTemplateTypeForId(int id) {
@@ -1461,5 +1472,9 @@ public class ArticleService extends BaseService {
             delete(SubArticle.class, subArticle.getId());
         }
         createSubArticleForContents(id, contents);
+    }
+
+    public static String getThisYear() {
+        return String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
     }
 }

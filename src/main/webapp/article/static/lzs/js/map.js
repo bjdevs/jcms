@@ -6,7 +6,7 @@ AMapUI.loadUI(['overlay/SimpleMarker'], function (SimpleMarker) {
     new SimpleMarker({
         iconLabel: 'H',
         iconStyle: {
-            src: '/article/static/lzs/images/mark_b.png',
+            src: 'http://images.hmlzs.cn/pic/2017-06-21_1052252155.png',
             style: {
                 width: '20px',
                 height: '30px'
