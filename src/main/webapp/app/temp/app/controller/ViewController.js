@@ -47,8 +47,6 @@ Ext.define('Admin.controller.ViewController', {
             });
         });
 
-        console.log(filters)
-        console.log(store.getRemoteFilter())
         // 实现远程过滤 , 目前在这里设置,是为了节省store的一行代码,可能有未知异常,需要注意
         /*if (!store.getRemoteFilter()) store.setRemoteFilter(true);
         store.setFilters(filters);*/
