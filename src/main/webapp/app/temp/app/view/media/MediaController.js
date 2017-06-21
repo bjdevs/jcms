@@ -57,19 +57,22 @@ Ext.define('Admin.view.media.MediaController', {
         if (count == 0) Ext.log('No selection');
 
         var deleteStatus = false,
-            enabledStatus = false;
+            enabledStatus = false,
+            abandonStatus = false;
         for (var i = 0; i < selected.length; i++) {
             var status = selected[i].data.status;
-            if (status == 1) { // status -> on
+            if (status == GENERAL_ID_ONE) { // status -> on
                 deleteStatus = true;
                 enabledStatus = true;
+            } else { // status -> off
+                abandonStatus = true;
             }
         }
 
         mediaGrid.down('button[action=save]').setDisabled(count < 1);
         mediaGrid.down('button[action=edit]').setDisabled(count < 1);
         mediaGrid.down('button[action=enabled]').setDisabled(enabledStatus);
-        mediaGrid.down('button[action=abandon]').setDisabled(count < 1);
+        mediaGrid.down('button[action=abandon]').setDisabled(abandonStatus);
         mediaGrid.down('button[action=delete]').setDisabled(deleteStatus);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
@@ -249,8 +252,10 @@ Ext.define('Admin.view.media.MediaController', {
                             break;
                         case 'failed' :
                             Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
+                            break;
                         case 'noRight' :
                             Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
+                            break;
                         default :
                             break;
                     }

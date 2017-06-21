@@ -30,19 +30,62 @@ Ext.define('Admin.view.ad.AdForm', {
                     allowBlank: false
                 },
                 {
+                    name: 'location',
+                    fieldLabel: '位置',
+                    itemId: 'd-location',
+                    xtype: 'combo',
+                    /*store: [
+                        ['hmlzs.home.banner1.left', 'hmlzs.home.banner1.left'],
+                        ['hmlzs.home.banner1.right', 'hmlzs.home.banner1.right']
+                    ],*/
+                    store: {
+                        proxy: {
+                            type: 'ajax',
+                            url: '/cn/admin/adlocation',
+                            reader: {
+                                type: 'json',
+                                rootProperty: 'data'
+                            }
+                        },
+                        fields: ['id', 'name']
+                    },
+                    displayField: 'name',
+                    valueField: 'id',
+                    editable: false, // 不允许编辑
+                    listeners: {
+                        "select": function(combo,record,index){
+                            if (combo.getValue() == 'hmlzs.home.banner1.left') {
+                                me.down('#d-size').setValue('912x100');
+                            } else {
+                                me.down('#d-size').setValue('240x100');
+                            }
+                        }
+                    }
+                },
+                {
                     name: 'size',
                     fieldLabel: '尺寸',
-                    allowBlank: false
+                    itemId: 'd-size',
+                    xtype: 'combo',
+                    store: [
+                        ['912x100', '912x100'],
+                        ['240x100', '240x100']
+                    ],
+                    editable: false // 不允许编辑
                 },
                 {
                     name: 'url',
                     fieldLabel: '链接',
-                    allowBlank: false
+                    allowBlank: false,
+                    maxLength: 150,
+                    maxLengthText: "链接不能超过150个字符"
                 },
                 {
                     name: 'materialUrl',
                     fieldLabel: '素材',
-                    allowBlank: false
+                    allowBlank: false,
+                    maxLength: 150,
+                    maxLengthText: "素材地址不能超过150个字符"
                 },
                 {
                     name: 'uId',

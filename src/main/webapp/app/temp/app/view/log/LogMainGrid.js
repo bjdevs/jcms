@@ -4,10 +4,9 @@ Ext.define('Admin.view.log.LogMainGrid', {
 
     initComponent: function() {
         var me = this;
-
-
         Ext.apply(me, {
-            store: Ext.create('Ext.data.Store', {
+            store: Ext.create('Admin.store.API', {
+                remoteFilter:true,
                 proxy: {
                     type: 'ajax',
                     url: '/cn/admin/logList',
@@ -26,7 +25,7 @@ Ext.define('Admin.view.log.LogMainGrid', {
                 { text: 'ID', dataIndex: 'id', width: 80 },
                 { text: '模块', dataIndex: 'name', width: 150 },
                 { text: '动作', dataIndex: 'action', width: 100 },
-                { text: '内容', dataIndex: 'content', /*width: 700*/flex: 1 },
+                { text: '内容', dataIndex: 'content', flex: 1,renderer: me.renderer},
                 { text: 'IP', dataIndex: 'ip', width: 130 },
                 { text: '操作人', dataIndex: 'account', width: 80},
                 { text: '操作时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'Y-m-d H:i:s', width: 150 }
@@ -51,16 +50,10 @@ Ext.define('Admin.view.log.LogMainGrid', {
             dataIndex = column.dataIndex;
 
         switch(dataIndex) {
-            case 'logDetail':
-                if(value && typeof value === 'object') {
-                    var returnStr = JSON.stringify(value);
-
-
-                    // return '<a href="http://jsoneditoronline.org/?json=' + encodeURIComponent(returnStr) + '" target="_blank" title="查看完整JSON">' + returnStr + '</a>';
-                    return '<button class="x-fa fa-magic admin-label-button admin-color-brown" action="show-json" title="想看我变魔术吗？赶快点击我吧！"></button>' + returnStr;
-                }
-
+            case 'content':
+                metaData.tdAttr = 'data-qtip="' + record.get('content') + '"';
                 return value;
+                break;
             default:
                 return value;
         }
