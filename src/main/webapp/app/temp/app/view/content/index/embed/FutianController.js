@@ -22,6 +22,7 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
     onAuditBtnClicked: function (button) {
         var ctrl = this,
             grid = button.up('grid');
+        var panel1 = button.up('content-index-embed-futian');
 
         Ext.Ajax.request({
             url: '/cn/article/auditArticleForId',
@@ -34,12 +35,18 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
                         });
                     } else {
                         Ext.ux.Msg.info('审核成功', function () {
+                        });
+                        panel1.lookupReference('status').setHtml({
+                            statusStr: ctrl.getStatus(statusStr),
+                            updateDate: updateDate
                         });
                     }
                 } else if (success == "error") {
@@ -54,7 +61,9 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
     },
 
 
-    onClickedRelease: function () {
+    onClickedRelease: function (button) {
+        var ctrl = this,
+            panel1 = button.up('content-index-embed-futian');
         // 广种福田
         Ext.Ajax.request({
             method: 'POST',
@@ -64,12 +73,18 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
                 data = JSON.parse(data);
                 var success = data.success;
                 var result = data.result;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success == true) {
                     if (result == "noRight") {
                         Ext.ux.Msg.info('对不起，您没有权限执行改操作。审核失败', function () {
                         });
                     } else {
                         Ext.ux.Msg.info('发布成功', function () {
+                        });
+                        panel1.lookupReference('status').setHtml({
+                            statusStr: ctrl.getStatus(statusStr),
+                            updateDate: updateDate
                         });
                     }
                 } else if (success == "error") {
@@ -98,8 +113,10 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
      * @param button
      */
     onClickedEdit: function (button) {
-        var grid = button.up().up().down('grid'),
+        var ctrl = this,
+            grid = button.up().up().down('grid'),
             form = button.up().up().down('form');
+        var panel1 = button.up('content-index-embed-futian');
 
         var formDepict = form.query('[name=depict]')[0].value;
         var selectCount = grid.getSelection();
@@ -121,9 +138,10 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
                 card: selectData.card
             },
             success: function (response, opts) {
-                console.log(response);
                 var data = Ext.decode(response.responseText);
                 var success = data.success;
+                var statusStr = data.status,
+                    updateDate = data.updateDate;
                 if (success) {
                     Ext.MessageBox.show({
                         title: '操作提示',
@@ -135,14 +153,28 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
                         fn: function (buttonId) {
                             var store = grid.getStore();
                             store.reload();
+                            panel1.lookupReference('status').setHtml({
+                                statusStr: ctrl.getStatus(statusStr),
+                                updateDate: updateDate
+                            });
                         }
                     });
                 }
             }
         });
-
-
+    },
+    getStatus: function (status) {
+        switch (status) {
+            case 0:
+                return '<strong style="color: #0066FF;">初稿</strong>';
+            case 1:
+                return '<strong style="color: black;">已签</strong>';
+            case 5:
+                return '<strong style="color: #FF6633;">返工</strong>';
+            case 9:
+                return '<strong style="color: #7DB336;">已发</strong>';
+            case 10:
+                return '<strong style="color: red;">已删</strong>';
+        }
     }
-
-
 });

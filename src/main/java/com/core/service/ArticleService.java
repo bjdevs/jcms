@@ -52,8 +52,8 @@ public class ArticleService extends BaseService {
         } else if ("all".equals(cName)) {
             // 都显示
 //            param.put("status", Constant.ARTICLE_ID_NINE);
-//            sql.append("status = :status AND id > 4");
-            sql.append("id > 4");
+            sql.append(" id > 4");
+            sql.append(" AND status < :status");
         } else {
             cId = getCategoryId(cName, false);
             if (cId == 0) {
@@ -146,6 +146,8 @@ public class ArticleService extends BaseService {
             objectNode1 = objectMapper.valueToTree(headLine);
             objectNode1.put("creator", getCreator(headLine.getuId()));
             objectNode1.put("category", getCategory(headLine.getcId()));
+            Article article = find(Article.class, headLine.getaId());
+            objectNode1.put("categoryArticle", getCategory(article.getcId()));
             arrayNode.add(objectNode1);
         }
         objectNode.put("rows", arrayNode);
@@ -351,6 +353,8 @@ public class ArticleService extends BaseService {
                             article.setStatus(Constant.ARTICLE_ID_NINE);
                             article.setPublishDate(new Date());
                             update(article);
+                            objectNode.put("status", article.getStatus());
+                            objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
                         } else {
                             objectNode.put("success", "error");
                             return objectNode;
@@ -754,7 +758,8 @@ public class ArticleService extends BaseService {
             update(article);
             // 调用文章处理
             disposeSubArticle(id, contents);
-
+            objectNode.put("status", article.getStatus());
+            objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
         }
         objectNode.put("success", true);
         return objectNode;
@@ -779,6 +784,8 @@ public class ArticleService extends BaseService {
             article.setUpdateDate(new Date());
             update(article);
             disposeSubArticle(id, contents);
+            objectNode.put("status", article.getStatus());
+            objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
         }
         objectNode.put("success", true);
         return objectNode;
@@ -815,6 +822,8 @@ public class ArticleService extends BaseService {
 
         createSubArticleForContents(3, content);
 
+        objectNode.put("status", article.getStatus());
+        objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
         objectNode.put("success", true);
 
         return objectNode;
@@ -967,6 +976,8 @@ public class ArticleService extends BaseService {
                     article.setUpdateDate(new Date());
                     update(article);
                     objectNode.put("success", true);
+                    objectNode.put("status", article.getStatus());
+                    objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
                 } else {
                     objectNode.put("success", "error");
                 }

@@ -23,7 +23,7 @@ public class ArticleStaticController extends BaseController {
     @Autowired
     private HomePageService homePageService;
 
-    @AsRight(id=137)
+    @AsRight(id = 137)
     @ResponseBody
     @RequestMapping("/index")
     public String createIndexAH(HttpServletRequest request) {
@@ -48,7 +48,7 @@ public class ArticleStaticController extends BaseController {
         return getViewRedirect("/article/index.html");
     }
 
-    @AsRight(id=137)
+    @AsRight(id = 137)
     @ResponseBody
     @RequestMapping("/ad")
     public String createAdAH(HttpServletRequest request) {

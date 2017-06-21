@@ -571,7 +571,7 @@ Ext.define('Admin.view.content.ContentController', {
                 if (data.indexOf('true') > -1) {
                     var preview = JSON.parse(data);
                     var url = preview.preview;
-                    window.open("http://" + url);
+                    window.open(url);
                 } else {
                     Ext.ux.Msg.info('预览失败，请稍候再试...', function () {
                         grid.getStore().reload();
