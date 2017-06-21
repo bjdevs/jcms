@@ -75,19 +75,14 @@ public class ArticleController extends BaseController {
     /**
      * 修改头条
      *
-     * @param id
-     * @param status
-     * @param redStatus
-     * @param cateOrderBy
-     * @param name
      * @param data
      * @return
      */
     @AsRight(id = 131)
     @ResponseBody
     @RequestMapping(value = "/updateHeadLine", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String updateHeadLineAH(@RequestParam("id") long id, int status, String redStatus, int cateOrderBy, String name, String data) {
-        return articleService.updateHeadLine(id, status, redStatus, cateOrderBy, name, data).toString();
+    public String updateHeadLineAH(String data) {
+        return articleService.updateHeadLine(data).toString();
     }
 
     /**
