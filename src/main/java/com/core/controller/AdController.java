@@ -46,21 +46,21 @@ public class AdController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/adEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adEnabledAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_THREE).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_NINE).toString();
     }
 
     @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adAbandonAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ONE).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ZERO).toString();
     }
 
     @AsRight(id = 111)
     @ResponseBody
     @RequestMapping(value = "/adDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adDeleteAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ZERO).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_TWO).toString();
     }
 
     @AsRight(id = 111)

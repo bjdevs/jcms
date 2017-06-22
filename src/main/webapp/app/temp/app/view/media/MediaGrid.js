@@ -101,19 +101,18 @@ Ext.define('Admin.view.media.MediaGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '保存',
-                    iconCls: 'x-fa fa-floppy-o',
-                    disabled: true,
-                    action: 'save'
-                },
-                {
-                    xtype: 'button',
                     text: '删除',
                     iconCls: 'x-fa fa-trash-o',
                     disabled: true,
                     action: 'delete'
                 },
-
+                {
+                    xtype: 'button',
+                    text: '保存',
+                    iconCls: 'x-fa fa-floppy-o',
+                    disabled: true,
+                    action: 'save'
+                },
                 '-',
                 {
                     xtype: 'button',
