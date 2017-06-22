@@ -60,27 +60,22 @@ Ext.define('Admin.view.ad.AdController', {
 
         var deleteStatus = true,
             enabledStatus = false,
-            abandonStatus = false,
-            publishStatus = true;
+            abandonStatus = false;
 
-        // 删除0 -> 废弃1 -> 待审2 -> 已审3 -> 已发9
+        // 删除2 -> 废弃0 -> 待审1 -> 启用9
         for (var i = 0; i < selected.length; i++) {
             var status = selected[i].data.status;
-            if (status == GENERAL_ID_ONE) {
+            if (status == GENERAL_ID_NINE) {
+                enabledStatus = true;
+            } else if (status == GENERAL_ID_ZERO) {
                 deleteStatus = false;
                 abandonStatus = true;
-            } else if (status == GENERAL_ID_THREE){
-                enabledStatus = true;
-                publishStatus = false;
-            } else if (status == GENERAL_ID_NINE){
-                enabledStatus = true;
             }
         }
         adGrid.down('button[action=save]').setDisabled(count < 1);
         adGrid.down('button[action=delete]').setDisabled(deleteStatus);
         adGrid.down('button[action=enabled]').setDisabled(enabledStatus);
         adGrid.down('button[action=abandon]').setDisabled(abandonStatus);
-        adGrid.down('button[action=publish]').setDisabled(publishStatus);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,
