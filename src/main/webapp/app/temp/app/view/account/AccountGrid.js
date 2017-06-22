@@ -104,6 +104,13 @@ Ext.define('Admin.view.account.AccountGrid', {
                 },
                 {
                     xtype: 'button',
+                    text: '密码重置',
+                    iconCls: 'x-fa fa-floppy-o',
+                    disabled: true,
+                    action: 'recover'
+                },
+                {
+                    xtype: 'button',
                     text: '保存',
                     iconCls: 'x-fa fa-floppy-o',
                     disabled: true,
