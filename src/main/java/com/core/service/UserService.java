@@ -4,6 +4,7 @@ import com.core.domain.User;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
 import com.core.util.EncryptUtil;
+import com.core.util.ProjectUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -239,9 +240,9 @@ public class UserService extends BaseService {
      */
     public ObjectNode multifunctionAccountAH(HttpServletRequest request, int type) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.put("result", "failed");
-        objectNode.put("message", "");
         objectNode.put("success", true);
+        String message = "";
+        String result = "failed";
         try {
             String[] ids = request.getParameterValues("ids");
             StringBuilder stringBuilder = new StringBuilder("广告ID:[");
@@ -254,20 +255,32 @@ public class UserService extends BaseService {
                 user = baseRepository.find(User.class, user.getId());
                 if (user != null && user.getId() > 0) {
                     user.setUpdateDate(new Date());
-                    if (type == 0) { // 禁用
+                    if (type == Constant.GENERAL_ID_ZERO) { // 禁用
                         user.setStatus(Constant.GENERAL_ID_ZERO);
                         typeStr = "废弃";
                         baseRepository.update(user);
+                        result = "success";
                     }
-                    if (type == 1) { // 启用
+                    if (type == Constant.GENERAL_ID_ONE) { // 启用
                         user.setStatus(Constant.GENERAL_ID_ONE);
                         typeStr = "启用";
                         baseRepository.update(user);
+                        result = "success";
                     }
-                    objectNode.put("result", "success");
-                    stringBuilder.append(user.getId()).append(",");
+                    if (type == Constant.GENERAL_ID_THREE) { // 密码重置
+                        typeStr = "启用";
+                        stringBuilder.append("密码重置");
+                        result = "custom";
+                        String newPassword = ProjectUtil.getPassWordOne(6);
+                        ProjectUtil.setClipboardString(newPassword);
+                        user.setPassword(EncryptUtil.md5(newPassword));
+                        message = "请牢记重置后的新密码" + newPassword;
+                    }
+                    stringBuilder.append(user.toString()).append(",");
                 }
             }
+            objectNode.put("result", result);
+            objectNode.put("message", message);
             log("用户管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();

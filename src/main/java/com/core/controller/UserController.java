@@ -5,6 +5,7 @@ import com.core.security.SecuritySupport;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.UserService;
+import com.core.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +71,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/accountEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userEnabledAH(HttpServletRequest request) throws Exception {
-        return userService.multifunctionAccountAH(request, 1).toString();
+        return userService.multifunctionAccountAH(request, Constant.GENERAL_ID_ONE).toString();
     }
 
     // 账号管理 -> 禁用
@@ -78,6 +79,14 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/accountAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userAbandonAH(HttpServletRequest request) throws Exception {
-        return userService.multifunctionAccountAH(request, 0).toString();
+        return userService.multifunctionAccountAH(request, Constant.GENERAL_ID_ZERO).toString();
+    }
+
+    // 账号管理 -> 密码重置
+    @AsRight(id = 101)
+    @ResponseBody
+    @RequestMapping(value = "/accountRecover", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String userRecoverAH(HttpServletRequest request) throws Exception {
+        return userService.multifunctionAccountAH(request, Constant.GENERAL_ID_THREE).toString();
     }
 }

@@ -29,6 +29,9 @@ Ext.define('Admin.view.account.AccountController', {
         },
         'account-mgrid button[action=abandon]': {
             click: 'onAbandonBtnClicked'
+        },
+        'account-mgrid button[action=recover]': {
+            click: 'onRecoverBtnClicked'
         }
     },
 
@@ -46,6 +49,7 @@ Ext.define('Admin.view.account.AccountController', {
         view.down('button[action=save]').setDisabled(count < 1);
         view.down('button[action=enabled]').setDisabled(count < 1);
         view.down('button[action=abandon]').setDisabled(count < 1);
+        view.down('button[action=recover]').setDisabled(count != 1);
     },
 
     onItemClick: function (grid, record, item, index, e, eOpts) {
@@ -284,6 +288,14 @@ Ext.define('Admin.view.account.AccountController', {
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
             url: '/cn/admin/accountAbandon'
         });
-    }
+    },
+    onRecoverBtnClicked: function (button) {
+        var ctrl = this,
+            grid = button.up('grid');
 
+        // todo edit
+        ctrl.sendAjaxFromIds(button.action, button.text, grid, {
+            url: '/cn/admin/accountRecover'
+        });
+    }
 });

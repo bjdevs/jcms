@@ -83,4 +83,10 @@ public class AuthController extends BaseController {
     public String authAuthorityUpdateAH(HttpServletRequest request,HttpServletResponse response) throws Exception {
         return authService.updateAuth(request);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/authDataNavs", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String authDataNavsAH(HttpServletRequest request,HttpServletResponse response) throws Exception {
+        return authService.authDataNavs(request);
+    }
 }

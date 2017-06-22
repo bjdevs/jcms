@@ -115,6 +115,7 @@ public class User {
                 ", depict='" + depict + '\'' +
                 ", phone='" + phone + '\'' +
                 ", mail='" + mail + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
