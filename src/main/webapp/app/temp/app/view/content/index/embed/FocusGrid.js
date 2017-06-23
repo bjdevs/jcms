@@ -42,7 +42,8 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                     },
                     width: 80
                 },
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                {
+                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -55,7 +56,8 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                         allowBlank: false
                     }
                 },
-                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                {
+                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
@@ -67,7 +69,6 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
                 {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
-
             ],
             tbar: [
                 {

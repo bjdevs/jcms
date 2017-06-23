@@ -17,67 +17,70 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
 
     /* 修改按钮 */
     onUpdateBtnClicked: function (button) {
-        var formPanel = button.up().up();
-        var displayFields = formPanel.query('[itemId^="d-"]');
-        var submitFields = formPanel.query('[itemId^="v-"]');
-        var cancelBtn = formPanel.down('button[action=cancel]');
-        var saveBtn = formPanel.down('button[action=save]');
-        var updateBtn = formPanel.down('button[action=update]');
+        var ctrl = this,
+            view = ctrl.getView(), // "main-panel-article"
 
-        Ext.each(displayFields, function (item, index, allItems) {
-            item.setHidden(true);
-        });
-        Ext.each(submitFields, function (item, index, allItems) {
-            item.setHidden(false);
-        });
+            cancelBtn = view.down('button[action=cancel]'),
+            saveBtn = view.down('button[action=save]'),
+            updateBtn = view.down('button[action=update]'),
+
+            formPanel = view.down('form'),
+            basicForm = formPanel.getForm(); // basic-form
 
         cancelBtn.setHidden(false);
         saveBtn.setHidden(false);
         updateBtn.setHidden(true);
 
-        var panel = formPanel.up().down('main-panel-article');
-        // 解决显示没有效果的问题
-        panel.setHeight(panel.getHeight());
+        formPanel.down('#display-field').setHidden(true);
+        formPanel.down('#submit-field').setHidden(false);
+
+        KindEditor('#' + basicForm.findField('content').id).show();
+
+        // basicForm.findField('content').setHeight(480);
+        basicForm.findField('content').setHeight(basicForm.findField('content').getHeight());
     },
 
     /* 取消修改 */
     onCancelBtnClicked: function (button) {
-        var formPanel = button.up().up();
-        var displayFields = formPanel.query('[itemId^="d-"]');
-        var submitFields = formPanel.query('[itemId^="v-"]');
-        var cancelBtn = formPanel.down('button[action=cancel]');
-        var saveBtn = formPanel.down('button[action=save]');
-        var updateBtn = formPanel.down('button[action=update]');
+        var ctrl = this,
+            view = ctrl.getView(), // "main-panel-article"
 
-        Ext.each(displayFields, function (item, index, allItems) {
-            item.setHidden(false);
-        });
-        Ext.each(submitFields, function (item, index, allItems) {
-            item.setHidden(true);
-        });
+            cancelBtn = view.down('button[action=cancel]'),
+            saveBtn = view.down('button[action=save]'),
+            updateBtn = view.down('button[action=update]'),
+
+            formPanel = view.down('form'),
+            basicForm = formPanel.getForm(); // basic-form
 
         cancelBtn.setHidden(true);
         saveBtn.setHidden(true);
         updateBtn.setHidden(false);
 
-        // KindEditor.remove('#content');
+        formPanel.down('#display-field').setHidden(false);
+        formPanel.down('#submit-field').setHidden(true);
+        KindEditor('#' + basicForm.findField('content').id).hide();
 
-        var panel = formPanel.up().down('main-panel-article');
-        // 解决显示没有效果的问题
-        panel.setHeight(panel.getHeight());
+        // basicForm.findField('content').setHeight(480);
+        basicForm.findField('content').setHeight(basicForm.findField('content').getHeight());
     },
 
     /* 保存 */
     onSaveBtnClicked: function (button) {
-        var form = button.up().up();
+        var form = button.up().up(),
+            ctrl = this,
+            view = ctrl.getView(),
+            formPanel = view.down('form'),
+            basicForm = formPanel.getForm();
+        var cancelBtn = view.down('button[action=cancel]'),
+            saveBtn = view.down('button[action=save]'),
+            updateBtn = view.down('button[action=update]');
 
         var id = form.query('[name=id]')[0].value;
-        id = id.split("：")[1];
         var title = form.query('[name=title]')[0].value;
         var author = form.query('[name=author]')[0].value;
         var depict = form.query('[name=depict]')[0].value;
         var kIds = form.query('[name=kId]')[0].value;
-        var content = editor.html();
+        var content = basicForm.findField('content').getValue();
         var account = _am.currentUser.account;
 
         Ext.Ajax.request({
@@ -96,6 +99,7 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
             success: function (response) {
                 var data = response.responseText;
                 data = JSON.parse(data);
+                var cName = data.cName;
                 if (data.success) {
                     Ext.ux.Msg.info('文章已修改', function () {
                     });
@@ -103,20 +107,29 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                     Ext.ux.Msg.info('文章修改异常，请刷新页面稍后再试...', function () {
                     });
                 }
-                var panel = button.up().up();
+                // var panel = button.up().up();
                 var grid = button.up().up().up().down('content-mgrid');
-                console.log("grid: " + grid);
                 if (grid == null) {
                     grid = button.up().up().up().down('workbench-mgrid');
-                    console.log("grid2: " + grid);
                 }
-                var contentPanel = button.up().up().up();
 
-                var cancelBtn = panel.down('button[action=cancel]');
-                var saveBtn = panel.down('button[action=save]');
+                // 关闭tab
+                // var contentPanel = button.up().up().up();
+                // contentPanel.remove(panel, true);
+
+                form.query('[itemId=dis_content]')[0].setValue(content);
+                form.query('[itemId=cName]')[0].setValue(cName);
+
                 cancelBtn.setHidden(true);
                 saveBtn.setHidden(true);
-                contentPanel.remove(panel, true);
+                updateBtn.setHidden(false);
+
+                formPanel.down('#display-field').setHidden(false);
+                formPanel.down('#submit-field').setHidden(true);
+                KindEditor('#' + basicForm.findField('content').id).hide();
+
+                basicForm.findField('content').setHeight(basicForm.findField('content').getHeight());
+
                 grid.getStore().reload();
                 grid.getSelectionModel().deselectAll();
             }
@@ -124,6 +137,12 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
     },
 
     onCloseBtnClicked: function (button) {
+        var grid = button.up().up().up().down('content-mgrid');
+        if (grid == null) {
+            grid = button.up().up().up().down('workbench-mgrid');
+        }
+        grid.getStore().reload();
+        grid.getSelectionModel().deselectAll();
         var panel = button.up().up();
         var contentPanel = button.up().up().up();
         contentPanel.remove(panel, true);

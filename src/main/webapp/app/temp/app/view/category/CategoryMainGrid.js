@@ -55,7 +55,7 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
                 {text: '栏目ID', dataIndex: 'id', width: 80},
                 {
                     text: '栏目名称 <span class="admin-color-red">+</span>',
-                    dataIndex: 'eName',
+                    dataIndex: 'name',
                     width: 150,
                     editor: {
                         xtype: 'textfield',
@@ -64,13 +64,13 @@ Ext.define('Admin.view.category.CategoryMainGrid', {
                 },
                 {text: '栏目路径', dataIndex: 'path', width: 150},
                 {
-                    text: '存放路径 <span class="admin-color-red">+</span>',
-                    dataIndex: 'name',
+                    text: '存放路径',
+                    dataIndex: 'eName',
                     width: 150
                 },
                 {text: '栏目模板', dataIndex: 'category_template', width: 150},
                 {
-                    text: '文章模板',
+                    text: '文章模板 <span class="admin-color-red">+</span>',
                     // dataIndex: 'article_template',
                     dataIndex: 'tAId',
                     editor: {

@@ -74,7 +74,7 @@ Ext.define('Admin.view.content.ContentController', {
 
         });
 
-        var objects;
+        var objects,cName="";
         Ext.Ajax.request({
             url: '/cn/article/getArticleKeyWord',
             method: 'POST',
@@ -91,11 +91,14 @@ Ext.define('Admin.view.content.ContentController', {
                 for (var i = 0; i < objects.length; i++) {
                     ob1 = [objects[i].name];
                     ob[i] = ob1;
+                    cName += ob1 + ",";
                 }
                 objects = ob;
             }
         });
+        cName = cName.substring(0, cName.length - 1);
         selected.set("kId", objects);
+        selected.set("cName", cName);
         tab.getViewModel().data.article = selected;
         tabPanel.setActiveTab(tab);
     },

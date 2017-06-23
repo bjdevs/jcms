@@ -2,7 +2,7 @@ Ext.define('Admin.controller.AppController', {
     extend: 'Ext.app.Controller',
     namespace: 'Admin',
     requires: [
-        'Ext.window.*'
+        // 'Ext.window.*'
     ],
 
     stores: [
