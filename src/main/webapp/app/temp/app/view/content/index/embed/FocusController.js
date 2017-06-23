@@ -102,10 +102,8 @@ Ext.define('Admin.view.content.index.embed.FocusController', {
                     }
                 }
             });
-
             ownerView.add(win);
         }
-
         win.show();
     },
 

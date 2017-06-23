@@ -42,7 +42,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     width: 80
                 },
                 {
-                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                    text: '状态 <span class="admin-color-red">+</span>', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -56,7 +56,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                     }
                 },
                 {
-                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                    text: '标题 <span class="admin-color-red">+</span>', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false

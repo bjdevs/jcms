@@ -31,7 +31,7 @@ Ext.define('Admin.view.serial.SerialGrid', {
                     width: 50
                 },
                 {
-                    text: '连载名称',
+                    text: '连载名称 <span class="admin-color-red">+</span>',
                     dataIndex: 'name',
                     width: 150,
                     editor: {
@@ -40,7 +40,7 @@ Ext.define('Admin.view.serial.SerialGrid', {
                     }
                 },
                 {
-                    text: '描述',
+                    text: '描述 <span class="admin-color-red">+</span>',
                     dataIndex: 'depict',
                     flex: 1,
                     editor: {
@@ -54,7 +54,7 @@ Ext.define('Admin.view.serial.SerialGrid', {
                     width: 130
                 },
                 {
-                    text: '状态',
+                    text: '状态 <span class="admin-color-red">+</span>',
                     dataIndex: 'status',
                     width: 100,
                     align: 'center',

@@ -47,7 +47,10 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     width: 80
                 },
                 {
-                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                    text: '状态 <span class="admin-color-red">+</span>',
+                    dataIndex: 'status',
+                    renderer: me.renderer,
+                    width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -61,11 +64,20 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
                     }
                 },
                 {
-                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                    text: '标题 <span class="admin-color-red">+</span>',
+                    dataIndex: 'name',
+                    renderer: me.renderer,
+                    flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
                     }
+                },
+                {
+                    text: '媒体名称',
+                    dataIndex: 'mediaName',
+                    width: 150,
+                    renderer: me.renderer
                 },
                 // {text: '文章栏目', dataIndex: 'category', width: 150},
                 {text: '文章栏目', dataIndex: 'categoryArticle', width: 150},
@@ -127,6 +139,11 @@ Ext.define('Admin.view.content.headline.picture.PictureMainGrid', {
             case 'title':
                 var redStatus = record.get('redStatus');
                 return redStatus == 1 ? '<span class="admin-color-red">' + value + '</span>' : value;
+            case 'mediaName':
+                var mediaName = record.get('mediaName');
+                var mediaUrl = record.get('mediaUrl');
+                return '<a href="' + mediaUrl + '" target="_blank">' + mediaName + '</a>';
+            // return '<div data-qtip="'+mediaUrl+'">'+mediaName+'</div>';
             default:
                 return value;
         }

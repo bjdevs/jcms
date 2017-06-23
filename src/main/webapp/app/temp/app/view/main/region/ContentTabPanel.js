@@ -20,8 +20,7 @@ Ext.define('Admin.view.main.region.ContentTabPanel', {
 
     },
     plugins: [
-        Ext.create('Ext.ux.TabCloseMenu'),
-        'tabreorderer'
+        Ext.create('Ext.ux.TabCloseMenu')
     ],
 
     items: {

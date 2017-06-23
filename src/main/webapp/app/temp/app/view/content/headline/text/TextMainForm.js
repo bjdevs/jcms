@@ -140,7 +140,7 @@ Ext.define('Admin.view.content.headline.text.TextMainForm', {
                                             },
                                             autoLoad: true
                                         },
-                                        displayField: 'eName',
+                                        displayField: 'name',
                                         valueField: 'id',
                                         msgTarget: 'side'
                                     }

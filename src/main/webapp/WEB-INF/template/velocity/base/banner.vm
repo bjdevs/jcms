@@ -1,4 +1,4 @@
 document.write(
-'<div class="left"><a href="$!ad.get(0).url" target="_blank"><img src="$!ad.get(0).materialUrl" alt=""/></a></div>'+
-'<div class="right"><a href="$!ad.get(1).url" target="_blank"><img src="$!ad.get(1).materialUrl" alt=""/></a> </div>'
+'<div class="left"><a href="$!ad.get(0).url" target="_blank"><img src="$!ad.get(0).materialUrl" alt="" width="912" height="100"/></a></div>'+
+'<div class="right"><a href="$!ad.get(1).url" target="_blank"><img src="$!ad.get(1).materialUrl" alt="" width="240" height="100"/></a> </div>'
 )
