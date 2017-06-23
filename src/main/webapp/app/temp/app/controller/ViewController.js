@@ -131,10 +131,10 @@ Ext.define('Admin.controller.ViewController', {
                 if (success) {
                     if (obj['result'] == 'noRight') {
                         Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
-                    } else if(obj['result'] == 'failed') {
+                    } else if (obj['result'] == 'failed') {
                         Ext.Msg.alert("更新失败", message).setIcon(Ext.Msg.WARNING);
                     } else {
-                        Ext.ux.Msg.info(text + '成功', function () {
+                        Ext.ux.Msg.info(text + '成功' + (obj['result'] == 'custom' ? "，" + message : ""), function () {
                             // 不需要重置pageNo
                             grid.getStore().reload();
                             grid.getSelectionModel().deselectAll();

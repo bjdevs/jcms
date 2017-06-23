@@ -132,7 +132,7 @@ public class AdService extends BaseService {
             ad.setMaterialUrl(materialUrl);
             ad.setCreateDate(new Date());
             ad.setUpdateDate(new Date());
-            ad.setStatus(Constant.GENERAL_ID_TWO);
+            ad.setStatus(Constant.GENERAL_ID_ONE);
             ad.setuId((byte) userInfo.getId());
             ad.setId(baseRepository.create(ad));
             // 执行保存的逻辑
@@ -148,7 +148,7 @@ public class AdService extends BaseService {
     /**
      *
      * @param request
-     * @param type // 删除0 -> 废弃1 -> 待审2 -> 已审3 -> 已发9
+     * @param type // 删除2 -> 废弃0 -> 待审1 -> 启用9
      * @return
      */
     public ObjectNode multifunctionAdAH(HttpServletRequest request, int type) {
@@ -167,50 +167,49 @@ public class AdService extends BaseService {
                 ad = baseRepository.find(Ad.class, ad.getId());
                 if (ad !=null && ad.getId() > 0) {
                     ad.setUpdateDate(new Date());
-                    if (type == Constant.GENERAL_ID_ONE) { // 废弃
-                        ad.setStatus(Constant.GENERAL_ID_ONE);
-                        typeStr = "废弃";
-                        baseRepository.update(ad);
-                        result = "success";
-                    } else if (type == Constant.GENERAL_ID_TWO) { // 待审
-                        ad.setStatus(Constant.GENERAL_ID_TWO);
-                        typeStr = "待审";
-                        result = "success";
-                        baseRepository.update(ad);
-                    } else if (type == Constant.GENERAL_ID_THREE) { // 已审
-                        // 查询一下是否含已冲突(含有此位置且状态大于废弃的)的位置？
-                        if (getAvailableList(ad.getLocation()) == 0) {
-                            ad.setStatus(Constant.GENERAL_ID_THREE);
-                            typeStr = "已审";
-                            baseRepository.update(ad);
-                            result = "success";
-                        } else {
-                            message = "审核失败，广告标题：" + ad.getName() + "、广告位置：" + ad.getLocation() + " 已存在";
-                        }
-                    } else if (type == Constant.GENERAL_ID_NINE) { // 已发
-                        if (ad.getStatus() == Constant.GENERAL_ID_THREE) {
+                    if (type == Constant.GENERAL_ID_NINE) { // 启用
+                        if (ad.getStatus() == Constant.GENERAL_ID_ONE
+                                || (ad.getStatus() == Constant.GENERAL_ID_ZERO && getAvailableList(ad.getLocation()) == 0)) {
                             ad.setStatus(Constant.GENERAL_ID_NINE);
-                            typeStr = "已发";
+                            typeStr = "启用";
                             baseRepository.update(ad);
                             result = "success";
                         } else {
-                            message = "当前状态不是已审，发布失败";
+                            message = "广告位置：" + ad.getLocation() + "已存在，无法启用";
                             break;
                         }
-                    } else if (type == Constant.GENERAL_ID_ZERO) { // 删除
-                        if (ad.getStatus() == Constant.GENERAL_ID_ONE) {
+                    } else if (type == Constant.GENERAL_ID_TWO) { // 删除
+                        if (ad.getStatus() == Constant.GENERAL_ID_ZERO) { // 只有广告是废弃才可以删除
                             typeStr = "删除";
+                            stringBuilder.append(ad.toString()).append(",");
                             baseRepository.delete(Ad.class, ad.getId());
                             result = "success";
                         } else {
                             message = "当前状态不是废弃，无法删除";
                             break;
                         }
+                    } else if (type == Constant.GENERAL_ID_ONE) { // 待审
+                        if (ad.getStatus() == Constant.GENERAL_ID_ZERO) { // 只有广告是废弃才可以待审
+                            ad.setStatus(Constant.GENERAL_ID_ONE);
+                            typeStr = "启用";
+                            baseRepository.update(ad);
+                            result = "success";
+                        } else {
+                            message = "当前状态不是废弃，无法审核";
+                            break;
+                        }
+                    } else if (type == Constant.GENERAL_ID_ZERO) { // 废弃
+                        ad.setStatus(Constant.GENERAL_ID_ZERO);
+                        typeStr = "废弃";
+                        baseRepository.update(ad);
+                        result = "success";
                     }
-                    stringBuilder.append(ad.toString()).append(",");
+                    if (type != Constant.GENERAL_ID_TWO) {
+                        stringBuilder.append(ad.toString()).append(",");
+                    }
                 }
             }
-            log("广告管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
+            log("广告管理", typeStr, stringBuilder.toString().substring(0,stringBuilder.length()-1));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,7 +254,7 @@ public class AdService extends BaseService {
                         adOld.setMaterialUrl(ad.getMaterialUrl());
                         adOld.setUpdateDate(new Date());
                         // 状态改成待审
-                        adOld.setStatus(Constant.GENERAL_ID_TWO);
+                        adOld.setStatus(Constant.GENERAL_ID_ONE);
                         baseRepository.update(adOld);
                         objectNode.put("result", "success");
                     }
@@ -274,7 +273,7 @@ public class AdService extends BaseService {
     public int getAvailableList(String location) {
         Map<String, Object> params = new HashMap<String, Object>();
         // 查询包含待审以上的所有广告list
-        params.put("status", Constant.GENERAL_ID_ONE);
+        params.put("status", Constant.GENERAL_ID_ZERO);
         params.put("location", location);
         String sql = " WHERE status > :status AND location = :location";
         return baseRepository.count(Ad.class, sql, params);

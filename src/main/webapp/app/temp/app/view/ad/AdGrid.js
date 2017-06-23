@@ -70,12 +70,10 @@ Ext.define('Admin.view.ad.AdGrid', {
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case GENERAL_ID_NINE:
-                                return '<span style="color: green">已发</span>';
-                            case GENERAL_ID_THREE:
-                                return '已审';
-                            case GENERAL_ID_TWO:
-                                return '待审';
+                                return '<span style="color: green">启用</span>';
                             case GENERAL_ID_ONE:
+                                return '待审';
+                            case GENERAL_ID_ZERO:
                                 return '<span style="color: red">废弃</span>';
                             default :
                                 return value;
@@ -93,7 +91,7 @@ Ext.define('Admin.view.ad.AdGrid', {
                 },
                 {
                     xtype: 'button',
-                    text: '审核',
+                    text: '启用',
                     iconCls: 'x-fa fa-check',
                     disabled: true,
                     action: 'enabled'
@@ -119,14 +117,13 @@ Ext.define('Admin.view.ad.AdGrid', {
                     disabled: true,
                     action: 'save'
                 },
-                {
+                /*{
                     xtype: 'button',
                     text: '发布',
                     iconCls: 'x-fa fa-paper-plane-o',
                     disabled: true,
                     action: 'publish'
-                },
-
+                },*/
                 '-',
                 {
                     xtype: 'button',

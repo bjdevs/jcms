@@ -27,11 +27,13 @@ Ext.define('Admin.view.ad.AdForm', {
                 {
                     name: 'name',
                     fieldLabel: '标题',
+                    emptyText: '广告标题',
                     allowBlank: false
                 },
                 {
                     name: 'location',
                     fieldLabel: '位置',
+                    emptyText: '广告位置',
                     itemId: 'd-location',
                     xtype: 'combo',
                     /*store: [
@@ -65,6 +67,7 @@ Ext.define('Admin.view.ad.AdForm', {
                 {
                     name: 'size',
                     fieldLabel: '尺寸',
+                    emptyText: '广告尺寸',
                     itemId: 'd-size',
                     xtype: 'combo',
                     store: [
@@ -76,6 +79,7 @@ Ext.define('Admin.view.ad.AdForm', {
                 {
                     name: 'url',
                     fieldLabel: '链接',
+                    emptyText: '广告跳转链接地址',
                     allowBlank: false,
                     maxLength: 150,
                     maxLengthText: "链接不能超过150个字符"
@@ -83,6 +87,7 @@ Ext.define('Admin.view.ad.AdForm', {
                 {
                     name: 'materialUrl',
                     fieldLabel: '素材',
+                    emptyText: '广告素材地址',
                     allowBlank: false,
                     maxLength: 150,
                     maxLengthText: "素材地址不能超过150个字符"

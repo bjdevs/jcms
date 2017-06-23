@@ -1,9 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%
-
-%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +49,8 @@
             name: "${user.name}",
             phone: "${user.phone}",
             mail: "${user.mail}",
-            depict: "${user.depict}"
+            depict: "${user.depict}",
+            status:"${user.status}"
         }
     }
 </script>

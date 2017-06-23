@@ -3,6 +3,7 @@ package com.core.controller;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.MediaService;
+import com.core.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,20 +48,20 @@ public class MediaController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/mediaDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaDeleteAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request, 2).toString();
+        return mediaService.multifunctionMediaAH(request, Constant.GENERAL_ID_TWO).toString();
     }
 
     @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaEnabledAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request, 1).toString();
+        return mediaService.multifunctionMediaAH(request, Constant.GENERAL_ID_ONE).toString();
     }
 
     @AsRight(id = 121)
     @ResponseBody
     @RequestMapping(value = "/mediaAbandon", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaAbandonAH(HttpServletRequest request) throws Exception {
-        return mediaService.multifunctionMediaAH(request, 0).toString();
+        return mediaService.multifunctionMediaAH(request, Constant.GENERAL_ID_ZERO).toString();
     }
 }

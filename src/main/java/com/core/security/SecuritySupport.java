@@ -289,7 +289,6 @@ public class SecuritySupport {
             param.put("password", password);
         }
         param.put("account", account);
-        //param.put("status", Constant.GENERAL_ID_ONE);
 
         User userInfo = findAccount(User.class, param);
         if (userInfo != null && userInfo.getId() != 0) {
@@ -299,6 +298,7 @@ public class SecuritySupport {
             user.setPhone(userInfo.getPhone());
             user.setMail(userInfo.getMail());
             user.setDepict(userInfo.getDepict());
+            user.setStatus(userInfo.getStatus());
             user.setCreateDate(userInfo.getCreateDate());
             user.setUpdateDate(userInfo.getUpdateDate());
             user.setLastLoginDate(userInfo.getLastLoginDate());
