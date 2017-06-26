@@ -37,14 +37,14 @@ public class MediaController extends BaseController {
         return mediaService.createMedia(msr);
     }
 
-    @AsRight(id = 121)
+    @AsRight(id = 120)
     @ResponseBody
     @RequestMapping(value = "/mediaUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaUpdateAH(HttpServletRequest request) throws Exception {
         return mediaService.updateMedia(request).toString();
     }
 
-    @AsRight(id = 121)
+    @AsRight(id = 120)
     @ResponseBody
     @RequestMapping(value = "/mediaDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String mediaDeleteAH(HttpServletRequest request) throws Exception {

@@ -1020,7 +1020,7 @@ public class ArticleService extends BaseService {
         } catch (Exception e) {
             objectNode.put("success", false);
         }
-        createBaseLog("文章管理", "更新", "审核的文章ID：" + article.getId());
+        createBaseLog("文章管理", "审核", "审核的文章ID：" + article.getId());
         return objectNode;
     }
 

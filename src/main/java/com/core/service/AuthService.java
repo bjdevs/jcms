@@ -1,6 +1,7 @@
 package com.core.service;
 
 import com.core.domain.*;
+import com.core.repository.SecurityRepository;
 import com.core.repository.sqlBuilder.Page;
 import com.core.util.Constant;
 import org.apache.commons.lang.StringUtils;
@@ -8,6 +9,8 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.core.util.Constant.AUTH_ACCOUNT;
+import static com.core.util.Constant.AUTH_USER;
+
 /**
  * Created by sun
  */
 @Service
 public class AuthService extends BaseService {
+
+    @Autowired
+    SecurityRepository securityRepository;
+
+    @Autowired
+    protected NamedParameterJdbcTemplate jdbcTemplate;
 
     // 功能管理
     /**
@@ -442,10 +454,40 @@ public class AuthService extends BaseService {
 
     public String authDataNavs(HttpServletRequest request) throws Exception {
         User user = (User) request.getAttribute("user");
-        if (user.getStatus() == Constant.GENERAL_ID_NINE) {
+
+        boolean s1 = getASRight(user.getId(), AUTH_ACCOUNT);
+        boolean s2 = getASRight(user.getId(), AUTH_USER);
+
+        // 判断是否有权限查看账号管理
+        if (getASRight(user.getId(), AUTH_USER)) { // 有权限管理必有账号管理
             return "{\"children\":[{\"text\":\"内容管理\",\"iconCls\":\"x-fa fa-newspaper-o\",\"expanded\":true,\"children\":[{\"text\":\"首页\",\"children\":[{\"viewType\":\"content-index-nav-main\",\"text\":\"主导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-nav-sub\",\"text\":\"次导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-notice\",\"text\":\"活动通知\",\"split\":true,\"leaf\":true},{\"text\":\"紫云法务\",\"children\":[{\"viewType\":\"content-index-embed-fawu-short\",\"text\":\"短期出家\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-temple\",\"text\":\"入寺须知\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-buddha\",\"text\":\"礼佛须知\",\"split\":true,\"leaf\":true}]},{\"viewType\":\"content-index-embed-futian\",\"text\":\"广种福田\",\"leaf\":true},{\"viewType\":\"content-index-embed-contact\",\"text\":\"联系我们\",\"leaf\":true},{\"viewType\":\"content-index-embed-focus\",\"text\":\"大焦点图\",\"leaf\":true}]},{\"viewType\":\"content-news\",\"text\":\"新闻法讯\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-life\",\"text\":\"生活禅\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-ziyunfoguo\",\"text\":\"紫云佛国\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-medical\",\"text\":\"禅医养生\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-knowledge\",\"text\":\"佛教常识\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-depository\",\"text\":\"藏经阁\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-waterzen\",\"text\":\"水墨禅韵\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-defaults\",\"text\":\"默认分类\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-recycle\",\"iconCls\":\"x-fa fa-trash\",\"text\":\"回收站\",\"leaf\":true}]},{\"text\":\"连载管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"serial\",\"text\":\"连载列表\",\"leaf\":true}]},{\"text\":\"发布管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"publish\",\"text\":\"发布记录\",\"leaf\":true}]},{\"text\":\"栏目维护\",\"iconCls\":\"x-fa fa-bars\",\"children\":[{\"viewType\":\"category\",\"text\":\"目录维护\",\"leaf\":true},{\"viewType\":\"template\",\"text\":\"模板维护\",\"leaf\":true},{\"viewType\":\"keyword\",\"text\":\"标签维护\",\"leaf\":true}]},{\"text\":\"媒体管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"media\",\"text\":\"媒体库\",\"leaf\":true}]},{\"text\":\"广告管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"ad\",\"text\":\"广告维护\",\"leaf\":true}]},{\"text\":\"账户资料\",\"iconCls\":\"x-fa fa-user\",\"children\":[{\"viewType\":\"account-setting\",\"text\":\"资料设置\",\"leaf\":true},{\"viewType\":\"account-editpwd\",\"text\":\"密码修改\",\"leaf\":true},{\"viewType\":\"account-mgrid\",\"text\":\"账号管理\",\"leaf\":true}]},{\"text\":\"系统安全\",\"iconCls\":\"x-fa fa-lock\",\"children\":[{\"viewType\":\"log\",\"text\":\"日志管理\",\"leaf\":true},{\"viewType\":\"auth-function\",\"text\":\"功能管理\",\"leaf\":true},{\"viewType\":\"auth-role\",\"text\":\"角色管理\",\"leaf\":true},{\"viewType\":\"auth-acl\",\"text\":\"用户管理\",\"leaf\":true}]}]}";
-        } else {
+        } else if (getASRight(user.getId(), AUTH_ACCOUNT) && !getASRight(user.getId(), AUTH_USER)) { // 有账号管理未必有权限管理
+            return "{\"children\":[{\"text\":\"内容管理\",\"iconCls\":\"x-fa fa-newspaper-o\",\"expanded\":true,\"children\":[{\"text\":\"首页\",\"children\":[{\"viewType\":\"content-index-nav-main\",\"text\":\"主导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-nav-sub\",\"text\":\"次导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-notice\",\"text\":\"活动通知\",\"split\":true,\"leaf\":true},{\"text\":\"紫云法务\",\"children\":[{\"viewType\":\"content-index-embed-fawu-short\",\"text\":\"短期出家\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-temple\",\"text\":\"入寺须知\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-buddha\",\"text\":\"礼佛须知\",\"split\":true,\"leaf\":true}]},{\"viewType\":\"content-index-embed-futian\",\"text\":\"广种福田\",\"leaf\":true},{\"viewType\":\"content-index-embed-contact\",\"text\":\"联系我们\",\"leaf\":true},{\"viewType\":\"content-index-embed-focus\",\"text\":\"大焦点图\",\"leaf\":true}]},{\"viewType\":\"content-news\",\"text\":\"新闻法讯\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-life\",\"text\":\"生活禅\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-ziyunfoguo\",\"text\":\"紫云佛国\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-medical\",\"text\":\"禅医养生\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-knowledge\",\"text\":\"佛教常识\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-depository\",\"text\":\"藏经阁\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-waterzen\",\"text\":\"水墨禅韵\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-defaults\",\"text\":\"默认分类\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-recycle\",\"iconCls\":\"x-fa fa-trash\",\"text\":\"回收站\",\"leaf\":true}]},{\"text\":\"连载管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"serial\",\"text\":\"连载列表\",\"leaf\":true}]},{\"text\":\"发布管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"publish\",\"text\":\"发布记录\",\"leaf\":true}]},{\"text\":\"栏目维护\",\"iconCls\":\"x-fa fa-bars\",\"children\":[{\"viewType\":\"category\",\"text\":\"目录维护\",\"leaf\":true},{\"viewType\":\"template\",\"text\":\"模板维护\",\"leaf\":true},{\"viewType\":\"keyword\",\"text\":\"标签维护\",\"leaf\":true}]},{\"text\":\"媒体管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"media\",\"text\":\"媒体库\",\"leaf\":true}]},{\"text\":\"广告管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"ad\",\"text\":\"广告维护\",\"leaf\":true}]},{\"text\":\"账户资料\",\"iconCls\":\"x-fa fa-user\",\"children\":[{\"viewType\":\"account-setting\",\"text\":\"资料设置\",\"leaf\":true},{\"viewType\":\"account-editpwd\",\"text\":\"密码修改\",\"leaf\":true},{\"viewType\":\"account-mgrid\",\"text\":\"账号管理\",\"leaf\":true}]}]}";
+        } else { // 普通用户
             return "{\"children\":[{\"text\":\"内容管理\",\"iconCls\":\"x-fa fa-newspaper-o\",\"expanded\":true,\"children\":[{\"text\":\"首页\",\"children\":[{\"viewType\":\"content-index-nav-main\",\"text\":\"主导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-nav-sub\",\"text\":\"次导航\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-notice\",\"text\":\"活动通知\",\"split\":true,\"leaf\":true},{\"text\":\"紫云法务\",\"children\":[{\"viewType\":\"content-index-embed-fawu-short\",\"text\":\"短期出家\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-temple\",\"text\":\"入寺须知\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-index-embed-fawu-buddha\",\"text\":\"礼佛须知\",\"split\":true,\"leaf\":true}]},{\"viewType\":\"content-index-embed-futian\",\"text\":\"广种福田\",\"leaf\":true},{\"viewType\":\"content-index-embed-contact\",\"text\":\"联系我们\",\"leaf\":true},{\"viewType\":\"content-index-embed-focus\",\"text\":\"大焦点图\",\"leaf\":true}]},{\"viewType\":\"content-news\",\"text\":\"新闻法讯\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-life\",\"text\":\"生活禅\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-ziyunfoguo\",\"text\":\"紫云佛国\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-medical\",\"text\":\"禅医养生\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-knowledge\",\"text\":\"佛教常识\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-depository\",\"text\":\"藏经阁\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-waterzen\",\"text\":\"水墨禅韵\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-defaults\",\"text\":\"默认分类\",\"split\":true,\"leaf\":true},{\"viewType\":\"content-recycle\",\"iconCls\":\"x-fa fa-trash\",\"text\":\"回收站\",\"leaf\":true}]},{\"text\":\"连载管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"serial\",\"text\":\"连载列表\",\"leaf\":true}]},{\"text\":\"发布管理\",\"iconCls\":\"x-fa fa-desktop\",\"children\":[{\"viewType\":\"publish\",\"text\":\"发布记录\",\"leaf\":true}]},{\"text\":\"栏目维护\",\"iconCls\":\"x-fa fa-bars\",\"children\":[{\"viewType\":\"category\",\"text\":\"目录维护\",\"leaf\":true},{\"viewType\":\"template\",\"text\":\"模板维护\",\"leaf\":true},{\"viewType\":\"keyword\",\"text\":\"标签维护\",\"leaf\":true}]},{\"text\":\"媒体管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"media\",\"text\":\"媒体库\",\"leaf\":true}]},{\"text\":\"广告管理\",\"iconCls\":\"x-fa fa-cog\",\"children\":[{\"viewType\":\"ad\",\"text\":\"广告维护\",\"leaf\":true}]},{\"text\":\"账户资料\",\"iconCls\":\"x-fa fa-user\",\"children\":[{\"viewType\":\"account-setting\",\"text\":\"资料设置\",\"leaf\":true},{\"viewType\":\"account-editpwd\",\"text\":\"密码修改\",\"leaf\":true}]}]}";
         }
+    }
+
+    public boolean getASRight(long userId, int functionId) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", userId);
+        param.put("functionId", functionId);
+        String sql = "SELECT COUNT(1) " +
+                "FROM " +
+                config.getDbName() + "_user AS u, " +
+                config.getDbName() + "_role AS r, " +
+                config.getDbName() + "_authrole AS ar, " +
+                config.getDbName() + "_rolefunction AS rf " +
+                "WHERE " +
+                "u.id = :userId " +
+                "AND rf.fId = :functionId " +
+                "AND u.status > 0 " +
+                "AND ar.uId = u.id " +
+                "AND rf.rId = r.id " +
+                "AND rf.rId = ar.rId";
+
+        Integer count = jdbcTemplate.queryForObject(sql, param, Integer.class);
+
+        return (count > 0);
     }
 }

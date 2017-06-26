@@ -24,7 +24,7 @@ public class ArticleStaticController extends BaseController {
     @Autowired
     private HomePageService homePageService;
 
-    @AsRight(id = 137)
+    @AsRight(id = 180)
     @ResponseBody
     @RequestMapping("/index")
     public String createIndexAH(HttpServletRequest request) {
