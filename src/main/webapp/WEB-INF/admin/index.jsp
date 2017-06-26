@@ -8,7 +8,8 @@
     <!-- extjs.css -->
     <link href="//cdn.bootcss.com/extjs/6.2.0/classic/theme-neptune/resources/theme-neptune-all.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/extjs/6.2.0/packages/ux/classic/neptune/resources/ux-all-debug.css" rel="stylesheet">
-    <link href="//cdn.bootcss.com/extjs/6.2.0/packages/charts/classic/neptune/resources/charts-all-debug.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/extjs/6.2.0/packages/charts/classic/neptune/resources/charts-all-debug.css"
+          rel="stylesheet">
     <!-- font -->
     <!--<link href="//cdn.bootcss.com/extjs/6.2.0/packages/font-awesome/resources/font-awesome-all-debug.css" rel="stylesheet">-->
     <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">

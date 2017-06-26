@@ -42,7 +42,8 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                     },
                     width: 80
                 },
-                {text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
+                {
+                    text: '状态', dataIndex: 'status', renderer: me.renderer, width: 80,
                     editor: {
                         xtype: 'combo',
                         store: [
@@ -55,11 +56,18 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                         allowBlank: false
                     }
                 },
-                {text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
+                {
+                    text: '标题', dataIndex: 'name', renderer: me.renderer, flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
                     }
+                },
+                {
+                    text: '媒体名称',
+                    dataIndex: 'mediaName',
+                    width: 150,
+                    renderer: me.renderer
                 },
                 // {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '文章栏目', dataIndex: 'categoryArticle', width: 150},
@@ -67,7 +75,6 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                 {text: '创建人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
                 {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
-
             ],
             tbar: [
                 {
@@ -129,6 +136,11 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                     case 0:
                         return '<span class="x-fa fa-picture-o"></span>';
                 }
+            case 'mediaName':
+                var mediaName = record.get('mediaName');
+                var mediaUrl = record.get('mediaUrl');
+                return '<a href="' + mediaUrl + '" target="_blank">' + mediaName + '</a>';
+            // return '<div data-qtip="'+mediaUrl+'">'+mediaName+'</div>';
             default:
                 return value;
         }

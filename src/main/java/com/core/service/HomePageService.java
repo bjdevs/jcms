@@ -56,11 +56,16 @@ public class HomePageService extends BaseService {
 
         ToolContext toolManagerContext = toolManager.createContext();
 
+        String depict = "古名紫云山寺，位于黄梅紫云山莲花峰下，" +
+                "毗邻避暑胜地挪步园风景区，为鄂东古刹之最。是印度高僧千岁宝掌和尚于" +
+                "汉景帝中元6年（公元前144年）开创。现已成为避暑览胜、礼佛参禅的现代旅" +
+                "游景区。";
+
         //返回绑定的文件路径
         toolManagerContext.put("resURLPrefix", staticResPrefix);
         toolManagerContext.put("listURLPrefix", listDomain);
         toolManagerContext.put("winTitle", "首页_" + config.getProjectName());
-        toolManagerContext.put("depict", "首页,描述");
+        toolManagerContext.put("depict", depict);
         toolManagerContext.put("keyWord", " ");
 
         log.setIp(IpUtil.getIp(request));
@@ -72,7 +77,7 @@ public class HomePageService extends BaseService {
 
             // 焦点图
             Map<String, Object> focus = staticOtherModules(Constant.CATEGORY_ID_FOCUS, Constant.GENERAL_ID_TWO);
-            if (focus.containsKey("temp") && focus.get("temp").equals("false")){
+            if (focus.containsKey("temp") && focus.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -81,7 +86,7 @@ public class HomePageService extends BaseService {
 
             // 新闻法讯
             Map<String, Object> news = staticOtherModules(Constant.CATEGORY_ID_NEWS, Constant.GENERAL_ID_ONE);
-            if (news.containsKey("temp") && news.get("temp").equals("false")){
+            if (news.containsKey("temp") && news.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -90,7 +95,7 @@ public class HomePageService extends BaseService {
 
             // 生活禅
             Map<String, Object> life = staticOtherModules(Constant.CATEGORY_ID_LIFE, Constant.GENERAL_ID_TWO);
-            if (life.containsKey("temp") && life.get("temp").equals("false")){
+            if (life.containsKey("temp") && life.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -99,7 +104,7 @@ public class HomePageService extends BaseService {
 
             // 紫云佛国
             Map<String, Object> ziyun = staticOtherModules(Constant.CATEGORY_ID_ZIYUNFOGUO, Constant.GENERAL_ID_TWO);
-            if (ziyun.containsKey("temp") && ziyun.get("temp").equals("false")){
+            if (ziyun.containsKey("temp") && ziyun.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -108,7 +113,7 @@ public class HomePageService extends BaseService {
 
             // 佛教常识
             Map<String, Object> knowledge = staticOtherModules(Constant.CATEGORY_ID_KNOWLEDGE, Constant.GENERAL_ID_TWO);
-            if (knowledge.containsKey("temp") && knowledge.get("temp").equals("false")){
+            if (knowledge.containsKey("temp") && knowledge.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -117,7 +122,7 @@ public class HomePageService extends BaseService {
 
             // 禅医养生
             Map<String, Object> medical = staticOtherModules(Constant.CATEGORY_ID_MEDICAL, Constant.GENERAL_ID_TWO);
-            if (medical.containsKey("temp") && medical.get("temp").equals("false")){
+            if (medical.containsKey("temp") && medical.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -130,7 +135,7 @@ public class HomePageService extends BaseService {
 
             // 水墨禅韵
             Map<String, Object> waterzen = staticOtherModules(Constant.CATEGORY_ID_WATERZEN, Constant.GENERAL_ID_TWO);
-            if (waterzen.containsKey("temp") && waterzen.get("temp").equals("false")){
+            if (waterzen.containsKey("temp") && waterzen.get("temp").equals("false")) {
                 publishLog.setStatus(0);
                 publishLog.setFinishDate(new Date());
                 update(publishLog);
@@ -150,7 +155,7 @@ public class HomePageService extends BaseService {
             staticFawu();
 
             // banner
-            staticAd(request);
+//            staticAd();
 
             create("/index.html", "base/index.vm", toolManagerContext, null);
 
@@ -309,28 +314,44 @@ public class HomePageService extends BaseService {
 
     /**
      * 静态化 广告位
+     *
+     * @param adList: 为null不发布广告；left为list.get(0),right为list.get(1)
+     * @return 修改了静态页面：true；为修改静态页面：false
      */
-    public ObjectNode staticAd(HttpServletRequest request) {
-        ObjectNode objectNode1 = objectMapper.createObjectNode();
-        User user = (User) request.getAttribute("user");
-        long id = createPublishLog(user.getId(), "广告位");
+    public boolean staticAd(List<Ad> adList, long userId) {
+        boolean result = false;
+
+        long id = createPublishLog(userId, "广告位");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
-            List<Ad> resultAdList = searchAd();
+            List<Ad> resultAdList = new ArrayList<>();
+            Ad[] ads = new Ad[2];
+            for (int i = 0; i < adList.size(); i++) {
+                Ad ad = adList.get(i);
+                if (Constant.AD_LOCATION_LEFT.equals(ad.getLocation())) {
+                    ads[0] = ad;
+                }
+                if (Constant.AD_LOCATION_RIGHT.equals(ad.getLocation())) {
+                    ads[1] = ad;
+                }
+            }
+
+            for (int i = 0; i < ads.length; i++){
+                resultAdList.add(ads[i]);
+            }
 
             ToolContext toolManagerContext = toolManager.createContext();
             toolManagerContext.put("ad", resultAdList);
 
             create("/base/banner.html", "base/banner.vm", toolManagerContext, null);
-            objectNode1.put("success", true);
+            result = true;
         } catch (Exception e) {
+            e.printStackTrace();
             publishLog.setStatus(0);
-            objectNode1.put("success", false);
-            objectNode1.put("msg", e.getMessage());
         }
         publishLog.setFinishDate(new Date());
         update(publishLog);
-        return objectNode1;
+        return result;
     }
 
     /**
@@ -399,7 +420,7 @@ public class HomePageService extends BaseService {
                 kw += keyWord.getName() + ",";
             }
             String doc = article.getDepict();
-            if (doc.contains("\"")){
+            if (doc.contains("\"")) {
                 doc = doc.replaceAll("\"", "");
             }
             toolManagerContext.put("keyWord", kw.contains(",") ? kw.substring(0, kw.length() - 1) : kw);
@@ -594,7 +615,7 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
-                    if (null == media){
+                    if (null == media) {
                         map.put("temp", "false");
                     }
                     if (null != article) {
@@ -613,7 +634,7 @@ public class HomePageService extends BaseService {
                     headLine = headLines.get(i);
                     article = find(Article.class, headLine.getaId());
                     Media media = find(Media.class, headLine.getmId());
-                    if (null == media){
+                    if (null == media) {
                         map.put("temp", "false");
                     }
                     news = new String[4];
@@ -864,9 +885,15 @@ public class HomePageService extends BaseService {
      */
     private List<Ad> searchAd() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
+        List<Ad> list = new ArrayList<>();
         paramMap.put("status", Constant.ARTICLE_ID_NINE);
-        List<Ad> adList = list(Ad.class, " WHERE status = :status ORDER BY id ASC", paramMap);
-        return adList.size() >= 2 ? adList : null;
+        paramMap.put("location_left", Constant.AD_LOCATION_LEFT);
+        paramMap.put("location_right", Constant.AD_LOCATION_RIGHT);
+        List<Ad> adList1 = list(Ad.class, " WHERE location = :location_left AND status = :status ORDER BY createDate DESC, updateDate DESC", paramMap);
+        List<Ad> adList2 = list(Ad.class, " WHERE location = :location_right AND status = :status ORDER BY createDate DESC, updateDate DESC", paramMap);
+        list.add(0, adList1.size() > 0 ? adList1.get(0) : null);
+        list.add(1, adList2.size() > 0 ? adList2.get(0) : null);
+        return list.size() >= 2 ? list : null;
     }
 
     /**

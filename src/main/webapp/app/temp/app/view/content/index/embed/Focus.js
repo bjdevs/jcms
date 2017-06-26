@@ -21,7 +21,6 @@ Ext.define('Admin.view.content.index.embed.Focus', {
                 }
             ]
         });
-
         me.callParent();
     }
 });

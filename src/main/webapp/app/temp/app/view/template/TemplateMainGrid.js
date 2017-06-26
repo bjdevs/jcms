@@ -44,7 +44,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                     flex: 1
                 },
                 {
-                    text: '文件 <span class="admin-color-red">+</span>',
+                    text: '文件',
                     dataIndex: 'fileName',
                     /*editor: {
                         xtype: 'textfield',
@@ -74,7 +74,7 @@ Ext.define('Admin.view.template.TemplateMainGrid', {
                 },
                 // {text: '栏目', dataIndex: 'cId'},
                 {
-                    text: '状态',
+                    text: '状态 <span class="admin-color-red">+</span>',
                     dataIndex: 'status',
                     editor: {
                         xtype: 'combo',

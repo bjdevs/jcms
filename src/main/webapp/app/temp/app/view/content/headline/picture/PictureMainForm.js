@@ -160,7 +160,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                             },
                                             autoLoad: true
                                         },
-                                        displayField: 'eName',
+                                        displayField: 'name',
                                         valueField: 'id',
                                         msgTarget: 'side'
                                     }

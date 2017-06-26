@@ -92,6 +92,9 @@ public class Constant {
     public static final String STATIC_RESOURCE_URL_PREFIX = "resURLPrefix";
     public static final String LIST_PAGE_URL_PREFIX = "listURLPrefix";
 
+    public static final String AD_LOCATION_LEFT = "hmlzs.home.banner1.left";
+    public static final String AD_LOCATION_RIGHT = "hmlzs.home.banner1.right";
+
     /**
      * 适用
      * 媒体 媒体类型 1-图片 / 2-音频 / 3-文档

@@ -1,15 +1,16 @@
 package com.core.controller;
 
+import com.core.domain.Ad;
 import com.core.security.annotation.AsRight;
 import com.core.security.annotation.RightCheck;
 import com.core.service.HomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by yk on 2017/4/24.
@@ -46,13 +47,6 @@ public class ArticleStaticController extends BaseController {
     public String createFawu() {
         homePageService.staticFawu();
         return getViewRedirect("/article/index.html");
-    }
-
-    @AsRight(id = 137)
-    @ResponseBody
-    @RequestMapping("/ad")
-    public String createAdAH(HttpServletRequest request) {
-        return homePageService.staticAd(request).toString();
     }
 
     @ResponseBody
