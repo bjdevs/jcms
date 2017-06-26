@@ -336,7 +336,7 @@ public class HomePageService extends BaseService {
                 }
             }
 
-            for (int i = 0; i < ads.length; i++){
+            for (int i = 0; i < ads.length; i++) {
                 resultAdList.add(ads[i]);
             }
 
