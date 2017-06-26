@@ -210,7 +210,7 @@ public class MediaService extends BaseService {
                     }
                     if (type != Constant.GENERAL_ID_TWO) {
                         if ("failed".equals(result)) {
-                            stringBuilder.append(message);
+
                             typeStr = "失败";
                         }
                         stringBuilder.append(media.toString()).append(",");

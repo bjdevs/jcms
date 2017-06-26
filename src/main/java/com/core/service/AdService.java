@@ -3,6 +3,7 @@ package com.core.service;
 import com.core.domain.Ad;
 import com.core.domain.User;
 import com.core.repository.sqlBuilder.Page;
+import com.core.security.SecuritySupport;
 import com.core.util.Constant;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonNode;
@@ -182,7 +183,7 @@ public class AdService extends BaseService {
                             message = "当前状态不是废弃，无法删除";
                         }
                     } else if (type == Constant.GENERAL_ID_ZERO) { // 废弃
-                        if (getAvailableList(ad.getLocation(), Constant.GENERAL_ID_ZERO) > 1) { // 只有两个同位置的状态大于等于待审的广告才允许删除
+                        if (getAvailableList(ad.getLocation(), Constant.GENERAL_ID_ZERO) > 1) { // 只有两个同位置的状态大于等于待审的广告才允许废弃
                             ad.setStatus(Constant.GENERAL_ID_ZERO);
                             ad.setUpdateDate(new Date());
                             typeStr = "废弃";
@@ -268,25 +269,20 @@ public class AdService extends BaseService {
                 ad.setSize(jsonNode.get("size").asText());
                 ad.setMaterialUrl(jsonNode.get("materialUrl").asText());
                 ad.setStatus((byte) jsonNode.get("status").asInt());
-
                 if (ad.getId() > 0) {
-                    if (getAvailableList(ad.getLocation(), Constant.GENERAL_ID_ZERO) > 1) { // 只有两个同位置的状态大于等于待审的广告才允许删除
-                        adOld = find(Ad.class, ad.getId());
-                        if (adOld != null && adOld.getId() > 0) {
-                            adOld.setName(ad.getName());
-                            adOld.setSize(ad.getSize());
-                            adOld.setUrl(ad.getUrl());
-                            adOld.setMaterialUrl(ad.getMaterialUrl());
-                            adOld.setUpdateDate(new Date());
-                            // 状态改成待审
-                            adOld.setStatus(Constant.GENERAL_ID_ONE);
-                            baseRepository.update(adOld);
-                            result = "success";
-                        }
-                        stringBuilder.append(ad.toString()).append(",");
-                    } else {
-                        message = "当前位置：" + ad.getLocation() + "，只剩下最后一个在投广告，不允许修改";
+                    adOld = find(Ad.class, ad.getId());
+                    if (adOld != null && adOld.getId() > 0) {
+                        adOld.setName(ad.getName());
+                        adOld.setSize(ad.getSize());
+                        adOld.setUrl(ad.getUrl());
+                        adOld.setMaterialUrl(ad.getMaterialUrl());
+                        adOld.setUpdateDate(new Date());
+                        // 状态改成待审
+                        adOld.setStatus(Constant.GENERAL_ID_ONE);
+                        baseRepository.update(adOld);
+                        result = "success";
                     }
+                    stringBuilder.append(ad.toString()).append(",");
                 } else {
                     message = "更新出错，请刷新页面再试 :(";
                 }
@@ -320,36 +316,33 @@ public class AdService extends BaseService {
         return baseRepository.count(Ad.class, sql, params);
     }
 
-    public boolean adSetPublish(Ad ad) {
-        boolean status = false;
-        if (ad.getStatus() == Constant.GENERAL_ID_THREE) { // 已审才可以发布
-            try {
-                if (1 == 1) { // // 调用发布静态化接口
-                    ad.setStatus(Constant.GENERAL_ID_NINE);
-                    ad.setUpdateDate(new Date());
-                    baseRepository.update(ad);
-                    log("广告管理","已发", ad.toString());
-                    status = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                return status;
-            }
-        } else {
-            return status;
-        }
-    }
-
     /**
      * 给发布系统调用已审的广告数据
-     * @return
+     * @return true 成功 / 没有可发布的广告，false 失败
      */
-    public List<Ad> getAvailableList() {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("status", Constant.GENERAL_ID_THREE);
-        String sql = " WHERE status > :status";
-        return baseRepository.list(Ad.class, sql, params);
+    public boolean getAvailableList() {
+        List<Ad> adPublishList = getAvailableList(Constant.GENERAL_ID_THREE); // 已发布广告
+        boolean status = false;
+        if (adPublishList.size() > 0) {
+            if (homePageService.staticAd(adPublishList, 0)) {
+                try {
+                    for (Ad ad : adPublishList) {
+                        ad.setStatus(Constant.GENERAL_ID_NINE);// 发布成功
+                        ad.setUpdateDate(new Date());
+                        baseRepository.update(ad);
+                        log("广告管理","发布", "发布系统调用：" + ad.toString());
+                    }
+                    status = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    return status;
+                }
+            }
+        } else {
+            status = true;
+        }
+        return status;
     }
 
     /**
