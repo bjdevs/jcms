@@ -34,6 +34,9 @@ public class HomePageService extends BaseService {
     private Config config;
 
     @Autowired
+    private AdService adService;
+
+    @Autowired
     private HeadLineService headLineService;
 
     private Log log;
@@ -155,7 +158,7 @@ public class HomePageService extends BaseService {
             staticFawu();
 
             // banner
-//            staticAd();
+            adService.getAvailableList();
 
             create("/index.html", "base/index.vm", toolManagerContext, null);
 
