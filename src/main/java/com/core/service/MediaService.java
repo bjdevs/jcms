@@ -165,7 +165,7 @@ public class MediaService extends BaseService {
                 media.setId(id);
                 media = baseRepository.find(Media.class, media.getId());
                 if (media != null && media.getId() > 0) {
-                    if (type == 0) { // 废弃
+                    if (type == Constant.GENERAL_ID_ZERO) { // 废弃
                         // 查询关联表
                         //select count(1) from jcms_headline where mid =;
                         List<HeadLine> headLineList = getHeadLineList(media.getId());
@@ -188,28 +188,36 @@ public class MediaService extends BaseService {
                             }
                             stringBuilder2.append("中作为焦点图引用，无法删除");
                             message = "该图片被〔" + articleTitle + "〕在<br/>" + stringBuilder2.toString();
-                            break;
                         }
                     }
-                    if (type == 1) { // 启用
+                    if (type == Constant.GENERAL_ID_ONE) { // 启用
                         media.setStatus(Constant.GENERAL_ID_ONE);
                         typeStr = "启用";
                         result = "success";
                         baseRepository.update(media);
                     }
-                    if (type == 2) { // 删除
+                    if (type == Constant.GENERAL_ID_TWO) { // 删除
                         if (media.getStatus() == Constant.GENERAL_ID_ONE) { // 如果状态是启用，是不能删除
                             message = "当前状态为启用，禁止删除";
-                            break;
                         } else if (media.getStatus() == Constant.GENERAL_ID_ZERO) {
                             // 如果可以删除，那么要再去查询表，如果大于
                             qiniuAuthUtil.deleteFile(media.getRealUrl().split(qiniuAuthUtil.accessDomain)[1]);
+                            stringBuilder.append(media.toString()).append(",");
                             typeStr = "删除";
                             baseRepository.delete(Media.class, media.getId());
                             result = "success";
                         }
                     }
-                    stringBuilder.append(media.toString()).append(",");
+                    if (type != Constant.GENERAL_ID_TWO) {
+                        if ("failed".equals(result)) {
+                            stringBuilder.append(message);
+                            typeStr = "失败";
+                        }
+                        stringBuilder.append(media.toString()).append(",");
+                        if ("failed".equals(result)) {
+                            break;
+                        }
+                    }
                 }
             }
             if ("success".equals(result)) {

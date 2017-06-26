@@ -96,26 +96,32 @@ public class LogService extends BaseService {
     // 基础数据
     static Map<Integer, String> searchModule = new LinkedHashMap<Integer, String>() {{
         put(100, "全部");
-        put(101, "系统日志");
-        put(102, "用户管理");
-        put(103, "权限管理");
-        put(104, "媒体管理");
-        put(105, "广告管理");
+        put(100, "发布管理");
+        put(101, "广告管理");
+        put(102, "文章管理");
+        put(103, "头条管理");
+        put(104, "内嵌管理");
+        put(105, "标签管理");
+        put(106, "模板管理");
+        put(150, "媒体管理");
+        put(151, "用户管理");
+        put(152, "系统日志");
+        put(153, "权限管理");
     }};
 
     static Map<Integer, String> searchAction = new LinkedHashMap<Integer, String>() {{
         put(200, "全部");
         put(201, "新增");
         put(202, "更新");
-        put(203, "删除");
-        put(204, "已审");
-        put(205, "废弃");
-        put(206, "初稿");
-        put(207, "已签");
-        put(208, "返工");
-        put(209, "已发");
-        put(210, "已删");
-        put(300, "登录");
-        put(301, "退出");
+        put(203, "初稿");
+        put(204, "审核");
+        put(205, "发布");
+        put(206, "返工");
+        put(207, "还原");
+        put(208, "废弃");
+        put(209, "删除");
+        put(210, "失败");
+        put(211, "登录");
+        put(212, "退出");
     }};
 }
