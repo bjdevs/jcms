@@ -155,7 +155,7 @@ public class HomePageService extends BaseService {
             staticFawu();
 
             // banner
-            staticAd(request);
+//            staticAd();
 
             create("/index.html", "base/index.vm", toolManagerContext, null);
 
@@ -314,29 +314,44 @@ public class HomePageService extends BaseService {
 
     /**
      * 静态化 广告位
+     *
+     * @param adList: 为null不发布广告；left为list.get(0),right为list.get(1)
+     * @return 修改了静态页面：true；为修改静态页面：false
      */
-    public ObjectNode staticAd(HttpServletRequest request) {
-        ObjectNode objectNode1 = objectMapper.createObjectNode();
-        User user = (User) request.getAttribute("user");
-        long id = createPublishLog(user.getId(), "广告位");
+    public boolean staticAd(List<Ad> adList, long userId) {
+        boolean result = false;
+
+        long id = createPublishLog(userId, "广告位");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
-            List<Ad> resultAdList = searchAd();
+            List<Ad> resultAdList = new ArrayList<>();
+            Ad[] ads = new Ad[2];
+            for (int i = 0; i < adList.size(); i++) {
+                Ad ad = adList.get(i);
+                if (Constant.AD_LOCATION_LEFT.equals(ad.getLocation())) {
+                    ads[0] = ad;
+                }
+                if (Constant.AD_LOCATION_RIGHT.equals(ad.getLocation())) {
+                    ads[1] = ad;
+                }
+            }
+
+            for (int i = 0; i < ads.length; i++){
+                resultAdList.add(ads[i]);
+            }
 
             ToolContext toolManagerContext = toolManager.createContext();
             toolManagerContext.put("ad", resultAdList);
 
             create("/base/banner.html", "base/banner.vm", toolManagerContext, null);
-            objectNode1.put("success", true);
+            result = true;
         } catch (Exception e) {
             e.printStackTrace();
             publishLog.setStatus(0);
-            objectNode1.put("success", false);
-            objectNode1.put("msg", e.getMessage());
         }
         publishLog.setFinishDate(new Date());
         update(publishLog);
-        return objectNode1;
+        return result;
     }
 
     /**

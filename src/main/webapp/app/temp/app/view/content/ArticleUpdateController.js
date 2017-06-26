@@ -100,11 +100,20 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 var data = response.responseText;
                 data = JSON.parse(data);
                 var cName = data.cName;
-                if (data.success) {
-                    Ext.ux.Msg.info('文章已修改', function () {
-                    });
+                var success = data.success;
+                var result = data.result;
+                if (success) {
+                    if (result == "noRight") {
+                        Ext.ux.Msg.error('文章修改失败，您没有该操作权限。', function () {
+                        });
+                    } else {
+                        Ext.ux.Msg.info('文章已修改', function () {
+                        });
+                        form.query('[itemId=dis_content]')[0].setValue(content);
+                        form.query('[itemId=cName]')[0].setValue(cName);
+                    }
                 } else {
-                    Ext.ux.Msg.info('文章修改异常，请刷新页面稍后再试...', function () {
+                    Ext.ux.Msg.error('文章修改异常，请刷新页面稍后再试...', function () {
                     });
                 }
                 // var panel = button.up().up();
@@ -117,8 +126,8 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 // var contentPanel = button.up().up().up();
                 // contentPanel.remove(panel, true);
 
-                form.query('[itemId=dis_content]')[0].setValue(content);
-                form.query('[itemId=cName]')[0].setValue(cName);
+                // form.query('[itemId=dis_content]')[0].setValue(content);
+                // form.query('[itemId=cName]')[0].setValue(cName);
 
                 cancelBtn.setHidden(true);
                 saveBtn.setHidden(true);

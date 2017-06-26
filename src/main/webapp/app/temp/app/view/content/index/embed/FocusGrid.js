@@ -63,6 +63,12 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                         allowBlank: false
                     }
                 },
+                {
+                    text: '媒体名称',
+                    dataIndex: 'mediaName',
+                    width: 150,
+                    renderer: me.renderer
+                },
                 // {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '文章栏目', dataIndex: 'categoryArticle', width: 150},
                 {text: '套红 <span class="admin-color-red">+</span>', dataIndex: 'redStatus', xtype: 'checkcolumn'},
@@ -130,6 +136,11 @@ Ext.define('Admin.view.content.index.embed.FocusGrid', {
                     case 0:
                         return '<span class="x-fa fa-picture-o"></span>';
                 }
+            case 'mediaName':
+                var mediaName = record.get('mediaName');
+                var mediaUrl = record.get('mediaUrl');
+                return '<a href="' + mediaUrl + '" target="_blank">' + mediaName + '</a>';
+            // return '<div data-qtip="'+mediaUrl+'">'+mediaName+'</div>';
             default:
                 return value;
         }
