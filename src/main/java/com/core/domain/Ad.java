@@ -1,5 +1,8 @@
 package com.core.domain;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -58,20 +61,20 @@ public class Ad {
         this.size = size;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUrl() throws UnsupportedEncodingException {
+        return URLDecoder.decode(url, "UTF-8");
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrl(String url) throws UnsupportedEncodingException {
+        this.url = URLEncoder.encode(url, "UTF-8");
     }
 
-    public String getMaterialUrl() {
-        return materialUrl;
+    public String getMaterialUrl() throws UnsupportedEncodingException {
+        return URLDecoder.decode(materialUrl, "UTF-8");
     }
 
-    public void setMaterialUrl(String materialUrl) {
-        this.materialUrl = materialUrl;
+    public void setMaterialUrl(String materialUrl) throws UnsupportedEncodingException {
+        this.materialUrl = URLEncoder.encode(materialUrl, "UTF-8");
     }
 
     public int getuId() {

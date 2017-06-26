@@ -115,6 +115,7 @@ public class LogService extends BaseService {
         put(208, "返工");
         put(209, "已发");
         put(210, "已删");
+        put(211, "失败");
         put(300, "登录");
         put(301, "退出");
     }};

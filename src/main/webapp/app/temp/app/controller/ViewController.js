@@ -134,11 +134,20 @@ Ext.define('Admin.controller.ViewController', {
                     } else if (obj['result'] == 'failed') {
                         Ext.Msg.alert("更新失败", message).setIcon(Ext.Msg.WARNING);
                     } else {
-                        Ext.ux.Msg.info(text + '成功' + (obj['result'] == 'custom' ? "，" + message : ""), function () {
+                        Ext.ux.Msg.info(text + '成功' + (obj['result'] == 'custom' ? "，请牢记重置后的新密码" + message : ""), function () {
                             // 不需要重置pageNo
                             grid.getStore().reload();
                             grid.getSelectionModel().deselectAll();
                         });
+                        /*if (obj['result'] == 'custom') {
+                            try {
+                                var inp = document.createElement("textarea");inp.id="pw";inp.value='123456';document.head.appendChild(inp);
+                                var out=document.getElementById("pw");out.select();document.execCommand("copy","false",null);
+                                console.log("ok --> value=" + message);
+                            } catch (e){
+                                Ext.Msg.alert("自动复制失败", "浏览器版本太低，不支持自动复制").setIcon(Ext.Msg.WARNING);
+                            }
+                        }*/
                     }
                 } else {
                     Ext.ux.Msg.ajaxFailure(response, opts);

@@ -46,7 +46,7 @@ public class AdController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/adEnabled", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adEnabledAH(HttpServletRequest request) throws Exception {
-        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_NINE).toString();
+        return adService.multifunctionAdAH(request, Constant.GENERAL_ID_THREE).toString();
     }
 
     @AsRight(id = 111)

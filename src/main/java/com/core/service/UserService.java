@@ -272,9 +272,9 @@ public class UserService extends BaseService {
                         stringBuilder.append("密码重置");
                         result = "custom";
                         String newPassword = ProjectUtil.getPassWordOne(6);
-                        ProjectUtil.setClipboardString(newPassword);
                         user.setPassword(EncryptUtil.md5(newPassword));
-                        message = "请牢记重置后的新密码" + newPassword;
+                        message = newPassword;
+                        baseRepository.update(user);
                     }
                     stringBuilder.append(user.toString()).append(",");
                 }
