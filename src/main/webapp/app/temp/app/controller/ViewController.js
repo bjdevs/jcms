@@ -213,11 +213,14 @@ Ext.define('Admin.controller.ViewController', {
                 var obj = Ext.decode(response.responseText);
 
                 var success = obj['success'],
-                    msg = obj['msg'];
+                    msg = obj['msg'],
+                    message = obj['message'];
 
                 if (success) {
                     if (obj['result'] == 'noRight') {
                         Ext.Msg.alert("警告", "您没有权限操作 :(").setIcon(Ext.Msg.WARNING);
+                    } else if (obj['result'] == 'failed') {
+                        Ext.Msg.alert("更新失败", message).setIcon(Ext.Msg.WARNING);
                     } else {
                         Ext.ux.Msg.info(text + '成功', function () {
                             // 不需要重置pageNo

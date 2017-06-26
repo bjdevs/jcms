@@ -68,7 +68,6 @@ Ext.define('Admin.view.ad.AdController', {
             var status = selected[i].data.status;
             if (status == GENERAL_ID_NINE) {// 已发
                 enabledStatus = true;
-                publishStatus = false;
             } else if (status == GENERAL_ID_THREE) {// 已审
                 publishStatus = false;
                 enabledStatus = true;
