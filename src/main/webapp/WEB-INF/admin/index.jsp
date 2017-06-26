@@ -28,8 +28,6 @@
     <script src="//cdn.bootcss.com/extjs/6.2.0/packages/charts/classic/charts-debug.js"></script>
     <!-- extjs.locale -->
     <script src="//cdn.bootcss.com/extjs/6.2.0/classic/locale/locale-zh_CN-debug.js"></script>
-    <!-- clipboard.online -->
-    <script src="//cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
 
     <!-- 自定义 -->
     <script src="/resources/extjs/ext-expand-debug.js"></script>

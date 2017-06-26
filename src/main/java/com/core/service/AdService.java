@@ -105,27 +105,7 @@ public class AdService extends BaseService {
         if (StringUtils.isBlank(location)) {
             message = "广告位置不能为空";
             isVerify = false;
-        }/* else {
-            boolean exist = false;
-            // 检查是否可以新增位置
-            Iterator<Map.Entry<String, String>> iterator = locationData.entrySet().iterator();
-            while(iterator.hasNext()) {
-                Map.Entry entry = iterator.next();
-                if (location.equals((String) entry.getKey())) {
-                    exist = true;
-                    // 检查数据库是否存在此位置的广告
-                    if (getAvailableList(location) > 0) {
-                        isVerify = false;
-                        message = "广告位置：" + entry.getKey() + "已存在，无法新增";
-                        break;
-                    }
-                }
-            }
-            if (!exist) {
-                isVerify = false;
-                message = "广告位置：" + location + "不存在，无法新增";
-            }
-        }*/
+        }
         // 后台验证通过
         if (isVerify) {
             // 新增
@@ -208,6 +188,9 @@ public class AdService extends BaseService {
                             adPublishList.add(ad);// 已审核待发布
                             User user = (User) request.getAttribute("user");
                             if (homePageService.staticAd(adPublishList, user.getId())) {
+                                if (ad.getStatus() == Constant.GENERAL_ID_NINE) {
+                                    continue;
+                                }
                                 ad.setStatus(Constant.GENERAL_ID_NINE);// 发布成功
                                 ad.setUpdateDate(new Date());
                                 typeStr = "发布";
@@ -321,12 +304,19 @@ public class AdService extends BaseService {
      * @return true 成功 / 没有可发布的广告，false 失败
      */
     public boolean getAvailableList() {
-        List<Ad> adPublishList = getAvailableList(Constant.GENERAL_ID_THREE); // 已发布广告
+        List<Ad> adUNPublishList = getAvailableList(Constant.GENERAL_ID_THREE); // 待发布广告
         boolean status = false;
-        if (adPublishList.size() > 0) {
+        if (adUNPublishList.size() > 0) {
+            List<Ad> adPublishList = getAvailableList(Constant.GENERAL_ID_NINE); // 已发广告
+            for (Ad ad : adUNPublishList) {
+                adPublishList.add(ad);
+            }
             if (homePageService.staticAd(adPublishList, 0)) {
                 try {
                     for (Ad ad : adPublishList) {
+                        if (ad.getStatus() == Constant.GENERAL_ID_NINE) {
+                            continue;
+                        }
                         ad.setStatus(Constant.GENERAL_ID_NINE);// 发布成功
                         ad.setUpdateDate(new Date());
                         baseRepository.update(ad);

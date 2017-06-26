@@ -73,7 +73,6 @@ Ext.define('Admin.view.ad.AdController', {
                 enabledStatus = true;
             } else if (status == GENERAL_ID_ZERO) { // 废弃
                 deleteStatus = false;
-                enabledStatus = true;
                 abandonStatus = true;
             }
         }
