@@ -9,6 +9,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,9 @@ import java.util.*;
  */
 @Service
 public class AdService extends BaseService {
+
+    @Autowired
+    HomePageService homePageService;
 
     /**
      *
@@ -185,13 +189,13 @@ public class AdService extends BaseService {
                             baseRepository.update(ad);
                             result = "success";
                         } else {
-                            message = "只有最后一个广告了，不允许废弃";
+                            message = "当前位置：" + ad.getLocation() + "，只剩下最后一个在投广告，不允许废弃";
                         }
                     } else if (type == Constant.GENERAL_ID_THREE) { // 已审
                         if (getAvailableList(ad.getLocation(), Constant.GENERAL_ID_TWO) == 0 ) { // 有且只有 一个 已审 / 已发 就不允许审核通过
                             ad.setStatus(Constant.GENERAL_ID_THREE);
                             ad.setUpdateDate(new Date());
-                            typeStr = "已审";
+                            typeStr = "审核";
                             baseRepository.update(ad);
                             result = "success";
                         } else {
@@ -199,12 +203,19 @@ public class AdService extends BaseService {
                         }
                     } else if (type == Constant.GENERAL_ID_NINE) { // 已发
                         if (ad.getStatus() == Constant.GENERAL_ID_THREE) {
-                            a
-                            ad.setStatus(Constant.GENERAL_ID_NINE);
-                            ad.setUpdateDate(new Date());
-                            typeStr = "已发";
-                            baseRepository.update(ad);
-                            result = "success";
+                            List<Ad> adPublishList = getAvailableList(Constant.GENERAL_ID_NINE); // 已发布广告
+                            adPublishList.add(ad);// 已审核待发布
+                            User user = (User) request.getAttribute("user");
+                            if (homePageService.staticAd(adPublishList, user.getId())) {
+                                ad.setStatus(Constant.GENERAL_ID_NINE);// 发布成功
+                                ad.setUpdateDate(new Date());
+                                typeStr = "发布";
+                                baseRepository.update(ad);
+                                result = "success";
+                            } else {
+                                // 发布失败
+                                message = "发布失败，请稍后重试";
+                            }
                         } else {
                             message = "当前位置不是已审广告，不允许发布";
                         }
@@ -238,10 +249,11 @@ public class AdService extends BaseService {
      */
     public ObjectNode updateAd(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.put("result", "failed");
+        String result = "failed";
+        String message = "";
         try {
             String data = request.getParameter("data");
-            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
+            StringBuilder stringBuilder = new StringBuilder("广告ID:");
             String typeStr = "";
             Ad ad = null;
             Ad adOld = null;
@@ -250,6 +262,7 @@ public class AdService extends BaseService {
             for (JsonNode jsonNode : root) {
                 ad = new Ad();
                 ad.setId(jsonNode.get("id").asLong());
+                ad.setLocation(jsonNode.get("location").asText());
                 ad.setName(jsonNode.get("name").asText());
                 ad.setUrl(jsonNode.get("url").asText());
                 ad.setSize(jsonNode.get("size").asText());
@@ -257,26 +270,37 @@ public class AdService extends BaseService {
                 ad.setStatus((byte) jsonNode.get("status").asInt());
 
                 if (ad.getId() > 0) {
-                    adOld = find(Ad.class, ad.getId());
-                    if (adOld != null && adOld.getId() > 0) {
-                        adOld.setName(ad.getName());
-                        adOld.setSize(ad.getSize());
-                        adOld.setUrl(ad.getUrl());
-                        adOld.setMaterialUrl(ad.getMaterialUrl());
-                        adOld.setUpdateDate(new Date());
-                        // 状态改成待审
-                        adOld.setStatus(Constant.GENERAL_ID_ONE);
-                        baseRepository.update(adOld);
-                        objectNode.put("result", "success");
+                    if (getAvailableList(ad.getLocation(), Constant.GENERAL_ID_ZERO) > 1) { // 只有两个同位置的状态大于等于待审的广告才允许删除
+                        adOld = find(Ad.class, ad.getId());
+                        if (adOld != null && adOld.getId() > 0) {
+                            adOld.setName(ad.getName());
+                            adOld.setSize(ad.getSize());
+                            adOld.setUrl(ad.getUrl());
+                            adOld.setMaterialUrl(ad.getMaterialUrl());
+                            adOld.setUpdateDate(new Date());
+                            // 状态改成待审
+                            adOld.setStatus(Constant.GENERAL_ID_ONE);
+                            baseRepository.update(adOld);
+                            result = "success";
+                        }
+                        stringBuilder.append(ad.toString()).append(",");
+                    } else {
+                        message = "当前位置：" + ad.getLocation() + "，只剩下最后一个在投广告，不允许修改";
                     }
-                    stringBuilder.append(ad.toString()).append(",");
+                } else {
+                    message = "更新出错，请刷新页面再试 :(";
+                }
+                if ("failed".equals(result)) {
+                    stringBuilder.append(message);
+                    break;
                 }
             }
             log("广告管理", "更新", stringBuilder.toString().substring(0,stringBuilder.length()-1) + "]");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        objectNode.put("message", "");
+        objectNode.put("result", result);
+        objectNode.put("message", message);
         objectNode.put("success", true);
         return objectNode;
     }
@@ -325,6 +349,17 @@ public class AdService extends BaseService {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("status", Constant.GENERAL_ID_THREE);
         String sql = " WHERE status > :status";
+        return baseRepository.list(Ad.class, sql, params);
+    }
+
+    /**
+     * 查询发布状态
+     * @return
+     */
+    public List<Ad> getAvailableList(int status) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("status", status);
+        String sql = " WHERE status = :status";
         return baseRepository.list(Ad.class, sql, params);
     }
 
