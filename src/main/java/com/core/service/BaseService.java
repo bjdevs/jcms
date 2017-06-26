@@ -124,6 +124,9 @@ public class BaseService {
         log.setAccount(user.getAccount());
         log.setName(name);
         log.setAction(action);
+        if (content.length() > 255) {
+            content = content.substring(0,254);
+        }
         log.setContent(content);
         log.setIp(IpUtil.getIp(request));
         log.setCreateDate(new Date());

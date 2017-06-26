@@ -58,24 +58,32 @@ Ext.define('Admin.view.ad.AdController', {
 
         if (count == 0) Ext.log('No selection');
 
-        var deleteStatus = true,
-            enabledStatus = false,
-            abandonStatus = false;
+        var deleteStatus = true, //关闭
+            enabledStatus = false, //打开
+            abandonStatus = false, //关闭
+            publishStatus = true; //打开
 
-        // 删除2 -> 废弃0 -> 待审1 -> 启用9
+        // 删除2 -> 废弃0 -> 待审1 -> 已审3 -> 已发9
         for (var i = 0; i < selected.length; i++) {
             var status = selected[i].data.status;
-            if (status == GENERAL_ID_NINE) {
+            if (status == GENERAL_ID_NINE) {// 已发
                 enabledStatus = true;
-            } else if (status == GENERAL_ID_ZERO) {
+                publishStatus = false;
+            } else if (status == GENERAL_ID_THREE) {// 已审
+                publishStatus = false;
+                enabledStatus = true;
+            } else if (status == GENERAL_ID_ZERO) { // 废弃
                 deleteStatus = false;
+                enabledStatus = true;
                 abandonStatus = true;
             }
         }
+
         adGrid.down('button[action=save]').setDisabled(count < 1);
         adGrid.down('button[action=delete]').setDisabled(deleteStatus);
         adGrid.down('button[action=enabled]').setDisabled(enabledStatus);
         adGrid.down('button[action=abandon]').setDisabled(abandonStatus);
+        adGrid.down('button[action=publish]').setDisabled(publishStatus);
     },
     onItemClick: function (grid, record, item, index, e, eOpts) {
         var ctrl = this,

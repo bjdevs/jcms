@@ -12,6 +12,7 @@ Ext.define('Admin.view.account.AccountController', {
 
     control: {
         'account-mgrid': {
+            //afterlayout: 'onGridAfterLayout',
             selectionchange: 'onSelectionChange',
             itemclick: 'onItemClick'
         },
@@ -33,6 +34,35 @@ Ext.define('Admin.view.account.AccountController', {
         'account-mgrid button[action=recover]': {
             click: 'onRecoverBtnClicked'
         }
+    },
+
+    onGridAfterLayout: function() {
+        var ctrl = this,
+            view = ctrl.getView();
+
+        console.log("view.copy=" + view.copy);
+        //if(view.copy) return;
+
+        var clipboard = new Clipboard('.clipboard-copy', {
+            text: function(trigger) {
+                //var value = Ext.fly(trigger).up().up().getAttribute('');
+                var value = "abcdefg";
+                if(!value || !value.length) {
+                    return '没有可复制的值';
+                }
+
+                return value;
+            }
+        });
+        clipboard.on('success', function(e) {
+            Ext.Msg.alert('复制到切板', e.text);
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+            console.log(e);
+        });
+
+        //view.copy = true;
     },
 
     onSelectionChange: function (model, selected, eOpts) {
