@@ -144,7 +144,7 @@ public class ArticleService extends BaseService {
             objectNode1.put("creator", getCreator(headLine.getuId()));
             objectNode1.put("category", getCategory(headLine.getcId()));
             long mId = headLine.getmId();
-            if (mId != 0){
+            if (mId != 0) {
                 Media media = find(Media.class, mId);
                 objectNode1.put("mediaName", media.getTitle());
                 objectNode1.put("mediaUrl", media.getUrl());
@@ -241,7 +241,7 @@ public class ArticleService extends BaseService {
 
         long articleId = 0;
         if (!StringUtils.isBlank(articleIdStr)) {
-            type = "修改";
+            type = "更新";
             articleId = Long.parseLong(articleIdStr);
             article.setId(articleId);
             article.setUpdateDate(new Date());
@@ -286,18 +286,7 @@ public class ArticleService extends BaseService {
             }
         }
 
-        /*String path = homePageService.articlePublish(articleId);
-        article = find(Article.class, articleId);
-        article.setUrl(path);
-        update(article);*/
-        log = new Log();
-        log.setIp(IpUtil.getIp(request));
-        log.setAccount(find(User.class, Integer.parseInt(userId)).getAccount());
-        log.setName("文章管理");
-        log.setAction(type);
-        log.setContent(type + "文章ID: " + articleId + " 、标题：" + title);
-        log.setCreateDate(new Date());
-        create(log);
+        createBaseLog("文章管理", type, type + "文章ID: " + articleId + " 、标题：" + title);
 
         if (articleId > 0) {
             createSubArticleForContents(articleId, contentArray);
@@ -307,7 +296,7 @@ public class ArticleService extends BaseService {
 
             return objectNode;
         } else {
-            objectNode.put("result", "Create Article Error");
+            objectNode.put("result", "Create Article Error，Content length is empty");
             objectNode.put("success", false);
             return objectNode;
         }
@@ -343,10 +332,12 @@ public class ArticleService extends BaseService {
     public ObjectNode updateArticleStatus(String type, String[] ids) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         int num = 0;
+        String log_action = null;
         boolean success = true;
         try {
             if ("release".equals(type)) {
                 // 发布
+                log_action = "发布";
                 for (int i = 0; i < ids.length; i++) {
                     long id = Long.parseLong(ids[i]);
                     Article article = find(Article.class, id);
@@ -381,6 +372,7 @@ public class ArticleService extends BaseService {
                         article.setStatus(num);
                         article.setUpdateDate(new Date());
                         update(article);
+
                         // 文章返工 撤下头条
                         if (num == Constant.ARTICLE_ID_FIVE) {
                             repealHeadline(article.getId());
@@ -390,8 +382,29 @@ public class ArticleService extends BaseService {
                             removeArticleFile(article.getId());
                         }
                     }
+                    switch (type) {
+                        case "audit":
+                            log_action = "审核";
+                            break;
+                        case "rework":
+                            log_action = "返工";
+                            break;
+                        case "move":
+                            log_action = "移动";
+                            break;
+                        case "delete":
+                            log_action = "删除";
+                            break;
+                        case "release":
+                            log_action = "发布";
+                            break;
+                        case "restore":
+                            log_action = "还原";
+                            break;
+                    }
                 }
             }
+            createBaseLog("文章管理", log_action, "操作ID：" + Arrays.toString(ids));
         } catch (Exception e) {
             e.printStackTrace();
             success = false;
@@ -412,17 +425,20 @@ public class ArticleService extends BaseService {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         int categoryId = getCategoryIdForStr(category);
+        String category_type = null;
 
         for (int i = 0; i < ids.length; i++) {
             long id = Long.parseLong(ids[i]);
             Article article = find(Article.class, id);
+            Category category1 = find(Category.class, article.getcId());
+            category_type = category1.geteName() + " --> " + category;
             if (null != article) {
                 article.setcId(categoryId);
                 article.setUpdateDate(new Date());
                 update(article);
             }
-
         }
+        createBaseLog("文章管理", "移动", "修改文章分类[" + category_type + "]：" + Arrays.toString(ids));
         objectNode.put("success", true);
         return objectNode;
     }
@@ -496,6 +512,9 @@ public class ArticleService extends BaseService {
             }
             objectNode.put("success", true);
         }
+
+        createBaseLog("标签管理", "更新", Arrays.toString(ids));
+
         return objectNode;
     }
 
@@ -519,6 +538,8 @@ public class ArticleService extends BaseService {
         create(keyWord);
 
         objectNode.put("success", true);
+
+        createBaseLog("标签管理", "新增", keyWord.toString());
 
         return objectNode;
     }
@@ -589,7 +610,9 @@ public class ArticleService extends BaseService {
                     category.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
                     category.setUpdateDate(new Date());
                     update(category);
+                    createBaseLog("模版管理", "更新", "栏目模版修改：" + category.toString());
                 }
+
                 objectNode.put("success", true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -632,7 +655,6 @@ public class ArticleService extends BaseService {
         for (int i = 0; i < templates.size(); i++) {
             Template template = templates.get(i);
             arrayNode.add(objectMapper.valueToTree(template));
-
         }
         objectNode.put("rows", arrayNode);
         objectNode.put("total", count);
@@ -771,6 +793,7 @@ public class ArticleService extends BaseService {
             disposeSubArticle(id, contents);
             objectNode.put("status", article.getStatus());
             objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
+            createBaseLog("内嵌管理", "更新", "更新导航");
         }
         objectNode.put("success", true);
         return objectNode;
@@ -797,6 +820,7 @@ public class ArticleService extends BaseService {
             disposeSubArticle(id, contents);
             objectNode.put("status", article.getStatus());
             objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
+            createBaseLog("内嵌管理", "更新", "更新紫云法务");
         }
         objectNode.put("success", true);
         return objectNode;
@@ -836,7 +860,7 @@ public class ArticleService extends BaseService {
         objectNode.put("status", article.getStatus());
         objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
         objectNode.put("success", true);
-
+        createBaseLog("内嵌管理", "更新", "更新广种福田");
         return objectNode;
     }
 
@@ -877,6 +901,7 @@ public class ArticleService extends BaseService {
         article.setStatus(Constant.ARTICLE_ID_FIVE);
         update(article);
         objectNode.put("success", true);
+        createBaseLog("内嵌管理", "更新", "更新联系我们");
         return objectNode;
     }
 
@@ -963,14 +988,8 @@ public class ArticleService extends BaseService {
                 create(articleKeyWord);
             }
         }
-        log = new Log();
-        log.setAccount(account);
-        log.setAction("修改");
-        log.setName("文章管理");
-        log.setCreateDate(new Date());
-        log.setIp(IpUtil.getIp(request));
-        log.setContent("被修改文章ID：" + article.getId());
-        create(log);
+
+        createBaseLog("文章管理", "更新", "被修改文章ID：" + article.getId());
         objectNode1.put("cName", cName.substring(0, cName.length() - 1));
         objectNode1.put("success", true);
         return objectNode1;
@@ -1001,7 +1020,7 @@ public class ArticleService extends BaseService {
         } catch (Exception e) {
             objectNode.put("success", false);
         }
-
+        createBaseLog("文章管理", "更新", "审核的文章ID：" + article.getId());
         return objectNode;
     }
 
@@ -1055,7 +1074,7 @@ public class ArticleService extends BaseService {
      */
     public ObjectNode createHeadLine(HttpServletRequest request) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        log = new Log();
+        String log_content = null;
         String id = request.getParameter("id");
         String type = request.getParameter("type");
         String imageUpload = request.getParameter("imageUpload");
@@ -1114,24 +1133,17 @@ public class ArticleService extends BaseService {
                 long headId = create(headLine);
                 Article article = find(Article.class, Integer.parseInt(id));
                 if ("1".equals(type)) {
-                    log.setContent("新增文字头条，文章ID：" + id);
+                    log_content = "新增文字头条，文章ID：" + id;
                     article.sethAId(Integer.parseInt(headId + ""));
                 } else {
-                    log.setContent("新增图片头条，文章ID：" + id);
+                    log_content = "新增图片头条，文章ID：" + id;
                     article.sethPId(Integer.parseInt(headId + ""));
                 }
                 article.setUpdateDate(new Date());
                 update(article);
             }
         }
-
-        log.setIp(IpUtil.getIp(request));
-        log.setAccount(find(User.class, Integer.parseInt(userId)).getAccount());
-        log.setName("头条管理");
-        log.setAction("新增");
-        log.setCreateDate(new Date());
-        create(log);
-
+        createBaseLog("头条管理", "新增", log_content);
         objectNode.put("success", true);
         return objectNode;
     }
@@ -1208,13 +1220,13 @@ public class ArticleService extends BaseService {
                 }
                 headLine.setRedStatus(redStatusFind);
                 update(headLine);
+                createBaseLog("头条管理", "更新", "更新头条ID：" + headLine.getId());
             }
         } catch (Exception e) {
             e.printStackTrace();
             objectNode.put("success", false);
             objectNode.put("msg", e.getMessage());
         }
-
 
         objectNode.put("success", true);
 
@@ -1230,13 +1242,6 @@ public class ArticleService extends BaseService {
      */
     public ObjectNode headLineBtn(String method, long[] ids, int type, String account) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        log = new Log();
-        log.setIp(IpUtil.getIp(request));
-        log.setAccount(account);
-        log.setName("头条管理");
-        log.setAction("删除");
-        log.setCreateDate(new Date());
-
         for (int i = 0; i < ids.length; i++) {
             long id = ids[i];
             HeadLine headLine = find(HeadLine.class, id);
@@ -1262,11 +1267,10 @@ public class ArticleService extends BaseService {
                         article.sethPId(0);
                     }
                 }
-
                 update(article);
             }
         }
-        create(log);
+        createBaseLog("头条管理", "删除", "删除头条ID：" + Arrays.toString(ids));
         objectNode.put("success", true);
         return objectNode;
     }
@@ -1301,6 +1305,7 @@ public class ArticleService extends BaseService {
                 }
             }
         }
+
         objectNode.put("success", true);
         return objectNode;
     }
@@ -1505,5 +1510,20 @@ public class ArticleService extends BaseService {
             headLine.setStatus(0);
             update(headLine);
         }
+    }
+
+    /**
+     * 创建log日志
+     */
+    private void createBaseLog(String name, String action, String content) {
+        User userInfo = (User) request.getAttribute("user");
+        log = new Log();
+        log.setIp(IpUtil.getIp(request));
+        log.setAccount(userInfo.getAccount());
+        log.setName(name);
+        log.setAction(action);
+        log.setContent(content);
+        log.setCreateDate(new Date());
+        create(log);
     }
 }
