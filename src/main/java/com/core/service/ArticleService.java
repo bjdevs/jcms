@@ -597,8 +597,8 @@ public class ArticleService extends BaseService {
                     if (eName.contains("\"")) {
                         eName = eName.replaceAll("\"", "").trim();
                     }
-                    category.seteName(name);
-                    category.setName(eName);
+                    category.seteName(eName);
+                    category.setName(name);
                     category.setParentId(Integer.parseInt(jsonNode.get("parentId").toString()));
                     category.settId(Integer.parseInt(jsonNode.get("tId").toString()));
                     category.settAId(Integer.parseInt(jsonNode.get("tAId").toString()));
