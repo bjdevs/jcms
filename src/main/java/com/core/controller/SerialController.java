@@ -1,5 +1,6 @@
 package com.core.controller;
 
+import com.core.security.annotation.AsRight;
 import com.core.service.SerialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +27,14 @@ public class SerialController {
         return serialService.serialList(start, limit).toString();
     }
 
+    @AsRight(id = 145)
     @ResponseBody
     @RequestMapping(value = "/serialBtn", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String serialBtn(@RequestParam("method") String method, String data, String account, int[] ids) {
+    public String serialBtnAH(@RequestParam("method") String method, String data, String account, int[] ids) {
         return serialService.serialBtn(method, data, account, ids).toString();
     }
 
+    @AsRight(id = 145)
     @ResponseBody
     @RequestMapping(value = "/createSerial", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String createSerial(HttpServletRequest request) {

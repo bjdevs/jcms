@@ -56,7 +56,7 @@ public class AdController extends BaseController {
         return adService.multifunctionAdAH(request, Constant.GENERAL_ID_ZERO).toString();
     }
 
-    @AsRight(id = 111)
+    @AsRight(id = 110)
     @ResponseBody
     @RequestMapping(value = "/adDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adDeleteAH(HttpServletRequest request) throws Exception {
@@ -70,7 +70,7 @@ public class AdController extends BaseController {
         return adService.multifunctionAdAH(request, Constant.GENERAL_ID_NINE).toString();
     }
 
-    @AsRight(id = 111)
+    @AsRight(id = 110)
     @ResponseBody
     @RequestMapping(value = "/adUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adUpdateAH(HttpServletRequest request) throws Exception {

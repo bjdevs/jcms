@@ -127,4 +127,9 @@ public class Constant {
     // 1024 * 1024 * 20 文档 20MB
     public static final int UPLOAD_DOCUMENT_MAX_SIZE = 20971520;
 
+    /**
+     * 权限
+     */
+    public static final int AUTH_ACCOUNT = 101;
+    public static final int AUTH_USER = 202;
 }
