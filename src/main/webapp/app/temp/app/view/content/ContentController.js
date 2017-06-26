@@ -74,7 +74,7 @@ Ext.define('Admin.view.content.ContentController', {
 
         });
 
-        var objects,cName="";
+        var objects, cName = "";
         Ext.Ajax.request({
             url: '/cn/article/getArticleKeyWord',
             method: 'POST',
@@ -121,17 +121,6 @@ Ext.define('Admin.view.content.ContentController', {
             reworkBtn = true;
             releaseBtn = false;
         } else {
-            /*Ext.each(selected, function (item, index, allItems) {
-             var status = item.data.status;
-             console.log(status);
-             if (status == 0 || status == 5) {
-             auditBtn = false;
-             } else{
-             auditBtn = true;
-             }
-             console.log(auditBtn);
-             });*/
-
             // auditBtn
             for (var i = 0; i < selected.length; i++) {
                 var status = selected[i].data.status;
@@ -443,34 +432,24 @@ Ext.define('Admin.view.content.ContentController', {
                 success: function (_from, action) {
                     var result = action.result.result;
                     var success = action.result.success;
+                    var resultMsg = action.result.msg;
                     if (success) {
-                        Ext.MessageBox.show({
-                            title: '操作提示',
-                            closable: 'true',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.INFO,
-                            align: 'center',
-                            message: '文章' + msg + '成功',
-                            fn: function (buttonId) {
-                                view.hide();
-                                editor.html("");
-                                var store = view.up().down('grid').getStore();
-                                store.getProxy().setExtraParam('page', 1);
-                                store.reload();
-                            }
-                        });
+                        if (result == "noRight") {
+                            Ext.ux.Msg.error('您没有该操作权限', function () {
+                            });
+                        } else {
+                            Ext.ux.Msg.info('文章' + msg + '成功', function () {
+                            });
+                            view.hide();
+                            editor.html("");
+                            var store = view.up().down('grid').getStore();
+                            store.getProxy().setExtraParam('page', 1);
+                            store.reload();
+                        }
                     } else {
-                        Ext.MessageBox.show({
-                            title: '文章创建失败,请刷新重试',
-                            closable: 'true',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR,
-                            align: 'center',
-                            message: result,
-                            fn: function (buttonId) {
-                                editor.html("");
-                            }
+                        Ext.ux.Msg.error('文章创建失败：' + resultMsg, function () {
                         });
+                        editor.html("");
                     }
                 }
 
