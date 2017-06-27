@@ -68,8 +68,6 @@ public class ArticleService extends BaseService {
             sql.append(" AND title like '%" + title + "%'");
         }
         if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)) {
-            startDate = startDate.substring(0, startDate.indexOf("T"));
-            endDate = endDate.substring(0, endDate.indexOf("T"));
             param.put("start", startDate);
             param.put("end", endDate);
             sql.append(" AND createDate BETWEEN :start AND :end");
