@@ -59,7 +59,7 @@ public class UserController extends BaseController {
     }
 
     // 账号管理 -> 保存
-    @AsRight(id = 101)
+    @AsRight(id = 100)
     @ResponseBody
     @RequestMapping(value = "/accountUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userUpdateAH(HttpServletRequest request) throws Exception {
@@ -83,7 +83,7 @@ public class UserController extends BaseController {
     }
 
     // 账号管理 -> 密码重置
-    @AsRight(id = 101)
+    @AsRight(id = 102)
     @ResponseBody
     @RequestMapping(value = "/accountRecover", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String userRecoverAH(HttpServletRequest request) throws Exception {

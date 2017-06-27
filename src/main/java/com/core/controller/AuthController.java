@@ -30,14 +30,14 @@ public class AuthController extends BaseController {
         response.getWriter().print(authService.getFunctionList(request));
     }
 
-    @AsRight(id = 500)
+    @AsRight(id = 200)
     @ResponseBody
     @RequestMapping(value = "/authFunctionUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String authFunctionUpdateAH(HttpServletRequest request) throws Exception {
         return authService.updateAuthFunction(request);
     }
 
-    @AsRight(id = 500)
+    @AsRight(id = 200)
     @ResponseBody
     @RequestMapping(value = "/authFunctionDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String authFunctionDeleteAH(HttpServletRequest request) throws Exception {
@@ -47,21 +47,20 @@ public class AuthController extends BaseController {
     /////////////
     // 角色管理
     /////////////
-    @AsRight(id = 500)
     @ResponseBody
     @RequestMapping(value = "/authRoleList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void authRoleList(HttpServletRequest request,HttpServletResponse response) throws Exception {
         response.getWriter().print(authService.getRoleList(request));
     }
 
-    @AsRight(id = 500)
+    @AsRight(id = 201)
     @ResponseBody
     @RequestMapping(value = "/authRoleUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String authRoleUpdateAH(HttpServletRequest request,HttpServletResponse response) throws Exception {
         return authService.updateAuthRoleFunction(request);
     }
 
-    @AsRight(id = 500)
+    @AsRight(id = 201)
     @ResponseBody
     @RequestMapping(value = "/authRoleFunctionDelete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String adRoleFunctionRoleDeleteAH(HttpServletRequest request) throws Exception {
@@ -77,7 +76,7 @@ public class AuthController extends BaseController {
         response.getWriter().print(authService.getAuthList(request));
     }
 
-    @AsRight(id = 500)
+    @AsRight(id = 202)
     @ResponseBody
     @RequestMapping(value = "/authorityUpdate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String authAuthorityUpdateAH(HttpServletRequest request,HttpServletResponse response) throws Exception {
