@@ -61,11 +61,11 @@ Ext.define('Admin.view.account.AccountGrid', {
                         maxLength: 50
                     }
                 },
-                {text: '描述', dataIndex: 'depict', width: 250},
+                {text: '描述', dataIndex: 'depict', flex: 1},
                 {
                     text: '状态',
                     dataIndex: 'status',
-                    flex: 1,
+                    width: 60,
                     renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
                         switch (value) {
                             case 1:
