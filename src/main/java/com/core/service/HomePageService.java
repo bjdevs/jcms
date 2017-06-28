@@ -146,7 +146,7 @@ public class HomePageService extends BaseService {
             toolManagerContext.put("waterzen", waterzen);
 
             // 活动通知
-            staticNotice();
+            staticNotice(user.getId());
 
             // 导航
             staticNav(0);
@@ -186,8 +186,9 @@ public class HomePageService extends BaseService {
      * 静态化 导航
      */
     public ObjectNode staticNav(long idStr) {
+        User user = (User) request.getAttribute("user");
         ObjectNode objectNode = objectMapper.createObjectNode();
-        long id = createPublishLog(1, "导航");
+        long id = createPublishLog(user.getId(), "导航");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             String[] mainNav;
@@ -232,8 +233,9 @@ public class HomePageService extends BaseService {
      * 静态化 广种福田、联系我们
      */
     public ObjectNode staticFutian(long idStr) {
+        User user = (User) request.getAttribute("user");
         ObjectNode objectNode = objectMapper.createObjectNode();
-        long id = createPublishLog(1, "广种福田、联系我们");
+        long id = createPublishLog(user.getId(), "广种福田、联系我们");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             if (idStr == 3 || idStr == 4) {
@@ -273,7 +275,8 @@ public class HomePageService extends BaseService {
      * 静态化 紫云法务
      */
     public void staticFawu() {
-        long id = createPublishLog(1, "紫云法务");
+        User user = (User) request.getAttribute("user");
+        long id = createPublishLog(user.getId(), "紫云法务");
         PublishLog publishLog = find(PublishLog.class, id);
 
         try {
@@ -360,8 +363,8 @@ public class HomePageService extends BaseService {
     /**
      * 静态化 活动通知
      */
-    public void staticNotice() throws Exception {
-        long id = createPublishLog(1, "活动通知");
+    public void staticNotice(long userId) throws Exception {
+        long id = createPublishLog(userId, "活动通知");
         PublishLog publishLog = find(PublishLog.class, id);
         try {
             List<HeadLine> resultHeadLine = searchNotice();
@@ -423,8 +426,10 @@ public class HomePageService extends BaseService {
                 kw += keyWord.getName() + ",";
             }
             String doc = article.getDepict();
-            if (doc.contains("\"")) {
+            if (null != doc && doc.contains("\"")) {
                 doc = doc.replaceAll("\"", "");
+            } else {
+                doc = "";
             }
             toolManagerContext.put("keyWord", kw.contains(",") ? kw.substring(0, kw.length() - 1) : kw);
             toolManagerContext.put("winTitle", article.getTitle());
