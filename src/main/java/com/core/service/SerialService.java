@@ -1,9 +1,6 @@
 package com.core.service;
 
-import com.core.domain.Article;
-import com.core.domain.Log;
-import com.core.domain.Serial;
-import com.core.domain.Template;
+import com.core.domain.*;
 import com.core.util.IpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
@@ -109,12 +106,11 @@ public class SerialService extends BaseService {
     /**
      * 新增连载
      *
-     * @param request
      * @return
      */
-    public ObjectNode createSerial(HttpServletRequest request) {
+    public ObjectNode createSerial() {
         ObjectNode objectNode1 = objectMapper.createObjectNode();
-
+        User user = (User) request.getAttribute("user");
         String name = request.getParameter("name");
         String depict = request.getParameter("depict");
         String tIdStr = request.getParameter("tId");
@@ -144,13 +140,14 @@ public class SerialService extends BaseService {
             log.setAction("新增");
             log.setIp(IpUtil.getIp(request));
             log.setContent("新增连载：" + name);
-            log.setAccount(request.getParameter("account"));
+            log.setAccount(user.getAccount());
             log.setCreateDate(new Date());
             create(log);
             objectNode1.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();
             objectNode1.put("success", false);
+            objectNode1.put("msg", e.getMessage());
         }
         return objectNode1;
     }

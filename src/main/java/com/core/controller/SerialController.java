@@ -37,8 +37,8 @@ public class SerialController {
     @AsRight(id = 145)
     @ResponseBody
     @RequestMapping(value = "/createSerial", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String createSerial(HttpServletRequest request) {
-        return serialService.createSerial(request).toString();
+    public String createSerialAH() {
+        return serialService.createSerial().toString();
     }
 
     @ResponseBody
