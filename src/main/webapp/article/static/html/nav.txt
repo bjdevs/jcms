@@ -1,4 +1,4 @@
-<li class="current"><a href="http://www.hmlzs.org">首页</a></li>
+<li class="current"><a href="http://www.hmlzs.cn">首页</a></li>
 <li><a href="http://list.hmlzs.cn/c-2-1.html">新闻法讯</a></li>
 <li><a href="http://list.hmlzs.cn/c-3-1.html">生活禅</a></li>
 <li><a href="http://list.hmlzs.cn/c-4-1.html">紫云佛国</a></li>
