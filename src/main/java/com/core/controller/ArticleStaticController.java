@@ -31,15 +31,17 @@ public class ArticleStaticController extends BaseController {
         return homePageService.staticIndex(request).toString();
     }
 
+    @AsRight(id = 180)
     @ResponseBody
     @RequestMapping("/nav")
-    public String createNav(long id) {
+    public String createNavAH(long id) {
         return homePageService.staticNav(id).toString();
     }
 
+    @AsRight(id = 180)
     @ResponseBody
     @RequestMapping("/embed")
-    public String createEmbed(long id) {
+    public String createEmbedAH(long id) {
         return homePageService.staticFutian(id).toString();
     }
 
