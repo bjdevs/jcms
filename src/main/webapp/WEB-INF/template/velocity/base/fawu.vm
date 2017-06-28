@@ -23,9 +23,11 @@ document.write(
 #if($content && $content.size() != 0)
 #foreach($item in $content)
 #if($velocityCount == 1)
-        '<li class="current">$item[2]<a href="$item[1]" target="_blank">[详细]</a></li>'+
+##        '<li class="current">$item[2]<a href="$item[1]" target="_blank">[详细]</a></li>'+
+        '<li class="current">$item[2]</li>'+
 #else
-        '<li>$item[2]<a href="$item[1]" target="_blank">[详细]</a></li>'+
+##        '<li>$item[2]<a href="$item[1]" target="_blank">[详细]</a></li>'+
+        '<li>$item[2]</li>'+
 #end
 #end
 #else
