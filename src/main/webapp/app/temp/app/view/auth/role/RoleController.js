@@ -107,7 +107,7 @@ Ext.define('Admin.view.auth.role.RoleController', {
             Ext.ux.Msg.info('保存成功', function() {
 
                 view.hide();
-
+                form.reset();
                 var grid = view.up().down('auth-role-mgrid'),
                     store = grid.getStore();
 
