@@ -87,6 +87,7 @@ Ext.define('Admin.view.auth.function.FunctionController', {
                 case 'success' :
                     Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
                         view.hide();
+                        form.reset();
                         var grid = view.up().down('auth-function-mgrid'),
                             store = grid.getStore();
 

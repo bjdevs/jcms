@@ -150,7 +150,7 @@ Ext.define('Admin.view.auth.acl.AclController', {
             Ext.ux.Msg.info('保存成功', function() {
 
                 view.hide();
-
+                form.reset();
                 var grid = view.up().down('auth-acl-mgrid'),
                     store = grid.getStore();
 
