@@ -292,13 +292,15 @@ public class HomePageService extends BaseService {
 
                 String title = result.length >= 0 ? result[0] : "";
                 if (title.length() > 5) {
-                    title = title.substring(0, title.length() >= 4 ? 4 : title.length()) + "...";
+//                    title = title.substring(0, title.length() >= 4 ? 4 : title.length()) + "...";
+                    title = title.substring(0, title.length() >= 4 ? 4 : title.length()) + " ";
                     result[0] = title;
                 }
 
                 String content = result.length >= 3 ? result[2] : "";
-                content = contentReplace(content);
-                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "...";
+//                content = contentReplace(content);
+//                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "...";
+                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "";
                 result[2] = content;
                 res.add(i, result);
             }
