@@ -270,6 +270,7 @@ Ext.define('Admin.view.account.AccountController', {
                         case 'success' :
                             Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
                                 view.hide();
+                                _form.reset();
                                 var grid = button.up('grid'),
                                     store = button.up('grid').getStore();
                                 store.getProxy().setExtraParam('page', 1);
