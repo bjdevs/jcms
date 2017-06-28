@@ -125,7 +125,7 @@ public class UserService extends BaseService {
         objectNode.put("success", true);
         try {
             String data = request.getParameter("data");
-            StringBuilder stringBuilder = new StringBuilder("用户ID:[");
+            StringBuilder stringBuilder = new StringBuilder("用户:");
             User user = null;
             User userOld = null;
             ObjectMapper mapper = new ObjectMapper();
@@ -245,7 +245,7 @@ public class UserService extends BaseService {
         String result = "failed";
         try {
             String[] ids = request.getParameterValues("ids");
-            StringBuilder stringBuilder = new StringBuilder("广告ID:[");
+            StringBuilder stringBuilder = new StringBuilder("用户：");
             String typeStr = "";
             User user = null;
             for (String num : ids) {
