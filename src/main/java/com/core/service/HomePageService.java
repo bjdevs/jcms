@@ -380,7 +380,7 @@ public class HomePageService extends BaseService {
                     if (null != article) {
                         String[] items = new String[2];
                         items[0] = article.getUrl();
-                        items[1] = headLine.getRedStatus() == 1 ? "<strong>" + headLine.getName() + config.getPostTag() : headLine.getName();
+                        items[1] = headLine.getRedStatus() == 1 ? "<strong style=\"color: red;\">" + headLine.getName() + config.getPostTag() : headLine.getName();
                         list.add(i, items);
                     }
                 }
@@ -527,12 +527,17 @@ public class HomePageService extends BaseService {
             maxLimit = 9;
         } else if (articleId == Constant.CATEGORY_ID_DEPOSITORY) {
             maxLimit = 7;
+        } else if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
+            maxLimit = 10;
+        } else if (articleId == Constant.CATEGORY_ID_FOCUS) {
+            maxLimit = 5;
         }
+        map.put("categoryUrl", getCategoryList(articleId));
         List<HeadLine> headLines = headLineService.searchHeadLine(articleId, different, maxLimit);
         switch (articleId) {
             case Constant.CATEGORY_ID_NEWS:
                 // 新闻法讯 -- 文字头条
-                news = new String[3];
+                news = new String[4];
                 other = new ArrayList<String[]>();
                 headLine = headLines.size() > 0 ? headLines.get(0) : null;
                 if (null != headLine && headLine.getId() > 0) {
@@ -540,25 +545,29 @@ public class HomePageService extends BaseService {
                     if (null != article) {
                         news[0] = article.getUrl();
                         news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
-                        news[2] = article.getDepict();
+//                        news[2] = article.getDepict();
+                        String depict = article.getDepict();
+                        news[2] = depict.substring(0, depict.length() >= 55 ? 55 : depict.length()) + "...";
+                        news[3] = null != article.getCreateDate() ? getArticleDate(article.getCreateDate()) : getArticleDate(article.getCreateDate());
                     }
                     map.put("first", news);
                 }
                 for (int i = 1; i < headLines.size(); i++) {
-                    news = new String[2];
+                    news = new String[3];
                     HeadLine headLineOther = headLines.get(i);
                     article = find(Article.class, headLineOther.getaId());
                     if (null != article) {
                         news[0] = article.getUrl();
                         news[1] = headLineOther.getRedStatus() == 1 ? config.getPreTag() + headLineOther.getName() + config.getPostTag() : headLineOther.getName();
 //                    news[2] = article.getDepict();
+                        news[2] = null != article.getCreateDate() ? getArticleDate(article.getCreateDate()) : getArticleDate(article.getCreateDate());
                     }
                     other.add(i - 1, news);
                 }
                 map.put("other", other);
                 return map;
             case Constant.CATEGORY_ID_LIFE:
-                // 生活禅  limit 0,4
+                // 生活禅  limit 0,10
             case Constant.CATEGORY_ID_ZIYUNFOGUO:
                 // 紫云佛国  limit 0,4
             case Constant.CATEGORY_ID_KNOWLEDGE:
@@ -566,7 +575,7 @@ public class HomePageService extends BaseService {
             case Constant.CATEGORY_ID_MEDICAL:
                 // 禅医养生  limit 0,4
                 // 文章链接，头条标题，文章描述，文章日期，头条图片
-                news = new String[5];
+                news = new String[6];
                 headLine = headLines.size() > 0 ? headLines.get(0) : null;
                 if (null != headLine && headLine.getId() > 0) {
                     article = find(Article.class, headLine.getaId());
@@ -575,15 +584,27 @@ public class HomePageService extends BaseService {
                         map.put("temp", "false");
                     }
                     if (null != article) {
-                        news[0] = article.getUrl();
                         news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
-                        news[2] = article.getDepict();
+                        news[0] = article.getUrl();
+                        String depict = article.getDepict();
+                        if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO){ // 生活禅 & 紫云佛国
+                            depict = depict.substring(0, depict.length() >= 30 ? 30 : depict.length()) + "...";
+                        }else{
+                            depict = depict.substring(0, depict.length() >= 55 ? 55 : depict.length()) + "...";
+                        }
+                        news[2] = depict;
+//                        news[2] = article.getDepict();
                     }
                     news[3] = null != article.getUpdateDate() ? getArticleDate(article.getUpdateDate()) : getArticleDate(article.getCreateDate());
                     if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
                         news[4] = null != media ? media.getPic_240x160() : "#";
                     } else {
                         news[4] = null != media ? media.getPic_144x96() : "#";
+                    }
+                    headLine = headLines.size() > 1 ? headLines.get(1) : null;
+                    if (null != headLine) {
+                        media = find(Media.class, headLine.getmId());
+                        news[5] = null != media ? media.getPic_144x96() : "#";
                     }
                 }
                 map.put("first", news);

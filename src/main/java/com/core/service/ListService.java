@@ -93,7 +93,7 @@ public class ListService extends BaseService {
         param.put("cId", categoryId);
         param.put("status", Constant.ARTICLE_ID_NINE);
 
-        Page<Article> page = getPage(Article.class, " WHERE cId = :cId AND status = :status ORDER BY publishDate DESC", param, pageSize, pageNum);
+        Page<Article> page = getPage(Article.class, " WHERE cId = :cId AND status = :status ORDER BY createDate DESC", param, pageSize, pageNum);
         List<Article> articles = page.getResultList();
         List<Map> articleList = new ArrayList<Map>();
 

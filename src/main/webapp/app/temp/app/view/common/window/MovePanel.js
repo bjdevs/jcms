@@ -21,7 +21,8 @@ Ext.define('Admin.view.common.window.MovePanel', {
                     xtype: 'store',
                     proxy: {
                         type: 'ajax',
-                        url: '../../app/temp/data/category.json',
+                        // url: '../../app/temp/data/category.json',
+                        url: '/cn/article/categoryENameListForMove',
                         reader: {
                             type: 'json',
                             rootProperty: 'children'

@@ -10,48 +10,49 @@
  */
 
 * {
-font-size: 100%;
-font-style: normal;
-margin: 0;
-padding: 0;
+    font-size: 100%;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
 }
 
 /* Image */
 img {
-border: none;
-vertical-align: middle;
+    border: none;
+    vertical-align: middle;
 }
 
 /* List */
 ol, ul {
-list-style: none;
+    list-style: none;
 }
 
 /* Table */
 table {
-border-collapse: collapse;
-border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 /* Text */
 q:after, q:before {
-content: ""; /* for IE8, Std */
+    content: ""; /* for IE8, Std */
 }
 
 /* Outlines and the focus */
 :focus {
-outline: none; /* for IE8, Std */
+    outline: none; /* for IE8, Std */
 }
 
 /* Clear */
 .clear {
-zoom: 1; /* for IE7- */ /* hasLayout */
+    zoom: 1; /* for IE7- */ /* hasLayout */
 }
+
 .clear:after {
-clear: both;
-content: ".";
-display: block;
-font-size: 0;
-height: 0;
-visibility: hidden;
+    clear: both;
+    content: ".";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
 }
