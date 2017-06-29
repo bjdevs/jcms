@@ -36,5 +36,17 @@ Ext.define('expand.ux.AdvancedVType', {
         return true;
     },
 
-    passwordText: 'Passwords do not match'
+    passwordText: 'Passwords do not match',
+
+    phone: function (val, field) {
+        try {
+            if (/^(((13[0-9]|14[57]|15[012356789]|17[0678]|18[0-9])[0-9]{8})|(1349[0-9]{7}))$/.test(val))
+                return true;
+            return false;
+        }
+        catch (e) {
+            return false;
+        }
+    },
+    phoneText: '请输入正确的11位手机号码'
 });

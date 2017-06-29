@@ -1,7 +1,7 @@
 document.write(
 ## 紫云法务
 '<div class="layer1 zyfw"><a name="fawu"></a>'+
-    '<h2><span><em>$!law.name</em>'+
+    '<h2><span><em><a>$!law.name</a></em>'+
 #if($law.more)
         '<a href="$law.more" target="_blank">更多></a>'+
 #end

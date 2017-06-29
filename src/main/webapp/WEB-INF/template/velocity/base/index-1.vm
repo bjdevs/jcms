@@ -42,7 +42,7 @@
 
     <!-- 新闻法讯 -->
     <div class="layer1 xwfx">
-        <h2><span><em><a href="$!news.categoryUrl" style="color: #7a4414;">$!news.name</a></em></span></h2>
+        <h2><span><em>$!news.name</em></span></h2>
         #if($news.first)
             <dl>
                 <dt><a href="$!news.first[0]" target="_blank">$!news.first[1]</a><em>$!news.first[3]</em></dt>
@@ -51,7 +51,7 @@
                     <a href="$!news.first[0]" target="_blank">[详细]</a>
                 </dd>
             </dl>
-            <ul style="list-style: none;">
+            <ul>
                 #foreach($item in $news.other)
                     #if($items[2])
                         <li class="highlight"><a href="!$item[0]" target="_blank">!$item[1]</a><em>$!item[2]</em></li>
@@ -67,7 +67,7 @@
 
     <!-- 生活禅 -->
     <div class="layer1 layer1-1 shc">
-        <h2><span><em><a href="$!life.categoryUrl" style="color: #7a4414;">$!life.name</a></em>
+        <h2><span><em>$!life.name</em>
             #if($life.more)
                 <a href="$!life.more" target="_blank">更多></a>
             #end
@@ -76,14 +76,16 @@
         #if($life.first)
             <div class="pic">
                 <a href="$!life.first[0]" target="_blank"><img src="$!life.first[4]" style="width: 240px;height: 160px;" alt=""/></a>
-                <ul id="update_depict_shc">
-                    <li><h3><a href="$!life.first[0]" target="_blank">$!life.first[1]</a></h3></li>
-                    <li style="font-size: 13px;color: #666;">
-                        $!life.first[2]
-                    </li>
-                </ul>
             </div>
-            <ul id="update_ul_list_shc">
+            <dl>
+                <dt><span><a href="$!life.first[0]" target="_blank">$!life.first[1]</a></span><em>$!life.first[3]</em>
+                </dt>
+                <dd>
+                    $!life.first[2]
+                    <a href="$!life.first[0]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
                 #foreach($item in $life.other)
                     <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$item[2]</em></li>
                 #end
@@ -95,7 +97,7 @@
 
     <!-- 紫云佛国 -->
     <div class="layer1 layer1-1 zyfg">
-        <h2><span><em><a href="$!ziyun.categoryUrl" style="color: #7a4414;">$!ziyun.name</a></em>
+        <h2><span><em>$!ziyun.name</em>
             #if($ziyun.more)
                 <a href="$!ziyun.more" target="_blank">更多></a>
             #end
@@ -104,14 +106,15 @@
         #if($ziyun.first)
             <div class="pic">
                 <a href="$!ziyun.first[0]" target="_blank"><img src="$!ziyun.first[4]" style="width: 240px;height: 160px;" alt=""/></a>
-                <ul id="update_depict_zyfg">
-                    <li><h3><a href="$!ziyun.first[0]" target="_blank">$!life.first[1]</a></h3></li>
-                    <li style="font-size: 13px;color: #666;">
-                        $!ziyun.first[2]
-                    </li>
-                </ul>
             </div>
-            <ul id="update_ul_list_zyfg">
+            <dl>
+                <dt><span><a href="$!ziyun.first[0]" target="_blank">$!ziyun.first[1]</a></span><em>$!ziyun.first[3]</em>
+                </dt>
+                <dd>
+                    $!ziyun.first[2]<a href="$!ziyun.first[0]" target="_blank">[详细]</a>
+                </dd>
+            </dl>
+            <ul>
                 #foreach($item in $ziyun.other)
                     <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span><em>$!item[2]</em></li>
                 #end
@@ -127,7 +130,7 @@
 
     <!-- 禅医养生 -->
     <div class="layer1 layer1-1 layer1-1-1 hgwj">
-        <h2><span><em><a href="$!medical.categoryUrl" style="color: #7a4414;">$!medical.name</a></em>
+        <h2><span><em>$!medical.name</em>
             #if($medical.more)
                 <a href="$medical.more" target="_blank">更多></a>
             #end
@@ -160,7 +163,7 @@
 
     <!-- 佛教常识 -->
     <div class="layer1 layer1-1 layer1-1-1 fjcs">
-        <h2><span><em><a href="$!knowledge.categoryUrl" style="color: #7a4414;">$!knowledge.name</a></em>
+        <h2><span><em>$!knowledge.name</em>
             #if($knowledge.more)
                 <a href="$!knowledge.more" target="_blank">更多></a>
             #end
@@ -194,7 +197,7 @@
 
     <!-- 藏经阁 -->
     <div class="layer1 fyxl">
-        <h2><span><em><a href="$!depository.categoryUrl" style="color: #7a4414;">$!depository.name</a></em>
+        <h2><span><em>$!depository.name</em>
             #if($depository.more)
                 <a href="$!depository.more" target="_blank">更多></a>
             #end
@@ -228,7 +231,7 @@
 
     <!-- 水墨禅韵 -->
     <div class="layer1 gallery">
-        <h2><span><em><a href="$!waterzen.categoryUrl" style="color: #7a4414;">$!waterzen.name</a></em>
+        <h2><span><em>$!waterzen.name</em>
             #if($waterzen.more)
                 <a href="$!waterzen.more" target="_blank">更多></a>
             #end
