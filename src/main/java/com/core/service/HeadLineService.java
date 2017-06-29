@@ -26,7 +26,8 @@ public class HeadLineService extends BaseService {
         paramArticle.put("cId", categoryId);
         paramArticle.put("different", different);
         StringBuffer sql = new StringBuffer();
-        sql.append("WHERE STATUS=9 AND cId=:cId AND different=:different ORDER BY updateDate DESC, cateOrderBy ASC ");
+//        sql.append("WHERE STATUS=9 AND cId=:cId AND different=:different ORDER BY cateOrderBy ASC ");
+        sql.append("WHERE STATUS=9 AND cId=:cId AND different=:different ORDER BY IF(cateOrderBy=0,100,cateOrderBy) ASC, updateDate DESC, createDate DESC ");
         String limit = "LIMIT 0,";
         if(maxLimit != 0){
             limit += maxLimit;

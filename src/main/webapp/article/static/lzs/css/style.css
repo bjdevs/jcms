@@ -413,7 +413,7 @@ input, select, textarea {
     position: relative;
 }
 
-.layer1 h2 em {
+.layer1 h2 em a {
     bottom: 0;
     bottom: 2px \0;
     font-size: 16px;
@@ -434,11 +434,24 @@ input, select, textarea {
     color: #8f1e22;
 }
 
+/*.layer1 h2 span em a{
+    color: #7a4414;
+}*/
+
 /* 新闻法讯 */
 .xwfx {
     float: right;
     height: 400px;
     width: 382px;
+}
+
+.xwfx dt em {
+    color: #999;
+    float: right;
+}
+.xwfx ul em {
+    color: #999;
+    float: right;
 }
 
 .xwfx dl {
@@ -449,7 +462,7 @@ input, select, textarea {
 }
 
 .xwfx dt {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     font-weight: bold;
     overflow: hidden;
     text-indent: 12px;
@@ -480,7 +493,7 @@ input, select, textarea {
 }
 
 .xwfx ul li {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     overflow: hidden;
     text-indent: 12px;
     text-overflow: ellipsis;
@@ -520,7 +533,7 @@ input, select, textarea {
 }
 
 .layer1.layer1-1 dt span {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     float: left;
     font-weight: bold;
     overflow: hidden;
@@ -564,7 +577,7 @@ input, select, textarea {
 }
 
 .layer1.layer1-1 ul span {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     float: left;
     overflow: hidden;
     text-indent: 12px;
@@ -581,14 +594,41 @@ input, select, textarea {
 /* 生活禅 */
 .shc {
     float: left;
-    height: 274px;
+    /*height: 274px;*/
+    height: 300px;
     width: 574px;
+}
+
+/*新增*/
+#update_depict_shc {
+    border-top: 0px;
+    margin-top: -5px;
+    width: 240px;
+    margin-left: 0px;
+}
+
+#update_ul_list_shc {
+    border-top: none;
+    margin-top: -19px;
+}
+
+#update_depict_zyfg {
+    border-top: 0px;
+    margin-top: -5px;
+    width: 240px;
+    margin-left: 0px;
+}
+
+#update_ul_list_zyfg {
+    border-top: none;
+    margin-top: -19px;
 }
 
 /* 紫云佛国 */
 .zyfg {
     float: right;
-    height: 274px;
+    /*height: 274px;*/
+    height: 300px;
     width: 574px;
 }
 
@@ -784,7 +824,8 @@ input, select, textarea {
 /* 紫云法务 */
 .zyfw {
     float: left;
-    height: 274px;
+    /*height: 274px;*/
+    height: 345px;
     position: relative;
     width: 446px;
 }
@@ -855,7 +896,8 @@ input, select, textarea {
 /* 广种福田 */
 .gzft {
     float: left;
-    height: 274px;
+    /*height: 274px;*/
+    height: 345px;
     margin-left: 16px;
     width: 446px;
 }
@@ -899,7 +941,8 @@ input, select, textarea {
 /**/
 .contact {
     float: right;
-    height: 274px;
+    /*height: 274px;*/
+    height: 345px;
     width: 238px;
 }
 
@@ -912,7 +955,7 @@ input, select, textarea {
 }
 
 .contact ul span {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     font-weight: normal;
     padding-left: 12px;
 }
@@ -1021,7 +1064,7 @@ input, select, textarea {
 }
 
 .article-list dt span {
-    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     float: left;
     font-weight: bold;
     overflow: hidden;
@@ -1087,7 +1130,7 @@ input, select, textarea {
 .layer2-2.article .detail {
     margin-left: auto;
     margin-right: auto;
-    width: 760px;
+    width: 80%;
 }
 
 .article .qrcode {

@@ -388,4 +388,11 @@ public class ArticleController extends BaseController {
     public String getEmbedInfo(long id) {
         return articleService.getEmbedInfo(id).toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/categoryENameListForMove", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String categoryENameListForMove() {
+        return articleService.categoryENameListForMove().toString();
+    }
+
 }

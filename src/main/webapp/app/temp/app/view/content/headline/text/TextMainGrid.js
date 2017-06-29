@@ -65,7 +65,7 @@ Ext.define('Admin.view.content.headline.text.TextMainGrid', {
                 // {text: '文章栏目', dataIndex: 'category', width: 150},
                 {text: '文章栏目', dataIndex: 'categoryArticle', width: 150},
                 {text: '套红 <span class="admin-color-red">+</span>', dataIndex: 'redStatus', xtype: 'checkcolumn'},
-                {text: '创建人', dataIndex: 'creator'},
+                {text: '操作人', dataIndex: 'creator'},
                 {text: '加入时间', dataIndex: 'createDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150},
                 {text: '更新时间', dataIndex: 'updateDate', xtype: 'datecolumn', format: 'y-m-d H:i:s', width: 150}
 

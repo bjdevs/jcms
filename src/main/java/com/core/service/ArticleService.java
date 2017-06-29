@@ -125,7 +125,8 @@ public class ArticleService extends BaseService {
         StringBuffer sql = new StringBuffer();
         int different = "text".equals(type) ? 1 : 2;
         sql.append(" WHERE cId = :cId AND different = :different ")
-                .append("ORDER BY cateOrderBy ASC, updateDate DESC, createDate DESC ");
+//                .append("ORDER BY cateOrderBy ASC, updateDate DESC, createDate DESC ");
+                .append("ORDER BY IF(cateOrderBy=0,100,cateOrderBy) ASC, updateDate DESC, createDate DESC ");
         param.put("cId", id);
         param.put("different", different);
         int count = count(HeadLine.class, sql.toString(), param);
@@ -639,6 +640,33 @@ public class ArticleService extends BaseService {
         objectNode.put("rows", arrayNode);
         return objectNode;
     }
+
+    /**
+     * 移动 -- 获取category
+     * @return
+     */
+    public ObjectNode categoryENameListForMove() {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        List<Category> categories = list(Category.class, " WHERE status > 2 ORDER BY status ASC");
+        ObjectNode objectNode1;
+        for (int i = 0; i < categories.size(); i++) {
+            Category category = categories.get(i);
+//            objectNode1 = objectMapper.valueToTree(category);
+            objectNode1 = objectMapper.createObjectNode();
+            objectNode1.put("viewType", "content-"+category.geteName());
+            objectNode1.put("text", category.getName());
+            objectNode1.put("split", "true");
+            objectNode1.put("checked", false);
+            objectNode1.put("leaf", true);
+            objectNode1.put("name", "category");
+            arrayNode.add(objectNode1);
+
+        }
+        objectNode.put("children", arrayNode);
+        return objectNode;
+    }
+
 
     /**
      * 查询 Template
