@@ -806,7 +806,7 @@ public class ArticleService extends BaseService {
      */
     public ObjectNode updateEmbedForId(long id, String content) {
         ObjectNode objectNode = objectMapper.createObjectNode();
-        content = content.replaceAll("\n\r*", "");
+//        content = content.replaceAll("\n\r*", " ");
         String[] contents = builderContentArray(content);
         Article article = null;
         if (contents.length > 0) {
