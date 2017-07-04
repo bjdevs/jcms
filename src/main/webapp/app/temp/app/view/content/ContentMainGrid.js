@@ -60,7 +60,7 @@ Ext.define('Admin.view.content.ContentMainGrid', {
                 {text: 'ID', dataIndex: 'id', width: 80},
                 {text: 'sId', dataIndex: 'sId', width: 80, hidden: true},
                 {text: '状态', dataIndex: 'status', name: 'status', renderer: me.renderer, width: 80},
-                {text: '标题', dataIndex: 'title', renderer: me.renderer, flex: 1},
+                {text: '标题', dataIndex: 'title', renderer: me.renderer, /*flex: 1*/width: 360,},
                 {text: '栏目', dataIndex: 'category', width: 150},
                 {text: '作者', dataIndex: 'author'},
                 {text: '创建人', dataIndex: 'creator'},

@@ -927,6 +927,8 @@ public class ArticleService extends BaseService {
         article.setStatus(Constant.ARTICLE_ID_FIVE);
         update(article);
         objectNode.put("success", true);
+        objectNode.put("status", article.getStatus());
+        objectNode.put("updateDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(article.getUpdateDate()));
         createBaseLog("内嵌管理", "更新", "更新联系我们");
         return objectNode;
     }
@@ -960,9 +962,21 @@ public class ArticleService extends BaseService {
         String title = request.getParameter("title");
         String author = request.getParameter("author");
         String[] kIds = request.getParameterValues("kIds");
+        String[] sIds = request.getParameterValues("sIds");
         String depict = request.getParameter("depict");
         String content = request.getParameter("content");
         String account = request.getParameter("account");
+        int sId = 0;
+        String sName = "未连载";
+
+        if (null != sIds && sIds.length > 0){
+            String sIdStr = sIds[0];
+            if (null != sIdStr && !"".equals(sIdStr)){
+                sId = Integer.parseInt(sIds[0]);
+                Serial serial = find(Serial.class, sId);
+                sName = serial.getName();
+            }
+        }
 
         String cName = "";
 
@@ -971,6 +985,7 @@ public class ArticleService extends BaseService {
             article.setTitle(title);
             article.setAuthor(author);
             article.setDepict(depict);
+            article.setsId(sId);
             String[] contents = builderContentArray(content);
             article.setContent(contents[0]);
             article.setUpdateDate(new Date());
@@ -1017,6 +1032,7 @@ public class ArticleService extends BaseService {
 
         createBaseLog("文章管理", "更新", "被修改文章ID：" + article.getId());
         objectNode1.put("cName", cName.substring(0, cName.length() - 1));
+        objectNode1.put("sName", sName);
         objectNode1.put("success", true);
         return objectNode1;
     }

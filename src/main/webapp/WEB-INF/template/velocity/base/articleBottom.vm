@@ -62,6 +62,9 @@
         }else{
             $('#navbar > ul > li').removeClass("current");
         }
+
+        $('li > span:eq(2)').text("");
+        $('li:has(img)').css("text-align", "center");
     </script>
     </body>
     </html>

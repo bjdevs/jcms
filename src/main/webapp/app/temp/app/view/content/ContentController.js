@@ -74,7 +74,7 @@ Ext.define('Admin.view.content.ContentController', {
 
         });
 
-        var objects, cName = "";
+        var objects, cName="";
         Ext.Ajax.request({
             url: '/cn/article/getArticleKeyWord',
             method: 'POST',
@@ -99,6 +99,7 @@ Ext.define('Admin.view.content.ContentController', {
         cName = cName.substring(0, cName.length - 1);
         selected.set("kId", objects);
         selected.set("cName", cName);
+        // selected.set("sName", "ssss");
         tab.getViewModel().data.article = selected;
         tabPanel.setActiveTab(tab);
     },
@@ -196,6 +197,7 @@ Ext.define('Admin.view.content.ContentController', {
                     });
                     return;
                 }
+
                 var winReference = 'content-headline-text-mform-' + category + "-" + aId + date.getTime(),
 
                     win = ctrl.lookupReference(winReference);
@@ -226,9 +228,8 @@ Ext.define('Admin.view.content.ContentController', {
                     });
                     return;
                 }
-                var winReference = 'content-headline-picture-mform-' + category + "-" + aId + date.getTime(),
+                var winReference = 'content-headline-picture-mform-' + category + "-" + aId,
                     win = ctrl.lookupReference(winReference);
-
 
                 if (!win) {
                     win = Ext.create({
@@ -311,7 +312,7 @@ Ext.define('Admin.view.content.ContentController', {
                 }
             });
             var form = view.down('form');
-            article.set("kId", objects);
+            // article.set("kId", objects);
             form.getForm().loadRecord(article);
             win.setTitle('【' + view.getTitle() + '】修改文章');
         }

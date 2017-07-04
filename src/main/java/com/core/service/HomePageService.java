@@ -300,7 +300,7 @@ public class HomePageService extends BaseService {
                 String content = result.length >= 3 ? result[2] : "";
 //                content = contentReplace(content);
 //                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "...";
-                content = content.substring(0, content.length() > 270 ? 270 : content.length()) + "";
+                content = content.substring(0, content.length() > 400 ? 400 : content.length()) + "";
                 result[2] = content;
                 res.add(i, result);
             }
@@ -430,8 +430,6 @@ public class HomePageService extends BaseService {
             String doc = article.getDepict();
             if (null != doc && doc.contains("\"")) {
                 doc = doc.replaceAll("\"", "");
-            } else {
-                doc = "";
             }
             toolManagerContext.put("keyWord", kw.contains(",") ? kw.substring(0, kw.length() - 1) : kw);
             toolManagerContext.put("winTitle", article.getTitle());
@@ -524,7 +522,7 @@ public class HomePageService extends BaseService {
         List<String[]> other;
         int maxLimit = 4;
         if (articleId == Constant.CATEGORY_ID_NEWS) {
-            maxLimit = 9;
+            maxLimit = 13;
         } else if (articleId == Constant.CATEGORY_ID_DEPOSITORY) {
             maxLimit = 7;
         } else if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
@@ -547,7 +545,7 @@ public class HomePageService extends BaseService {
                         news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
 //                        news[2] = article.getDepict();
                         String depict = article.getDepict();
-                        news[2] = depict.substring(0, depict.length() >= 55 ? 55 : depict.length()) + "...";
+                        news[2] = depict.substring(0, depict.length() >= 64 ? 64 : depict.length()) + "...";
                         news[3] = null != article.getCreateDate() ? getArticleDate(article.getCreateDate()) : getArticleDate(article.getCreateDate());
                     }
                     map.put("first", news);
@@ -575,7 +573,7 @@ public class HomePageService extends BaseService {
             case Constant.CATEGORY_ID_MEDICAL:
                 // 禅医养生  limit 0,4
                 // 文章链接，头条标题，文章描述，文章日期，头条图片
-                news = new String[6];
+                news = new String[7];
                 headLine = headLines.size() > 0 ? headLines.get(0) : null;
                 if (null != headLine && headLine.getId() > 0) {
                     article = find(Article.class, headLine.getaId());
@@ -601,10 +599,12 @@ public class HomePageService extends BaseService {
                     } else {
                         news[4] = null != media ? media.getPic_144x96() : "#";
                     }
-                    headLine = headLines.size() > 1 ? headLines.get(1) : null;
-                    if (null != headLine) {
-                        media = find(Media.class, headLine.getmId());
-                        news[5] = null != media ? media.getPic_144x96() : "#";
+                    HeadLine headLine2 = headLines.size() > 1 ? headLines.get(1) : null;
+                    if (null != headLine2) {
+                        Article article2 = find(Article.class, headLine2.getaId());
+                        Media media2 = find(Media.class, headLine2.getmId());
+                        news[5] = null != media2 ? media2.getPic_144x96() : "#";
+                        news[6] = article2.getUrl();
                     }
                 }
                 map.put("first", news);
@@ -673,7 +673,7 @@ public class HomePageService extends BaseService {
                         news[0] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[1] = article.getUrl();
                         news[2] = null != media ? media.getPic_630x420() : "null";
-                        news[3] = null != media ? media.getPic_102x68() : "null";
+                        news[3] = null != media ? media.getPic_102x77() : "null";
                     }
                     list.add(i, news);
                 }

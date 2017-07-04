@@ -12,6 +12,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
     maximized: true,// 默认最大化窗口
     maximizable: false, // 不支持放大 or 缩小
     layout: 'border',
+    // closeAction: 'destroy',
 
     initComponent: function () {
         var me = this,
@@ -95,8 +96,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                                         width: 100,
                                         iconCls: 'fa fa-upload',
                                         handler: 'onAddImgPictureHeadLineBtnClicked',
-                                        listeners: {
-                                        }
+                                        listeners: {}
                                     }
                                 ]
 

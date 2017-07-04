@@ -28,10 +28,10 @@ Ext.define('Admin.view.workbench.Workbench', {
                     region: 'center',
                     xtype: 'workbench-mgrid'
                 },
-                /*{
+                {
                     region: 'south',
                     xtype: 'homepage'
-                }*/
+                }
             ]
         });
 

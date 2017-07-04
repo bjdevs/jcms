@@ -75,7 +75,6 @@ Ext.define('Admin.controller.AppController', {
         }
 
         lastView = mainLayout.getActiveItem();
-
         if (!existingItem) {
 
             if (node) {
