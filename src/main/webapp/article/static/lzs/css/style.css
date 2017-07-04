@@ -308,7 +308,8 @@ input, select, textarea {
 .focus {
     border: 1px solid #e9d6bf;
     float: left;
-    height: 400px;
+    /*height: 400px;*/
+    height: 448px;
     margin-top: 16px;
     overflow: hidden;
     width: 766px;
@@ -338,15 +339,17 @@ input, select, textarea {
 }
 
 .focus ul img {
-    height: 372px;
-    width: 628px;
+    /*height: 372px;*/
+    /*width: 628px;*/
+    height: 420px;
+    width: 630px;
 }
 
 .focus ul span {
     background: rgba(0, 0, 0, 0.5);
-    bottom: 0;
+    bottom: -47px;
     font-size: 16px;
-    left: 0;
+    left: 1px;
     line-height: 32px;
     position: absolute;
     width: 100%;
@@ -366,7 +369,9 @@ input, select, textarea {
 }
 
 .focus ol img {
-    height: 68px;
+    /*height: 68px;*/
+    /*width: 102px;*/
+    height: 77px;
     width: 102px;
 }
 
@@ -381,8 +386,10 @@ input, select, textarea {
 
 .focus ol li.activeSlide img {
     border: 2px solid red;
-    height: 64px;
-    width: 98px;
+    /*height: 64px;
+    width: 98px;*/
+    height: 77px;
+    width: 102px;
 }
 
 .focus ol li.activeSlide span {
@@ -441,7 +448,8 @@ input, select, textarea {
 /* 新闻法讯 */
 .xwfx {
     float: right;
-    height: 400px;
+    /*height: 400px;*/
+    height: 448px;
     width: 382px;
 }
 
@@ -487,13 +495,15 @@ input, select, textarea {
     border-top: 1px dashed #e9d6bf;
     font-size: 14px;
     line-height: 1.8em;
-    margin: 12px 12px 0 12px;
-    padding-top: 12px;
+    /* margin: 12px 12px 0 12px; */
+    margin: 10px 12px 0 12px;
+    /* padding-top: 12px; */
+    padding-top: 5px;
     text-align: left;
 }
 
 .xwfx ul li {
-    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
+    background: url("../images/bullet-1.gif") no-repeat 0 center;
     overflow: hidden;
     text-indent: 12px;
     text-overflow: ellipsis;
@@ -577,7 +587,7 @@ input, select, textarea {
 }
 
 .layer1.layer1-1 ul span {
-    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
+    background: url("../images/bullet-1.gif") no-repeat 0 center;
     float: left;
     overflow: hidden;
     text-indent: 12px;
@@ -705,6 +715,12 @@ input, select, textarea {
     *padding-bottom: 0;
 }
 
+.fyxl #playing span{
+    background: url("../images/bullet-1.gif") no-repeat 0 center;
+    padding-left: 12px;
+    margin-left: -5px;
+}
+
 .fyxl .name {
     color: #666;
     font-size: 14px;
@@ -729,6 +745,7 @@ input, select, textarea {
 }
 
 .fyxl ul li {
+    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     /*background: url("../images/bullet-2.png") no-repeat 0 center;*/
     /*border-top: 1px dashed #e9d6bf;*/
     border-bottom: 1px dashed #e9d6bf;
@@ -740,6 +757,12 @@ input, select, textarea {
 
 .fyxl ul li.playing {
     background-image: url("../images/bullet-2-h.png");
+    /*border-top: none;*/
+    color: #333;
+    font-weight: bold;
+}
+.fyxl ul li#playing {
+    background-image: url("../images/bullet-1.gif");
     /*border-top: none;*/
     color: #333;
     font-weight: bold;
@@ -887,6 +910,7 @@ input, select, textarea {
 
 .zyfw ol li {
     display: none;
+    text-align: justify;
 }
 
 .zyfw ol li.current {
@@ -907,7 +931,8 @@ input, select, textarea {
     font-size: 14px;
     line-height: 1.5em;
     margin: 0 12px;
-    text-align: left;
+    /*text-align: left;*/
+    text-align: justify;
     text-indent: 2em;
 }
 
@@ -948,8 +973,9 @@ input, select, textarea {
 
 .contact ul {
     font-size: 14px;
-    font-weight: bold;
-    line-height: 1.5em;
+    /*font-weight: bold;*/
+    /*line-height: 1.5em;*/
+    line-height: 2em;
     margin: 0 12px;
     text-align: left;
 }
@@ -957,12 +983,19 @@ input, select, textarea {
 .contact ul span {
     /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
     font-weight: normal;
-    padding-left: 12px;
+    /*padding-left: 12px;*/
+    padding-left: 0px;
 }
 
 .contact .map {
-    margin-top: 12px;
+    /*margin-top: 12px;*/
+    margin-top: -5px;
     margin-left: 14px;
+    margin-bottom: 5px;
+
+}
+a.amap-logo{
+    display: none;
 }
 
 .contact .map p {
@@ -1064,7 +1097,7 @@ input, select, textarea {
 }
 
 .article-list dt span {
-    /*background: url("../images/bullet-1.gif") no-repeat 0 center;*/
+    background: url("../images/bullet-1.gif") no-repeat 0 center;
     float: left;
     font-weight: bold;
     overflow: hidden;
@@ -1130,7 +1163,7 @@ input, select, textarea {
 .layer2-2.article .detail {
     margin-left: auto;
     margin-right: auto;
-    width: 80%;
+    width: 95%;
 }
 
 .article .qrcode {
@@ -1197,7 +1230,8 @@ input, select, textarea {
 
 /**/
 .rightside .zyfw {
-    height: auto;
+    /*height: auto;*/
+    height: 530px;
     padding-bottom: 12px;
     width: 100%;
 }
@@ -1241,6 +1275,10 @@ input, select, textarea {
     height: auto;
     padding-bottom: 12px;
     width: 100%;
+}
+
+#contact li img{
+    height: 100px;
 }
 
 /*--------------------------------------

@@ -1,7 +1,7 @@
 document.write(
 ## 广种福田
 '<div class="layer1 gzft"><a name="futian"></a>'+
-    '<h2><span><em><a>$!futian[0]</a></em>#*<a href="$futian[1]">更多></a>*#</span></h2>'+
+    '<h2><span><em style="bottom: 0;bottom: 2px \0;font-size: 16px;left: 37px;position: absolute;">$!futian[0]</em>#*<a href="$futian[1]">更多></a>*#</span></h2>'+
 
     '<p>$!futian[1]</p>'+
 
@@ -26,7 +26,7 @@ document.write(
         '</table>'+
     '</div>'+
 '</div>'+
-'<div class="layer1 contact" id="contact"><a name="contact"></a>'+
+#*'<div class="layer1 contact" id="contact"><a name="contact"></a>'+
     '<h2><span><em><a>$!contact.get(0)[0]</a></em>'+
         #if($contact.get(0)[1] != "")
             '<a href="$!contact.get(0)[1]" target="_blank">详细></a>'+
@@ -41,5 +41,21 @@ document.write(
 #end
     '</ul>'+
     '<div class="map" id="map_container" style="width: 210px; height: 110px;"></div>'+
-'</div>'
+'</div>'*#
+'<div class="layer1 contact" id="contact"><a name="contact"></a>'+
+    '<h2><span><em style="bottom: 0;bottom: 2px \0;font-size: 16px;left: 37px;position: absolute;">$!contact.get(0)[0]</em>'+
+        #if($contact.get(0)[1] != "")
+            '<a href="$!contact.get(0)[1]" target="_blank">详细></a>'+
+        #end
+    '</span></h2>'+
+    '<div class="map" id="map_container" style="width: 210px; height: 110px;"></div>'+
+    '<ul>'+
+        #set($contactMaxNum = $contact.size() - 3)
+        #foreach($index in $contact)
+            #if($velocityCount > 1 && $velocityCount <= 4)
+                '<li><span>$!index[0]：</span>$!index[1]</li>'+
+            #end
+        #end
+        '<li style="text-align: center;font-size: 10px;"><span style="text-align: center;">扫我关注老祖寺官方微信</span></li></ul>'+
+    '</div>'
 )

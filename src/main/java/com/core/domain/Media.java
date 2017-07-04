@@ -67,8 +67,8 @@ public class Media {
     }
 
     @JsonIgnore
-    public String getPic_102x68() {
-        return getUrl("102x68");
+    public String getPic_102x77() {
+        return getUrl("102x77");
     }
 
     @JsonIgnore

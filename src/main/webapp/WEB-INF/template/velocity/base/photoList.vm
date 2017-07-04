@@ -69,6 +69,10 @@
     var pageCnt = ${list.totalPage};
     var page = ${list.pageNum};
     var listUrl = ${listUrl};
+
+    $('li > span:eq(2)').text("");
+    $('#contact > ul > li:gt(1)').css("text-align", "center");
+
 </script>
 <script type="text/javascript" src=${resURLPrefix}/static/lzs/js/paginate.js></script>
 </body>

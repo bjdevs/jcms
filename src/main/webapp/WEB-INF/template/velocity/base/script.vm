@@ -9,10 +9,14 @@
 
 <script type="text/javascript" src=${resURLPrefix}/static/lzs/js/jquery.qrcode.min.js></script>
 
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b"></script>
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b&plugin=AMap.ToolBar"></script>
+
+##<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b"></script>
 <script type="text/javascript" src="${resURLPrefix}/static/lzs/js/map_main.js"></script>
 <script type="text/javascript" src="http://webapi.amap.com/ui/1.0/main.js"></script>
 <script type="text/javascript" src="${resURLPrefix}/static/lzs/js/map.js"></script>
+
 
 ##<script type="text/javascript" src="http://www.4what.cn/js/util.jquery-1.1.js"></script>
 ##<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/util.jquery-1.1.js></script>

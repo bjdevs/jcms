@@ -34,12 +34,15 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
         var ctrl = this,
             view = ctrl.getView();
 
+        var date = new Date().getTime();
+
         var win = ctrl.lookupReference('pic-mform');
 
         if (!win) {
             win = Ext.create({
                 reference: 'pic-mform',
-                xtype: 'pic-mform'
+                xtype: 'pic-mform',
+                name: 'media' + date
             });
 
             view.add(win);
@@ -89,7 +92,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             grid = button.up('grid');
 
         var account = _am.currentUser.account;
-        
+
         // todo edit
         ctrl.sendAjaxFromIds(button.action, button.text, grid, {
             url: '/cn/article/headLineBtn?' + button.action + '&type=2&account=' + account
@@ -103,15 +106,16 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
             ownerView = view.up().up(),// content
             ownerCtrl = ownerView.getController(), // content
 
+            date = new Date().getTime(),
+
             category = ownerView.id.split('-'),
             category = category[category.length - 1],
 
-            winReference = 'content-headline-picture-win-' + category;
+            winReference = 'content-headline-picture-win-' + category + date;
 
         view.up().hide(); // 关闭当前窗口,再打开新窗口
 
         var win = ownerCtrl.lookupReference(winReference);
-
         if (!win) {
             win = Ext.create({
                 xtype: 'headlinewindow',
@@ -121,7 +125,7 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                     data: {
                         category: category,
                         categoryName: ownerView.getTitle(),
-                        subItem: 'content-headline-picture-mgrid',
+                        subItem: 'content-headline-picture-mgrid' + date,
                         type: 'picture'
                     }
                 }
@@ -164,6 +168,9 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
     onSubmitPicBtnClicked: function (button) {
         var ctrl = this,
             view = ctrl.getView();
+        var mform = view.up('content-headline-picture-mform');
+        var img = mform.query('[name=image]');
+        var imgPath = mform.query('[name=imageUpload]');
 
         var form = view.down('form').getForm();
         if (form.isValid()) {
@@ -173,18 +180,16 @@ Ext.define('Admin.view.content.headline.picture.PictureController', {
                 submitEmptyText: false,
                 waitMsg: '上传中，稍等片刻...',
                 success: function (_form, action) {
-                    var result = action.result.result;
+                    var data = action.result;
+                    var url = data.url;
+                    var result = data.result;
                     switch (result) {
                         case 'success' :
-                            Ext.Msg.alert("提示", "更新成功", function(buttonId, text, opt){
-                                view.hide();
-                                var url = action.result.url;
-                                var mform = button.up().up().up().up().up().down('content-headline-picture-mform');
-                                var img = mform.query('[name=image]');
-                                var imgPath = mform.query('[name=imageUpload]');
-                                imgPath[0].setValue(url);
-                                img[0].getEl().dom.src = url;
+                            Ext.Msg.alert("提示", "更新成功", function (buttonId, text, opt) {
                             }).setIcon(Ext.Msg.INFO);
+                            view.close();
+                            imgPath[0].setValue(url);
+                            img[0].getEl().dom.src = url;
                             break;
                         case 'failed' :
                             Ext.Msg.alert("更新失败", action.result.message).setIcon(Ext.Msg.WARNING);
