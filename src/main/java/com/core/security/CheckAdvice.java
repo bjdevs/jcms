@@ -98,6 +98,7 @@ public class CheckAdvice implements Ordered {
                 }
             }
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             logger.error(throwable);
             throw throwable;
         }

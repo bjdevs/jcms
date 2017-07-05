@@ -80,6 +80,7 @@
                     <li><h3><a href="$!life.first[0]" target="_blank">$!life.first[1]</a></h3></li>
                     <li style="font-size: 13px;color: #666;">
                         $!life.first[2]
+                        <a href="$!life.first[0]" target="_blank" style="color: #8F1E22;">[详细]</a>
                     </li>
                 </ul>
             </div>
@@ -108,6 +109,7 @@
                     <li><h3><a href="$!ziyun.first[0]" target="_blank">$!life.first[1]</a></h3></li>
                     <li style="font-size: 13px;color: #666;">
                         $!ziyun.first[2]
+                        <a href="$!ziyun.first[0]" target="_blank" style="color: #8F1E22;">[详细]</a>
                     </li>
                 </ul>
             </div>
@@ -138,7 +140,7 @@
                 <a href="$!medical.first[0]" target="_blank"><img src="$!medical.first[4]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
                 #if($medical.first.size() > 5)
-                <a href="$!medical.first[0]" target="_blank"><img src="$!medical.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
+                <a href="$!medical.first[6]" target="_blank"><img src="$!medical.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
             </div>
             <dl>
@@ -171,7 +173,7 @@
                 <a href="$!knowledge.first[0]" target="_blank"><img src="$!knowledge.first[4]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
                 #if($knowledge.first.size() > 5)
-                <a href="$!knowledge.first[0]" target="_blank"><img src="$!knowledge.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
+                <a href="$!knowledge.first[6]" target="_blank"><img src="$!knowledge.first[5]" style="width: 144px;height: 96px;" alt=""/></a>
                 #end
             </div>
             <dl>
@@ -216,9 +218,9 @@
             <span style="color:red">(暂无)</span>
         #end
     </ul>*#
-        <ul>
+        <ul id="playing">
             #foreach($item in $depository.list)
-                <li><a href="$!item[0]" target="_blank">$!item[1]</a></li>
+                <li><span><a href="$!item[0]" target="_blank">$!item[1]</a></span></li>
             #end
         </ul>
     </div>
@@ -274,6 +276,10 @@
         pause: true,
         timeout: 1000 * 3
     });
+
+    /*修改 联系我们 ： 微信 显示*/
+    $('#contact li:eq(2) > span').text("");
+    $('#contact li:eq(2)').css("text-align", "center");
 
     // audio
     /*audiojs.events.ready(function () {

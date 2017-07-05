@@ -211,8 +211,8 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                                 {
                                     xtype: 'displayfield',
                                     // fieldLabel: '<strong>状态</strong>',
-                                    labelWidth: 35,
-                                    width: '40%',
+                                    // labelWidth: 35,
+                                    width: '20%',
                                     bind: '{article.status}',
                                     margin: '0 100 0 0',
                                     listeners: {
@@ -261,26 +261,50 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                                     bind: '{article.publishDate}'
                                 },
                                 {
-                                    xtype: 'displayfield',
-                                    fieldLabel: '<strong>连载</strong>',
-                                    labelWidth: 40,
-                                    listeners: {
-                                        afterrender: function (filed) {
-                                            var sId = vm.get('article').get('sId');
-                                            if (sId == 0) {
-                                                filed.setValue('未连载');
-                                                return false;
-                                            }
-                                            Ext.Ajax.request({
-                                                method: 'POST',
-                                                url: '/cn/serial/serialQueryForId?id=' + sId
-                                            }).then(function (response, opts) {
-                                                var obj = Ext.decode(response.responseText);
-                                                filed.setValue(obj.rows.name);
-                                            })
-                                        }
+                                    xtype: 'fieldcontainer',
+                                    beforeLabelTextTpl: '',
+                                    fieldLabel: '连载',
+                                    labelWidth: 45,
+                                    layout: 'hbox',
+                                    combineErrors: true,
+                                    defaultType: 'textfield',
+                                    publishes: 'value',
+                                    /*style: {
+                                        "border": "1px solid red"
+                                    },*/
+                                    items: {
+                                        xtype: 'combobox',
+                                        name: 'sId',
+                                        bind: '{article.sId}',
+                                        /*style: {
+                                            "border": "1px solid blue",
+                                            "position": "absolute",
+                                            "left": "35px"
+                                        },*/
+                                        store: {
+                                            proxy: {
+                                                type: 'ajax',
+                                                url: '/cn/serial/serialQuery?status=5',
+                                                reader: {
+                                                    type: 'json',
+                                                    rootProperty: 'rows'
+                                                }
+                                            },
+                                            autoLoad: true
+                                        },
+                                        displayField: 'name',
+                                        valueField: 'id',
+                                        queryMode: 'remote',
+                                        editable: false, // 不可编辑
+                                        minChars: 1,
+                                        triggerAction: 'all',
+                                        // typeAhead: true, // 不启用组合编辑
+                                        forceSelection: true,
+                                        emptyText: '未连载',
+                                        // allowBlank: false, // 允许空白
+                                        // width: 100
                                     }
-                                }
+                                },
                             ]
                         },
                         {
@@ -427,7 +451,7 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                                 {
                                     xtype: 'displayfield',
                                     // fieldLabel: '<strong>状态</strong>',
-                                    labelWidth: 35,
+                                    // labelWidth: 35,
                                     width: '40%',
                                     bind: '{article.status}',
                                     // margin: '0 100 0 0',
@@ -461,7 +485,8 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
                                     xtype: 'displayfield',
                                     fieldLabel: '<strong>连载</strong>',
                                     labelWidth: 45,
-                                    labelWidth: 40,
+                                    itemId: 'sName',
+                                    // labelWidth: 40,
                                     listeners: {
                                         afterrender: function (filed) {
                                             var sId = vm.get('article').get('sId');
@@ -504,8 +529,23 @@ Ext.define('Admin.view.content.ArticleUpdatePanel', {
             items: form,
             listeners: {
                 beforeclose: function (tab, eOpts) {
-                    var grid = tab.up().down('content-mgrid');
+                    // var grid = tab.up().down('content-mgrid');
+                    // grid.getStore().reload();
+
+                    // var ctrl = this;
+                    // var view = ctrl.getView();
+                    var id = location.hash;
+                    if (id.indexOf('#') > -1) {
+                        id = id.substring(1, id.length);
+                    }
+                    var grid = tab.up('contentPanel').getComponent('main-panel-' + id);
+                    if (grid == null) {
+                        grid = tab.up('contentPanel').getComponent('workbench').down('workbench-mgrid');
+                    } else {
+                        grid = grid.down('grid');
+                    }
                     grid.getStore().reload();
+                    grid.getSelectionModel().deselectAll();
                 }
             }
         });

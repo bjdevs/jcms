@@ -22,6 +22,10 @@ Ext.define('Admin.view.content.index.embed.FutianForm', {
                 {
                     xtype: 'textarea',
                     name: 'depict',
+                    width: '98%',
+                    height: '100px',
+                    itemId: 'v-depict',
+                    // hidden: true,
                     listeners: {
                         beforerender: function (filed) {
                             Ext.Ajax.request({
@@ -32,7 +36,8 @@ Ext.define('Admin.view.content.index.embed.FutianForm', {
                             });
                         }
                     }
-                }
+
+                },
             ]
         });
 

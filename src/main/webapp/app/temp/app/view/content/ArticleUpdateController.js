@@ -80,6 +80,7 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
         var author = form.query('[name=author]')[0].value;
         var depict = form.query('[name=depict]')[0].value;
         var kIds = form.query('[name=kId]')[0].value;
+        var sIds = form.query('[name=sId]')[0].value;
         var content = basicForm.findField('content').getValue();
         var account = _am.currentUser.account;
 
@@ -92,6 +93,7 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 author: author,
                 depict: depict,
                 kIds: kIds,
+                sIds: sIds,
                 content: content,
                 account: account
             },
@@ -100,6 +102,7 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                 var data = response.responseText;
                 data = JSON.parse(data);
                 var cName = data.cName;
+                var sName = data.sName;
                 var success = data.success;
                 var result = data.result;
                 if (success) {
@@ -111,15 +114,23 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
                         });
                         form.query('[itemId=dis_content]')[0].setValue(content);
                         form.query('[itemId=cName]')[0].setValue(cName);
+                        form.query('[itemId=sName]')[0].setValue(sName);
                     }
                 } else {
                     Ext.ux.Msg.error('文章修改异常，请刷新页面稍后再试...', function () {
                     });
                 }
                 // var panel = button.up().up();
-                var grid = button.up().up().up().down('content-mgrid');
+                /*var grid = button.up().up().up().down('content-mgrid');
                 if (grid == null) {
                     grid = button.up().up().up().down('workbench-mgrid');
+                }*/
+                var grid = view.up('contentPanel').getComponent('main-panel-'+id);
+                if (grid == null) {
+                    // grid = view.up('contentPanel').getComponent('workbench-mgrid');
+                    grid = view.up('contentPanel').getComponent('workbench').down('workbench-mgrid');
+                } else {
+                    grid = grid.down('grid');
                 }
 
                 // 关闭tab
@@ -146,9 +157,18 @@ Ext.define('Admin.view.content.ArticleUpdateController', {
     },
 
     onCloseBtnClicked: function (button) {
-        var grid = button.up().up().up().down('content-mgrid');
+        var ctrl = this;
+        var view = ctrl.getView();
+        var id = location.hash;
+        if (id.indexOf('#') > -1){
+            id = id.substring(1, id.length);
+        }
+        var grid = view.up('contentPanel').getComponent('main-panel-'+id);
         if (grid == null) {
-            grid = button.up().up().up().down('workbench-mgrid');
+            // grid = view.up('contentPanel').getComponent('workbench-mgrid');
+            grid = view.up('contentPanel').getComponent('workbench').down('workbench-mgrid');
+        } else {
+            grid = grid.down('grid');
         }
         grid.getStore().reload();
         grid.getSelectionModel().deselectAll();

@@ -8,8 +8,16 @@
     <meta name="author" content="4what"/>
     <meta name="description" content="黄梅老祖寺 ${depict}"/>
     <meta name="keywords" content="老祖寺,黄梅老祖寺,紫云山,${keyWord}"/>
-
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0?v=1.0" />
     <link rel="stylesheet" type="text/css" href="${resURLPrefix}/static/lzs/css/style.css"/>
+    <style type="text/css">
+        #container{
+            margin:0;
+            height:100%;
+            width:100%;
+            font-size:12px;
+        }
+    </style>
 </head>
 
 <body>

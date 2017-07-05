@@ -120,8 +120,13 @@ Ext.define('Admin.view.content.index.embed.FutianController', {
 
         var formDepict = form.query('[name=depict]')[0].value;
         var selectCount = grid.getSelection();
-        if (selectCount.length == 0) {
+        if (selectCount.length == 0 || selectData == null) {
             selectCount = grid.setSelection(1, true).getSelection();
+            for (var i = 0; i < 10; i++){
+                if (selectCount.length == 0 || selectData == null){
+                    selectCount = grid.setSelection(i, true).getSelection();
+                }
+            }
         }
         var selectData = selectCount[0].data;
         selectData.depict = formDepict;

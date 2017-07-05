@@ -64,6 +64,9 @@
     }else{
         $('#navbar > ul > li').removeClass("current");
     }
+
+    $('#contact li:eq(2) > span').text("");
+    $('#contact li:eq(2)').css("text-align", "center");
 </script>
 </body>
 </html>
