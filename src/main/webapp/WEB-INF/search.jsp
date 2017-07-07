@@ -51,7 +51,7 @@
 
         <div class="header">
             <div class="wrapper">
-                <h1><a href="/"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
+                <h1><a href="//www.hmlzs.cn"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
 
                 <form action="search" method="get" id="search-frm" class="search">
                     <div class="keyword"><input type="text" name="kw" value="${keyword}"/></div>
@@ -260,10 +260,10 @@
         var kw = $("#search-frm .keyword input").val();
         var url = document.location.href;
         var index = url.indexOf("?");
-        url = url.substr(0,index+1)
+        url = url.substr(0,index+1);
         var param={};
         param.kw=kw;
-        param.c=$(".s_tool_panel .category").val();;
+        param.c=$(".s_tool_panel .category").val();
         param.t=$(".s_tool_panel .timerange").val();
         param.sort=$(".s_tool_panel .sort").val();
         location = url + jQuery.param(param);

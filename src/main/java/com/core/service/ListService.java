@@ -174,8 +174,8 @@ public class ListService extends BaseService {
     public List<Category> listByStatus(int status) {
         String sql = " WHERE 1=1 ";
         Map <String,Object> param=new HashMap<String, Object>();
-        if(status != -100){
-            sql += " AND status = :status AND id > 0 ORDER BY id asc";
+        if(status != -100) {
+            sql += " AND id > 0 AND status > 0 ORDER BY id asc";
             param.put("status", status);
         }
         return this.list(Category.class,sql,param);
