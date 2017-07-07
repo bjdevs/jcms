@@ -132,4 +132,14 @@ public class Constant {
      */
     public static final int AUTH_ACCOUNT = 101;
     public static final int AUTH_USER = 202;
+
+    /**
+     *  lucene
+     */
+    // 搜索页标题长度
+    public static final int LUCENE_TITLE_FRAGMENT_LEN = 30;
+    // 搜索页内容长度
+    public static final int LUCENE_CONTENT_FRAGMENT_LEN = 100;
+    // 搜索页每页数量
+    public static final int LUCENE_SEARCH_PAGESIZE = 10;
 }

@@ -41,13 +41,10 @@
         <div class="header">
             <div class="wrapper">
                 <h1><a href="http://www.hmlzs.cn"><img src="${resURLPrefix}/static/lzs/images/logo.png" alt="黄梅老祖寺"/></a></h1>
-
-                <!-- <form action="${listURLPrefix}/search" method="get" id="search-frm" class="search"> -->
-                <form action="" method="get" id="search-frm" class="search">
+                <form action="${listURLPrefix}/search" method="get" id="search-frm" class="search">
                     <div>
                         <div class="keyword"><input type="text" name="kw" value=""/></div>
-                        <!-- <input type="submit" name="" value="搜索" class="submit"/> -->
-                        <input type="button" name="" value="搜索" class="submit" onclick="alert('索引中,请稍后');"/>
+                        <input type="submit" name="" value="搜索" class="submit"/>
                     </div>
                     <input type="hidden" name="pn" class="pn" value=""/>
                     <input type="hidden" name="c" class="c" value=""/>

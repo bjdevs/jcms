@@ -1097,9 +1097,12 @@ public class HomePageService extends BaseService {
      *
      * @param content
      */
-    private long createPublishLog(long userId, String content) {
+    public long createPublishLog(long userId, String content) {
         PublishLog publishLog = new PublishLog();
         publishLog.setUserId(Integer.parseInt(userId + ""));
+        if (content.length() > 255) {
+            content = content.substring(0,254);
+        }
         publishLog.setCategory(content);
         publishLog.setStatus(1);
         publishLog.setRequestDate(new Date());

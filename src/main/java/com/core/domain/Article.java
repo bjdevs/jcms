@@ -1,5 +1,7 @@
 package com.core.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 
 /**
@@ -25,6 +27,8 @@ public class Article {
     private Date updateDate;
     private Date publishDate;
     private int orderBy;
+
+    transient String luceneId;
 
     public long getId() {
         return id;
@@ -168,6 +172,16 @@ public class Article {
 
     public void setOrderBy(int orderBy) {
         this.orderBy = orderBy;
+    }
+
+    @JsonIgnore
+    public String getLuceneId() {
+        return luceneId;
+    }
+
+    @JsonIgnore
+    public void setLuceneId(String luceneId) {
+        this.luceneId = luceneId;
     }
 
     @Override
