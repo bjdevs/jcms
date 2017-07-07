@@ -1,6 +1,7 @@
 package com.core.controller;
 
 import com.core.security.annotation.AsRight;
+import com.core.service.ArticleIndexService;
 import com.core.service.AuthService;
 import com.core.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController extends BaseController {
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private ArticleIndexService articleIndexService;
 
     /////////////
     // 功能管理
@@ -87,5 +91,15 @@ public class AuthController extends BaseController {
     @RequestMapping(value = "/authDataNavs", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String authDataNavsAH(HttpServletRequest request,HttpServletResponse response) throws Exception {
         return authService.authDataNavs(request);
+    }
+
+    //////////////////
+    // 重建索引
+    //////////////////
+    @AsRight(id = 181)
+    @ResponseBody
+    @RequestMapping(value = "/reBuildALLPublishIndex", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String reBuildALLPublishIndexAH() throws Exception {
+        return articleIndexService.reBuildALLPublishIndex().toString();
     }
 }

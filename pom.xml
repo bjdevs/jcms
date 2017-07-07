@@ -182,22 +182,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.janeluo</groupId>
-            <artifactId>ikanalyzer</artifactId>
-            <version>2012_u6</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.whalin</groupId>
             <artifactId>Memcached-Java-Client</artifactId>
             <version>3.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -205,7 +192,29 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>[7.2.0, 7.2.99]</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.3</version>
+        </dependency>
+
+        <!--local-->
+        <dependency>
+            <groupId>org.wltea.analyzer</groupId>
+            <artifactId>IKAnalyzer</artifactId>
+            <version>5.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/target/lib/IKAnalyzer5.0.jar</systemPath>
+        </dependency>
     </dependencies>
+
 
     <build>
         <finalName>jcms</finalName>

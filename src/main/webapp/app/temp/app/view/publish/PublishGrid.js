@@ -2,6 +2,7 @@ Ext.define('Admin.view.publish.PublishGrid', {
     extend: 'Admin.view.common.panel.BaseGridPanel',
     xtype: 'publish-mgrid',
 
+
     initComponent: function () {
         var me = this;
 
@@ -59,6 +60,7 @@ Ext.define('Admin.view.publish.PublishGrid', {
                     flex: 1
                 }
             ],
+
             tbar: [
                 {
                     xtype: 'button',
@@ -76,15 +78,19 @@ Ext.define('Admin.view.publish.PublishGrid', {
                 '-',
                 {
                     xtype: 'button',
+                    text: '重建索引',
+                    iconCls: 'x-fa fa-link',
+                    action: 'rebuildallpublishindex'
+                },
+                '-',
+                {
+                    xtype: 'button',
                     text: '查看首页',
                     iconCls: 'x-fa fa-eye',
                     action: 'redirect'
                 }
             ]
-
-
         });
-
         me.callParent();
     },
 
@@ -107,11 +113,6 @@ Ext.define('Admin.view.publish.PublishGrid', {
                 }
             default:
                 return value;
-
         }
-
-
     }
-
-
 });
