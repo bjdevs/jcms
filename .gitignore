@@ -47,7 +47,7 @@ Temporary Items
 .apdisk
 
 .idea
-target/
+target/generated-sources
 
 src/main/webapp/article/*
 !src/main/webapp/article/static
