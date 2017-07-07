@@ -32,6 +32,9 @@ public class ArticleService extends BaseService {
     @Autowired
     private HomePageService homePageService;
 
+    @Autowired
+    private ArticleIndexService articleIndexService;
+
     private Log log;
 
     /**
@@ -360,8 +363,9 @@ public class ArticleService extends BaseService {
                             return objectNode;
                         }
                     }
-
                 }
+                articleIndexService.updateIndex(ids);
+
             } else {
                 for (int i = 0; i < ids.length; i++) {
                     long id = Long.parseLong(ids[i]);
@@ -378,6 +382,8 @@ public class ArticleService extends BaseService {
                         }
                         // 删除文章静态文件
                         if (num == 19) {
+                            // 删除文章索引，必须放在删除目录方法上面
+                            articleIndexService.deleteArticle(article);
                             removeArticleFile(article.getId());
                         }
                     }
@@ -1574,5 +1580,24 @@ public class ArticleService extends BaseService {
         log.setContent(content);
         log.setCreateDate(new Date());
         create(log);
+    }
+
+    /**
+     * 获取完整文章内容
+     * @param article
+     * @return
+     */
+    public String getArticleConetnt(Article article) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("aId", article.getId());
+
+        List<SubArticle> subArticles = this.list(SubArticle.class, " WHERE aId = :aId ORDER BY seq ASC ", param);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(article.getContent());
+
+        for (int i = 0; i < subArticles.size(); i++) {
+            stringBuilder.append(subArticles.get(i).getContent());
+        }
+        return stringBuilder.toString();
     }
 }

@@ -76,6 +76,17 @@
     >
     </bean>
 
+    <!-- lucene Config -->
+    <bean name="analyzer" class="org.wltea.analyzer.lucene.IKAnalyzer"></bean>
+    <bean class="com.core.config.LuceneConfig"
+          p:analyzer-ref="analyzer"
+          p:indexDir="${lucene.indexDir}"
+          p:defaultSearchField="${lucene.defaultSearchField}"
+          p:preTag="${lucene.preTag}"
+          p:postTag="${lucene.postTag}"
+    >
+    </bean>
+
     <!-- NamedParameterJdbcTemplate-->
     <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
           c:dataSource-ref="dataSource"/>
