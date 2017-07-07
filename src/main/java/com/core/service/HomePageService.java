@@ -499,6 +499,7 @@ public class HomePageService extends BaseService {
             velocityEngine.mergeTemplate(templatePath, Constant.ENCODE_UTF8, toolManagerContext, printWriter);
 
             printWriter.flush();
+            printWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
             flag = "error";
@@ -585,9 +586,9 @@ public class HomePageService extends BaseService {
                         news[1] = headLine.getRedStatus() == 1 ? config.getPreTag() + headLine.getName() + config.getPostTag() : headLine.getName();
                         news[0] = article.getUrl();
                         String depict = article.getDepict();
-                        if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO){ // 生活禅 & 紫云佛国
+                        if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) { // 生活禅 & 紫云佛国
                             depict = depict.substring(0, depict.length() >= 30 ? 30 : depict.length()) + "...";
-                        }else{
+                        } else {
                             depict = depict.substring(0, depict.length() >= 55 ? 55 : depict.length()) + "...";
                         }
                         news[2] = depict;
@@ -1040,9 +1041,9 @@ public class HomePageService extends BaseService {
                 // 阅读全文
 
                 if (!"preview".equals(type)) {
-                    pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "_1", "");
+                    pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "_all", "");
                 } else {
-                    pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "_1");
+                    pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "_all");
                     staticResPrefix = "";
                 }
                 pageNoSb.append("<a href=\"" + staticResPrefix + pathTemp + "\">浏览全文</a>");
@@ -1057,10 +1058,10 @@ public class HomePageService extends BaseService {
         if (contents.length > 1) {
             // 获取文章路径
             if (!"preview".equals(type)) {
-                articlePath = getArticlePathSuffix(category.geteName(), article.getId(), "_1", "");
+                articlePath = getArticlePathSuffix(category.geteName(), article.getId(), "_all", "");
                 pathTemp = getArticlePathSuffix(category.geteName(), article.getId(), "", "");
             } else {
-                articlePath = getArticlePreviewPathSuffix(category.geteName(), article.getId(), "_1");
+                articlePath = getArticlePreviewPathSuffix(category.geteName(), article.getId(), "_all");
                 pathTemp = getPreviewResultPathSuffix((config.getArticleIdAddend() + article.getId()) + "");
                 staticResPrefix = "";
             }
