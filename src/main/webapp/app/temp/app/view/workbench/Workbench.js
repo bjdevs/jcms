@@ -30,7 +30,8 @@ Ext.define('Admin.view.workbench.Workbench', {
                 },
                 {
                     region: 'south',
-                    xtype: 'homepage'
+                    xtype: 'homepage',
+                    // height: '40%'
                 }
             ]
         });

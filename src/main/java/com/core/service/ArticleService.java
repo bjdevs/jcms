@@ -996,7 +996,7 @@ public class ArticleService extends BaseService {
             article.setContent(contents[0]);
             article.setUpdateDate(new Date());
             int status = article.getStatus();
-            if (status == Constant.ARTICLE_ID_NINE) {
+            if (status == Constant.ARTICLE_ID_NINE || status == Constant.ARTICLE_ID_ONE) {
                 article.setStatus(Constant.ARTICLE_ID_FIVE);
             }
             update(article);
@@ -1341,14 +1341,21 @@ public class ArticleService extends BaseService {
             File file = new File(finalPath);
             if (file.exists()) {
                 file.delete();
-                for (int i = 1; i < 50; i++) {
+
+                for (int i = 2; i < 50; i++) {
                     String otherId = idStr + "_" + i + ".html";
                     String otherPath = prefixPath + otherId;
                     File file1 = new File(otherPath);
-                    if (!file1.exists()) {
-                        break;
-                    } else {
+                    if (file1.exists()) {
                         file1.delete();
+                    } else {
+                        otherId = idStr + "_all.html";
+                        otherPath = prefixPath + otherId;
+                        file1 = new File(otherPath);
+                        if (file1.exists()) {
+                            file1.delete();
+                        }
+                        break;
                     }
                 }
             }
