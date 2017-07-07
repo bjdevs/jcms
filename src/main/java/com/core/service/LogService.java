@@ -103,6 +103,7 @@ public class LogService extends BaseService {
         put(105, "内嵌管理");
         put(106, "标签管理");
         put(107, "模板管理");
+        put(149, "索引管理");
         put(150, "媒体管理");
         put(151, "用户管理");
         put(152, "系统日志");
