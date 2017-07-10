@@ -27,7 +27,7 @@ public class ListController extends BaseController {
 
 
         request.setAttribute(Constant.STATIC_RESOURCE_URL_PREFIX, config.getStaticResourceURLPrefix());
-        request.setAttribute(Constant.LIST_PAGE_URL_PREFIX, config.getListDomain());
+        request.setAttribute(Constant.LIST_PAGE_URL_PREFIX, config.getSearchDomain());
 
         return getView((String) result[0]);
     }

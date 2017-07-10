@@ -408,7 +408,6 @@ public class HomePageService extends BaseService {
      */
     public String articlePublish(long id, String type) {
         String staticResPrefix = config.getStaticResourceURLPrefix();
-        String listDomain = config.getListDomain();
 
         ToolContext toolManagerContext = toolManager.createContext();
 
