@@ -49,7 +49,7 @@ public class ArticlIndexController extends BaseController {
     @Autowired
     ListService listService;
 
-    @RequestMapping(value = "/s")
+    @RequestMapping(value = "/q")
     public String search(Model model) {
         SearchResultPage<Article> resultPage = null;
         int pageSize = Constant.LUCENE_SEARCH_PAGESIZE;
@@ -109,6 +109,6 @@ public class ArticlIndexController extends BaseController {
         model.addAttribute("sort", sortStr);
         model.addAttribute("t", timerange);
         model.addAttribute("resultPage", resultPage);
-        return "s";
+        return "q";
     }
 }
