@@ -60,6 +60,14 @@ public class Config {
         return listDomain;
     }
 
+    public String getSearchDomain() {
+        return searchDomain;
+    }
+
+    public void setSearchDomain(String searchDomain) {
+        this.searchDomain = searchDomain;
+    }
+
     public void setListDomain(String listDomain) {
         this.listDomain = listDomain;
     }
