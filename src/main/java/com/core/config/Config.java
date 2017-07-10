@@ -32,6 +32,9 @@ public class Config {
     private String preTag;
     private String postTag;
 
+    // 搜索专用域名
+    private String searchDomain;
+
     public String getDbName() {
         return dbName;
     }
