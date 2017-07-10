@@ -524,7 +524,7 @@ public class HomePageService extends BaseService {
         List<String[]> other;
         int maxLimit = 4;
         if (articleId == Constant.CATEGORY_ID_NEWS) {
-            maxLimit = 13;
+            maxLimit = 12;
         } else if (articleId == Constant.CATEGORY_ID_DEPOSITORY) {
             maxLimit = 7;
         } else if (articleId == Constant.CATEGORY_ID_LIFE || articleId == Constant.CATEGORY_ID_ZIYUNFOGUO) {
@@ -694,12 +694,15 @@ public class HomePageService extends BaseService {
     public ObjectNode staticArticleList() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         String staticResPrefix = config.getStaticResourceURLPrefix();
+//        String listDomain = config.getListDomain();
+
         ToolContext toolManagerContext = toolManager.createContext();
 
         String path = System.getProperty("webapp.root") + "WEB-INF" + File.separator + "admin";
 
         //返回绑定的文件路径
         toolManagerContext.put("resURLPrefix", staticResPrefix);
+//        toolManagerContext.put("listURLPrefix", listDomain);
 
         create(path + "/articleList.jsp", "base/articleList.vm", toolManagerContext, "jsp");
         create(path + "/photoList.jsp", "base/photoList.vm", toolManagerContext, "jsp");

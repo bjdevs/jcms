@@ -9,9 +9,17 @@
     <title>${winTitle}</title>
     <meta name="author" content="4what"/>
     <meta name="description" content="黄梅老祖寺 ${depict}"/>
-    <meta name="keywords" content="黄梅老祖寺 ${keyWord}"/>
-
+    <meta name="keywords" content="老祖寺,黄梅老祖寺,紫云山,${keyWord}"/>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0?v=1.0" />
     <link rel="stylesheet" type="text/css" href="http://www.hmlzs.me:8080/article/static/lzs/css/style.css"/>
+    <style type="text/css">
+        #container{
+            margin:0;
+            height:100%;
+            width:100%;
+            font-size:12px;
+        }
+    </style>
 </head>
 
 <body>
@@ -35,8 +43,7 @@
         <div class="header">
             <div class="wrapper">
                 <h1><a href="http://www.hmlzs.cn"><img src="http://www.hmlzs.me:8080/article/static/lzs/images/logo.png" alt="黄梅老祖寺"/></a></h1>
-
-                <form action="${listURLPrefix}/search" method="get" id="search-frm" class="search">
+                <form action="${listURLPrefix}search" method="get" id="search-frm" class="search">
                     <div>
                         <div class="keyword"><input type="text" name="kw" value=""/></div>
                         <input type="submit" name="" value="搜索" class="submit"/>
@@ -114,9 +121,13 @@
 
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/jquery.qrcode.min.js></script>
 
-<script type="text/javascript" src='http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b'></script>
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b&plugin=AMap.ToolBar"></script>
+
 <script type="text/javascript" src="http://www.hmlzs.me:8080/article/static/lzs/js/map_main.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/ui/1.0/main.js"></script>
 <script type="text/javascript" src="http://www.hmlzs.me:8080/article/static/lzs/js/map.js"></script>
+
 
 
 
@@ -204,6 +215,10 @@
     var pageCnt = ${list.totalPage};
     var page = ${list.pageNum};
     var listUrl = ${listUrl};
+
+    $('li > span:eq(2)').text("");
+    $('#contact > ul > li:gt(1)').css("text-align", "center");
+
 </script>
 <script type="text/javascript" src=http://www.hmlzs.me:8080/article/static/lzs/js/paginate.js></script>
 </body>
