@@ -41,7 +41,7 @@
         <div class="header">
             <div class="wrapper">
                 <h1><a href="http://www.hmlzs.cn"><img src="${resURLPrefix}/static/lzs/images/logo.png" alt="黄梅老祖寺"/></a></h1>
-                <form action="${listURLPrefix}s" method="get" id="search-frm" class="search">
+                <form action="${listURLPrefix}q" method="get" id="search-frm" class="search">
                     <div>
                         <div class="keyword"><input type="text" name="kw" value=""/></div>
                         <input type="submit" name="" value="搜索" class="submit"/>
