@@ -53,7 +53,7 @@
             <div class="wrapper">
                 <h1><a href="//www.hmlzs.cn"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
 
-                <form action="s" method="get" id="search-frm" class="search">
+                <form action="q" method="get" id="search-frm" class="search">
                     <div class="keyword"><input type="text" name="kw" value="${keyword}"/></div>
                     <input type="submit" name="" value="搜索" class="submit"/>
                 </form>
@@ -250,9 +250,9 @@
     $(".s_tool_btn").click(function(){
         if($(".s_tool_panel:visible").length){
             $(".s_tool_panel").hide("slow");
-            $(".s_tool_btn").html("◇搜索工具")
+            $(".s_tool_btn").html("◇搜索工具");
         }else{
-            $(".s_tool_btn").html("◆收起工具")
+            $(".s_tool_btn").html("◆收起工具");
             $(".s_tool_panel").show("fast");
         }
     });
