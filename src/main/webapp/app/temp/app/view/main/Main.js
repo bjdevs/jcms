@@ -31,8 +31,11 @@ Ext.define('Admin.view.main.Main', {
                 height: 60,
                 items: [
                     {
-                        xtype: 'image',
+                        /*xtype: 'image',
                         src: 'http://www.hmlzs.cn/static/lzs/images/logo.png',
+                        userCls: 'admin-header-logo'*/
+                        xtype: 'label',
+                        html: '<a href="http://www.hmlzs.cn" target="_blank"><img src="http://www.hmlzs.cn/static/lzs/images/logo.png"></a>',
                         userCls: 'admin-header-logo'
                     },
                    /* {
