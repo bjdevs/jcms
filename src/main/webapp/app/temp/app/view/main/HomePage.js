@@ -20,6 +20,11 @@ Ext.define('Admin.view.main.HomePage', {
             title: '更新日志',
             height: '25%',
             html: '<ul type="disc">' +
+            '<li>20170707' +
+                '<ol>' +
+                    '<li>增加前台文章搜索功能</li>' +
+                '</ol>' +
+            '</li>' +
             '<li>20170705' +
                 '<ol>' +
                     '<li>修复删除文章时，静态文件不能每次删除。</li>' +
