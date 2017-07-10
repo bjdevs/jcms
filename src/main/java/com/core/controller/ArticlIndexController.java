@@ -111,4 +111,11 @@ public class ArticlIndexController extends BaseController {
         model.addAttribute("resultPage", resultPage);
         return "q";
     }
+
+    @RequestMapping(value = "/")
+    public void send301Redirect(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        response.setHeader("Location", config.getStaticResourceURLPrefix());
+        response.setHeader("Connection", "close");
+    }
 }
