@@ -32,6 +32,9 @@ public class Config {
     private String preTag;
     private String postTag;
 
+    // 搜索专用域名
+    private String searchDomain;
+
     public String getDbName() {
         return dbName;
     }
@@ -58,6 +61,14 @@ public class Config {
 
     public String getListDomain() {
         return listDomain;
+    }
+
+    public String getSearchDomain() {
+        return searchDomain;
+    }
+
+    public void setSearchDomain(String searchDomain) {
+        this.searchDomain = searchDomain;
     }
 
     public void setListDomain(String listDomain) {

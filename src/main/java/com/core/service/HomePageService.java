@@ -55,7 +55,7 @@ public class HomePageService extends BaseService {
         PublishLog publishLog = find(PublishLog.class, publishId);
 
         String staticResPrefix = config.getStaticResourceURLPrefix();
-        String listDomain = config.getListDomain();
+        String listDomain = config.getSearchDomain();
 
         ToolContext toolManagerContext = toolManager.createContext();
 
@@ -414,7 +414,7 @@ public class HomePageService extends BaseService {
 
         //返回绑定的文件路径
         toolManagerContext.put("resURLPrefix", staticResPrefix);
-        toolManagerContext.put("listURLPrefix", listDomain);
+        toolManagerContext.put("listURLPrefix", config.getSearchDomain());
 
         Article article = find(Article.class, id);
         article.setPublishDate(new Date());

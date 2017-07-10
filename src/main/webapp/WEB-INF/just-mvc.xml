@@ -66,6 +66,7 @@
           p:staticResourceURLPrefix="${config.hmlzs.static.resource.prefix}"
           p:articleDir="${config.hmlzs.static.article}"
           p:listDomain="${config.hmlzs.domain.list}"
+          p:searchDomain="${config.hmlzs.domain.search}"
           p:listParam="${config.hmlzs.domain.list.param}"
           p:domain="${config.hmlzs.domain}"
           p:preViewDomain="${config.hmlzs.preview.domain}"
