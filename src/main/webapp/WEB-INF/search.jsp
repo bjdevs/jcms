@@ -37,7 +37,7 @@
         <div class="topbar">
             <div class="wrapper">
 		<span class="welcome">
-			<em>欢迎来到黄梅四祖寺首页</em>
+			<em>欢迎来到黄梅老祖寺首页</em>
 			<span class="datetime"></span>
             </span>
                 <span class="tools">
@@ -51,7 +51,7 @@
 
         <div class="header">
             <div class="wrapper">
-                <h1><a href="/"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
+                <h1><a href="//www.hmlzs.cn"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
 
                 <form action="search" method="get" id="search-frm" class="search">
                     <div class="keyword"><input type="text" name="kw" value="${keyword}"/></div>
@@ -167,10 +167,14 @@
 
 <script type="text/javascript" src=http://www.hmlzs.cn/static/lzs/js/jquery.qrcode.min.js></script>
 
-
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=aa83bb67a3b8592e7b3aaf2674b6a50b&plugin=AMap.ToolBar"></script>
+<script type="text/javascript" src="http://webapi.amap.com/ui/1.0/main.js"></script>
+<script type="text/javascript" src="//www.hmlzs.cn/static/lzs/js/map_main.js"></script>
+<script type="text/javascript" src="//www.hmlzs.cn/static/lzs/js/map.js"></script>
 
 <!-- page analytics -->
-<script type="text/javascript" src=http://www.hmlzs.cn/static/lzs/js/analytics.js></script>
+<script type="text/javascript" src=//www.hmlzs.cn/static/lzs/js/analytics.js></script>
 
 <script type="text/javascript">
     $('.qrcode:eq(0)').qrcode({width: 64,height: 64,text: window.location.href})
@@ -260,10 +264,10 @@
         var kw = $("#search-frm .keyword input").val();
         var url = document.location.href;
         var index = url.indexOf("?");
-        url = url.substr(0,index+1)
+        url = url.substr(0,index+1);
         var param={};
         param.kw=kw;
-        param.c=$(".s_tool_panel .category").val();;
+        param.c=$(".s_tool_panel .category").val();
         param.t=$(".s_tool_panel .timerange").val();
         param.sort=$(".s_tool_panel .sort").val();
         location = url + jQuery.param(param);
@@ -281,6 +285,32 @@
     }
 
 </script>
+
+<script>
+    // 紫云法务
+    $(".zyfw ul li").each(function (index) {
+        $(this).mouseenter(function () {
+            $("ul li:eq(" + index + "), ol li:eq(" + index + ")", ".zyfw").addClass("current").siblings().removeClass("current");
+        });
+    });
+
+    // focus
+    $(".focus ul").cycle({
+        pager: ".focus ol",
+        pagerAnchorBuilder: function (idx, slide) {
+            return ".focus ol li:eq(" + idx + ") a";
+        },
+        pagerEvent: "hover",
+        pause: true,
+        timeout: 1000 * 3
+    });
+
+    /*修改 联系我们 ： 微信 显示*/
+    $('#contact li:eq(2) > span').text("");
+    $('#contact li:eq(2)').css("text-align", "center");
+    $('#map_container').css("width", "270px");
+</script>
+
 <script type="text/javascript" src="http://www.hmlzs.cn/static/lzs/js/paginate.js"></script>
 </body>
 </html>
