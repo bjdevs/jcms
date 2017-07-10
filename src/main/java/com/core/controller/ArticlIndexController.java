@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class ArticlIndexController extends BaseController {
     @Autowired
     ListService listService;
 
-    @RequestMapping(value = "/search")
+    @RequestMapping(value = "/s")
     public String search(Model model) {
         SearchResultPage<Article> resultPage = null;
         int pageSize = Constant.LUCENE_SEARCH_PAGESIZE;
@@ -108,6 +109,6 @@ public class ArticlIndexController extends BaseController {
         model.addAttribute("sort", sortStr);
         model.addAttribute("t", timerange);
         model.addAttribute("resultPage", resultPage);
-        return "search";
+        return "s";
     }
 }

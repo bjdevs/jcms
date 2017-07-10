@@ -53,7 +53,7 @@
             <div class="wrapper">
                 <h1><a href="//www.hmlzs.cn"><img src=http://www.hmlzs.cn/static/lzs/images/logo.png alt="黄梅老祖寺"/></a></h1>
 
-                <form action="search" method="get" id="search-frm" class="search">
+                <form action="s" method="get" id="search-frm" class="search">
                     <div class="keyword"><input type="text" name="kw" value="${keyword}"/></div>
                     <input type="submit" name="" value="搜索" class="submit"/>
                 </form>
@@ -310,7 +310,7 @@
     $('#contact li:eq(2)').css("text-align", "center");
     $('#map_container').css("width", "270px");
 </script>
-
+<script type="text/javascript" src=//www.hmlzs.cn/static/lzs/js/analytics.js></script>
 <script type="text/javascript" src="http://www.hmlzs.cn/static/lzs/js/paginate.js"></script>
 </body>
 </html>
