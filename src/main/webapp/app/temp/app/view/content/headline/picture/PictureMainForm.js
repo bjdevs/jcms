@@ -24,7 +24,7 @@ Ext.define('Admin.view.content.headline.picture.PictureMainForm', {
                 xtype: 'panel',
                 region: 'center',
                 layout: 'form',
-                minHeight: 400,
+                // minHeight: 400,
                 border: false,
                 scrollable: 'y',
                 items: [
