@@ -38,7 +38,6 @@ public class LuceneUtil {
                     try {
                         indexWriter.close();
                         indexReader.close();
-                        System.out.println("关闭索引");
                     } catch (Exception e) {
                         new RuntimeException(e);
                     }

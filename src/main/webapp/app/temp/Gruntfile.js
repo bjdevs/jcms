@@ -52,16 +52,26 @@ module.exports = function(grunt) {
                     '../application.js': ['<%= extjs_dependencies_dist %>']
                 }
             }
-        }
+        },
 
+        watch: {
+            configFiles: {
+                files: 'app/**',
+                tasks:['concat', 'extjs_dependencies', 'cssmin', 'uglify'],
+                options: {
+                    reload: true
+                }
+            }
+        }
 
     });
     grunt.loadNpmTasks('grunt-contrib-uglify');//采用UglifyJS压缩js
     grunt.loadNpmTasks('grunt-contrib-concat');//js合并
     grunt.loadNpmTasks('grunt-contrib-cssmin');//css压缩合并
+    grunt.loadNpmTasks('grunt-contrib-watch');//实时观察目标文件状态
     grunt.loadNpmTasks('grunt-extjs-dependencies');
 
-    grunt.registerTask('default', ['concat', 'extjs_dependencies', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['concat', 'extjs_dependencies', 'cssmin', 'uglify', 'watch']);
 };
 
 
